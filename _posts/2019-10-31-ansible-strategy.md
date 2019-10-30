@@ -1,8 +1,10 @@
 ---
 layout: post
-title:  "[WIP] Ansible에서 전략 패턴을 이용해 자동화 프로젝트의 유연성을 확보하기"
-date:   2019-10-31 00:07:50 +0900
-categories: devops ansible
+title: "[WIP] Ansible에서 전략 패턴을 이용해 자동화 프로젝트의 유연성을 확보하기"
+date: 2019-10-31 00:07:50 +0900
+tags:
+- devops
+- ansible
 ---
 
 ## 개요

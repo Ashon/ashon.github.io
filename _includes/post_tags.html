@@ -4,8 +4,11 @@
   {% else %}
     {% assign tags = page.tags %}
   {% endif %}
-  {% for tag in tags %}
-  <a href="/tags/#{{ tag | slugize }}">{{tag}}</a>{% unless forloop.last %},{% endunless %}
-  {% endfor %}
+  <ul class="tag-container">
+    {% for tag in tags %}
+    <li class="tag-item">
+      <a href="/tags/#{{ tag | slugize }}">{{tag}}</a>
+    </li>
+    {% endfor %}
+  </ul>
 </div>
-<br/>

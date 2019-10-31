@@ -71,6 +71,49 @@ $ tree
 같은 형식으로 디렉토리를 구성해서 사용한다.
 
 `playbooks/infrastructure.yml` 플레이북은 `infrastructure` `Role`을 호출하게 되고,
-호스트들은 정의 된 `Task` 블록으로, 적절히 애플리케이션 배포를 위한 프로비저닝 작업이 진행된다.
+호스트들은 정의 된 `Task` 블록들로, 적절히 애플리케이션 배포를 위한 프로비저닝 작업이 진행된다.
 
 `playbooks/deploy.yml` 플레이북은 적절히 애플리케이션을 배포하고 설정하는 로직을 갖는다.
+
+### 새로운 배포환경으로 점진적으로 변경해 나가기
+
+지금까지 구현 된 `Ansible` 자동화 프로젝트를 이용해서, 새로운 배포환경으로 애플리케이션을 점진적으로
+업그레이드 해 나가기로 한다.
+
+이 경우, 애플리케이션 배포 환경에 대한 `infrastructure` `Role`의 `Task`들을 모두 교체하게 된다면,
+기존 운영환경의 부득이한 사정으로 새로운 배포환경으로 갈 수 없는 상태의 호스트는 해당 자동화 스크립트를
+사용할 수 없게 된다.
+
+그렇다면, 이전 가능한 호스트들만 새로운 롤을 적용해 보는건 어떨까?
+
+이 경우에는 기존 인벤토리에서 이전할 호스트들을 새롭게 `Inventory Group`을 만들고,
+해당 그룹을 위한 task들을 따로 할당해 주는 방법이 좋을 것 같다.
+
+#### `Inventory` 나누기
+
+먼저 이전할 호스트들을 선정하고 새로운 `Inventory Group`을 할당한다.
+
+``` conf
+# file: inventory
+
+# 변경하기 전의 인벤토리의 webserver 그룹
+[webservers]
+region-app-[01:30].mysite.com
+```
+
+에서
+
+``` conf
+# file: inventory
+
+[webservers]
+region-app-[01:20].mysite.com
+
+# 21 ~ 30번 까지의 호스트는 새로운 배포환경으로 가기로 하였다.
+[webservers_v2]
+region-app[21:30].mysite.com
+```
+
+#### 새로운 `Inventory Group`을 위한 `Task` 만들기
+
+이제 새로운 호스트를 위한 `Task`를 만들고, `infrastructure` `Playbook`에 추가해 주어야 한다.

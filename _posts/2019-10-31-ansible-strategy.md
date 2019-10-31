@@ -52,20 +52,20 @@ tags:
 ``` sh
 $ tree
 .
-├── inventory                 # 인벤토리 파일
-│
-├── playbooks                 # 서버들을 관리하기 위한 플레이북 모음
-│  ├── infrastructure.yml     # 인프라스트럭쳐를 구성한다.
-│  └── deploy.yml             # 애플리케이션을 배포한다.
-│
-└── roles                     # 플레이북에 사용되는 롤들을 관리한다.
-   ├── infrastructure
-   │   └── tasks
-   │       └── main.yml       # 인프라스트럭쳐 구성 task
-   │
-   └── deploy
-       └── tasks
-           └── main.yml       # 배포작업 task
+|-- inventory                 # 인벤토리 파일
+|
+|-- playbooks                 # 서버들을 관리하기 위한 플레이북 모음
+|  |-- infrastructure.yml     # 인프라스트럭쳐를 구성한다.
+|  \-- deploy.yml             # 애플리케이션을 배포한다.
+|
+\-- roles                     # 플레이북에 사용되는 롤들을 관리한다.
+   |-- infrastructure
+   |   \-- tasks
+   |       \-- main.yml       # 인프라스트럭쳐 구성 task
+   |
+   \-- deploy
+       \-- tasks
+           \-- main.yml       # 배포작업 task
 ```
 
 같은 형식으로 디렉토리를 구성해서 사용한다.

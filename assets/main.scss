@@ -1,15 +1,31 @@
 ---
+
 ---
 
 @charset 'UTF-8';
 @import 'minima';
 @import 'syntax';
 
+body {
+  font: 300 16px/1.5 'Noto Sans KR', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
+a:visited {
+  color: #1756a9;
+}
+
+a {
+  color: #2a7ae2;
+}
+
 .post-title {
   font-size: 32px;
   letter-spacing: 0;
-  line-height:36px;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 @media screen and (max-width: 800px) {
@@ -32,14 +48,16 @@
 
 pre, code {
   background: #126da2;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9em;
   color: #fefefe;
   border: 0;
   border-radius: 3px;
-  font-size: 0.96em;
 }
 
 pre > code {
   background: none;
+  font-size: 1em;
 }
 
 .tag-container {

@@ -47,17 +47,20 @@ a {
 }
 
 pre, code {
-  background: #126da2;
+  background: #ffc4a8;
   font-family: 'Roboto Mono', monospace;
   font-size: 0.9em;
-  color: #fefefe;
+  color: #333;
   border: 0;
   border-radius: 3px;
 }
 
-pre > code {
-  background: none;
-  font-size: 1em;
+pre.highlight {
+  code{
+    color: #fefefe;
+    background: none;
+    font-size: 1em;
+  }
 }
 
 .tag-container {
@@ -72,7 +75,7 @@ pre > code {
   padding: 0 5px;
   border-radius: 3px;
   display: inline-block;
-  background: #ddd;
+  background: #f5f5f5;
 
   a {
     text-decoration: none

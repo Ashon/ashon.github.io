@@ -2,7 +2,6 @@
 layout: post
 title: "Ansible에서 전략 패턴을 이용해 자동화 프로젝트의 확장성을 확보하기"
 date: 2019-10-31 00:07:50 +0900
-toc: true
 comments: true
 tags:
 - devops

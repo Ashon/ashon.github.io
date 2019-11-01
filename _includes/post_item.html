@@ -1,0 +1,10 @@
+<div class="post-meta-wrapper">
+  <span class="post-date">{{ post.date | date: "%Y %b %d" }}</span>
+  {% include post_tags.html %}
+</div>
+<a class="post-title" href="{{ post.url | relative_url }}">
+  {{ post.title | escape }}
+</a>
+{%- if site.show_excerpts -%}
+  {{ post.excerpt }}
+{%- endif -%}

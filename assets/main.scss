@@ -17,17 +17,41 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a:visited {
-  color: #1756a9;
+  color: #087ba8;
 }
 
 a {
-  color: #2a7ae2;
+  color: #087ba8;
+  transition: background 0.2s, color 0.2s;
+}
+a:hover {
+  text-decoration: none;
+  color: #004966;
+}
+
+a.site-title {
+  font-size: 26px;
+  font-weight: 300;
+  letter-spacing: -1px;
+  margin-bottom: 0;
+  float: left;
+  padding: 5px;
+  line-height: 26px;
+  margin: 10px -5px;
+}
+a.site-title:hover {
+  background: #004966;
+  color: #fefefe
 }
 
 .post-title {
   font-size: 32px;
   letter-spacing: 0;
   line-height: 1.2;
+}
+
+a.post-title {
+  font-size: 22px;
 }
 
 @media screen and (max-width: 800px) {
@@ -66,7 +90,7 @@ a {
 }
 
 pre, code {
-  background: #ffc4a8;
+  background: #bbddea;
   font-family: 'Roboto Mono', monospace;
   font-size: 0.9em;
   color: #333;

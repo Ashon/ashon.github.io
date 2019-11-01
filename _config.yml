@@ -12,4 +12,15 @@ linkedin_username: ju-won-lee-9662108a
 markdown: kramdown
 theme: minima
 plugins:
-  - jekyll-feed
+- jekyll-feed
+- jekyll-archives
+
+jekyll-archives:
+  enabled: []
+  layout: archive
+  permalinks:
+    year: '/:year/'
+    month: '/:year/:month/'
+    day: '/:year/:month/:day/'
+    tag: '/tag/:name/'
+    category: '/category/:name/'

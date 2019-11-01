@@ -10,18 +10,18 @@ permalink: /about/
 
 ### Skills
 
-##### Python `Flask`, `Django`, `Celery`, `Beautifulsoup4`
-##### Frontend `React`, `AngularJS`, `jQuery`
-##### Automation `Ansible`, `Chef`, `Terraform`, `Vagrant`
-##### CI/CD `Spinnaker`, `Jenkins`
-##### Messaging `RabbitMQ`, `Nats`
-##### Monitoring `Prometheus`, `Nagios`
-##### Cloud `AWS`, `Openstack`
-##### Container `Docker`, `Kubernetes`
+- Python `Flask`, `Django`, `Celery`, `Beautifulsoup4`
+- Frontend `React`, `AngularJS`, `jQuery`
+- Automation `Ansible`, `Chef`, `Terraform`, `Vagrant`
+- CI/CD `Spinnaker`, `Jenkins`
+- Messaging `RabbitMQ`, `Nats`
+- Monitoring `Prometheus`, `Nagios`
+- Cloud `AWS`, `Openstack`
+- Container `Docker`, `Kubernetes`
 
 ### Careers
 
-##### 2018.02 ~ Present - KakaoCorp :: Cloud Computing
-##### 2017.02 ~ 2017.12 - Smartstudy :: Development Team
-##### 2014.08 ~ 2017.02 - CDNetworks :: Web Portal
-##### 2012.08 ~ 2013.12 - Neofect :: Planning
+- 2018.02 ~ Present - Kakao \| Cloud Computing
+- 2017.02 ~ 2017.12 - Smartstudy \| Development Team
+- 2014.08 ~ 2017.02 - CDNetworks \| Web Portal
+- 2012.08 ~ 2013.12 - Neofect \| Planning

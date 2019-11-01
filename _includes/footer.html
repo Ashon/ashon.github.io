@@ -20,15 +20,18 @@
       <div class="footer-col footer-col-2">
       </div>
       <div class="footer-col footer-col-5">
-        <ul class="social-media-list">
-          {%- include social.html -%}
-        </ul>
+        {%- include social.html -%}
         <a href="{{ 'feed.xml' | relative_url }}">
           <svg class="svg-icon orange"><use xlink:href="{{ 'assets/minima-social-icons.svg#rss' | relative_url }}"></use></svg>
         </a>
       </div>
     </div>
 
+    <div class="footer-col-wrapper">
+      <div class="footer-copyright">
+        <small>Copyright 2019. Ju-won Lee. All rights reserved.</small>
+      </div>
+    </div>
   </div>
 
 </footer>

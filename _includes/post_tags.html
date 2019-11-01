@@ -7,7 +7,7 @@
   <ul class="tag-container">
     {% for tag in tags %}
     <li class="tag-item">
-      <a href="/tags/#{{ tag | slugize }}">{{tag}}</a>
+      <a href="/tags/#{{ tag | slugize }}">#{{ tag }}</a>
     </li>
     {% endfor %}
   </ul>

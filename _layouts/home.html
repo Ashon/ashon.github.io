@@ -17,9 +17,8 @@ layout: default
     <ul class="post-list">
       {%- for post in site.posts -%}
       <li>
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <div class="post-meta-wrapper">
-          <span class="post-meta">{{ post.date | date: date_format }}</span>
+          <span class="post-meta">{{ post.date | date_to_string }}</span>
           {% include post_tags.html %}
         </div>
         <h3>

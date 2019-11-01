@@ -6,8 +6,11 @@ description: >-
 baseurl: ""
 url: "https://ashon.github.io"
 
-github_username: ashon
-linkedin_username: ju-won-lee-9662108a
+minima:
+  social_links:
+    github: ashon
+    linkedin: ju-won-lee-9662108a
+    rss: subscribe
 
 markdown: kramdown
 theme: minima

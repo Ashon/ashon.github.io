@@ -11,9 +11,9 @@
               {{ site.author | escape }}
             {%- endif -%}
           </li>
-            {%- if site.email -%}
+          {%- if site.email -%}
             <li><a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
-            {%- endif -%}
+          {%- endif -%}
         </ul>
       </div>
 
@@ -21,9 +21,6 @@
       </div>
       <div class="footer-col footer-col-5">
         {%- include social.html -%}
-        <a href="{{ 'feed.xml' | relative_url }}">
-          <svg class="svg-icon orange"><use xlink:href="{{ 'assets/minima-social-icons.svg#rss' | relative_url }}"></use></svg>
-        </a>
       </div>
     </div>
 

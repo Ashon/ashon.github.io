@@ -61,6 +61,13 @@ a.post-title {
     letter-spacing: 0;
   }
 }
+@media screen and (max-width: 600px) {
+  .site-nav {
+    border: 0;
+    background: #fff;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+  }
+}
 
 .site-header {
   border-top:0;
@@ -81,7 +88,11 @@ a.post-title {
   }
 
   .social-media-list {
+    float:right;
     margin-bottom:5px;
+    li {
+      display: inline
+    }
   }
 
   .footer-copyright {

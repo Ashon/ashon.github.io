@@ -44,6 +44,11 @@ a {
   background: #222;
   color: #fefefe;
   border: 0;
+
+  .footer-heading {
+    color: #fefefe;
+    margin-bottom:0
+  }
 }
 
 pre, code {
@@ -91,4 +96,12 @@ pre.highlight {
   border-top: 1px solid #eee;
   margin-top: 20px;
   padding-top: 10px;
+}
+
+.post-list {
+  .post-meta-wrapper {
+    .post-tags {
+      display: inline-block
+    }
+  }
 }

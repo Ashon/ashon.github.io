@@ -1,11 +1,13 @@
 title: Lifestack
 email: ashon8813@gmail.com
 description: >-
-  Thoughts and experiences for software development
+  Thoughts and Experiences
+  for Software
 baseurl: ""
 url: "https://ashon.github.io"
-twitter_username:
+
 github_username: ashon
+linkedin_username: ju-won-lee-9662108a
 
 markdown: kramdown
 theme: minima

@@ -4,11 +4,11 @@ title: Vagrant, Openstack, Jenkins, Ansible을 활용한 서비스 통합 테스
 date: 2016-08-10 13:35:00 +0900
 comments: true
 tags:
-- devops
-- ansible
-- vagrant
-- openstack
-- jenkins
+- DevOps
+- Ansible
+- Vagrant
+- Openstack
+- Jenkins
 - CI/CD
 ---
 
@@ -144,9 +144,9 @@ UI 서버군과 API 서버군은 로드 밸런서가 적용되어 Active - Stand
 
 그래서 figure1에서 표현된 팀 내 시스템에 대한 통합을 코드로 정리하기로 하였음.
 
-### Vagrant를 이용한 개발단계 서버형상 자동화
+### Vagrant를 이용한 개발단계 서버형상 가상화
 
-로컬 환경에 매번 vm들을 올렸다 내렸다 하는 반복작업을 최대한 줄이기 위해 Vagrant를 사용하였음.
+로컬 환경에 매번 VM들을 올렸다 내렸다 하는 반복작업을 최대한 줄이기 위해 Vagrant를 사용하였음.
 아래는 개발팀 로컬환경에 VM을 올리기 위한 각 서버들에 대한 가상화 스크립트임.
 
 Openstack환경과 사용하는 VM을 일치시키기 위해 Openstack에 올라가 있는 커스텀 이미지를 Export하였음.
@@ -418,7 +418,7 @@ Provision 단계에서 Ansible Plugin을 이용해 Job을 생성하려고 했지
 
 ### 프론트엔드 통합테스트 자동화를 위한 Selenium Grid와 Jenkins 구성
 
-Portal팀 에서는 Acceptance Test 툴로 Selenium을 사용하고 있는데,
+개발팀 에서는 Acceptance Test 툴로 Selenium을 사용하고 있는데,
 Provision Job 이후 Acceptance Test 자동화를 위해
 Jenkins에 Selenium Plugin을 이용해 Jenkins Slave Node에
 Selenium grid node를 구동할 수 있도록 세팅해 주었다.
@@ -459,7 +459,7 @@ Slack integration을 달아서 언제든지 Build Status를 확인 가능하도�
 아무튼 저 위의 작업들을 진행한 이후
 변경된 개발팀 개발 프로세스를 다이어그램으로 정리해 보았다.
 
-![fig3](/assets/2016-08-10/fig2.png)
+![fig3](/assets/2016-08-10/fig3.png)
 <center>< figure 3. 도입 이후 변경 된 개발 프로세스 ></center>
 
 `figure 1`에서 정리했던 작업들이 일부 자동화되고 통일되면서 더 안정성 있게 변경되었고, 더 빠르게 처리할 수 있게 되었다.

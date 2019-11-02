@@ -6,6 +6,7 @@ comments: true
 tags:
 - Web
 - Python
+- Software-Design
 ---
 
 ## 개요
@@ -165,3 +166,8 @@ app.route('/hello', methods=['GET'])(hello)
 `Zen of Python`의 맨 마지막 문구로 대신한다.
 
 > Namespaces are one honking great idea -- let's do more of those!
+
+## 참고
+
+- [Python Importlib](https://docs.python.org/3/library/importlib.html)
+- [Zen of Python Explained](https://inventwithpython.com/blog/2018/08/17/the-zen-of-python-explained/)

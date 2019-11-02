@@ -307,7 +307,6 @@ Go의 타입 시스템을 정확하게 이해하고 작성한 코드가 아니�
 
 ## 함께보면 좋은 내용
 
-- [Python Importlib](https://docs.python.org/3/library/importlib.html)
 - [Defer Panic and Recover](https://blog.golang.org/defer-panic-and-recover)
 - [Go Exported_identifiers](https://golang.org/ref/spec#Exported_identifiers)
 - [Go net/http](https://golang.org/pkg/net/http/)

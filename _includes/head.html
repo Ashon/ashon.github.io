@@ -2,10 +2,17 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   {%- seo -%}
+
   <link rel="preload" as="style" onload="this.rel = 'stylesheet'" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400|Roboto+Mono:300,400&display=swap&subset=korean">
   <link rel="stylesheet" href="{{ "assets/main.css" | relative_url }}">
+
   {%- feed_meta -%}
+
+  <!-- env {{ jekyll.environment }}-->
+  <!-- GA {{ site.google_analytics }}-->
+
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
     {%- include google-analytics.html -%}
   {%- endif -%}

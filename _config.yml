@@ -6,14 +6,16 @@ description: >-
 baseurl: ""
 url: "https://ashon.github.io"
 
+google_analytics: UA-151348212-1
+
+theme: minima
+markdown: kramdown
 minima:
   social_links:
     github: ashon
     linkedin: ju-won-lee-9662108a
     rss: subscribe
 
-markdown: kramdown
-theme: minima
 plugins:
 - jekyll-feed
 - jekyll-archives

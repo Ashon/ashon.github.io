@@ -11,7 +11,7 @@ title: Tags
   {% capture tag_size %}{{ tag|last|size }}{% endcapture %}
   <li class="tag-item" style="font-size: {{ font_size }}%">
     <a href="#{{ tag_name }}">
-      #{{ tag_name }} <small>| {{ tag_size }}</small>
+      {{ tag_name }} <small>| {{ tag_size }}</small>
     </a>
   </li>
 {% endfor %}
@@ -22,7 +22,7 @@ title: Tags
   <div class="archive-group">
     {% capture tag_name %}{{ tag | first }}{% endcapture %}
     <h4 id="#{{ tag_name | slugize }}">
-      #{{ tag_name }}
+      {{ tag_name }}
     </h4>
     <ul>
     {% for post in site.tags[tag_name] %}

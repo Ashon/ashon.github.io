@@ -267,8 +267,10 @@ roles
 ``` yaml
 # file: roles/infrastructure/tasks/main.yml
 
+# infrastructure_version 값이 없으면 기본값으로 1을 사용한다.
+# roles/defaults/ 에 정의해서 사용할 수도 있다.
 - name: Resolve task by version
-  include_tasks: "./versions/v{% raw %}{{ infrastructure_version }}{% endraw %}.yml"
+  include_tasks: "./versions/v{% raw %}{{ infrastructure_version | default('1') }}{% endraw %}.yml"
 ```
 
 이렇게 `inventory`에 특정 변수를 할당하여 태스크를 선택할 수 있게 만들게 되면,

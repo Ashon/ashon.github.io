@@ -151,6 +151,11 @@ pre.highlight {
 .post-content {
   margin-top: 20px;
   padding-top: 10px;
+
+  img {
+    display:block;
+    margin: auto
+  }
 }
 
 .utterances {

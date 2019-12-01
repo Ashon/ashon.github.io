@@ -8,9 +8,11 @@ permalink: /archive/
 
 {% for year in postsByYearMonth %}
 <h2 id="{{ year.name }}">{{ year.name }}</h2>
-<ul aria-label="posts from {{ year.name }}">
+<ul class="post-list archive" aria-label="posts from {{ year.name }}">
   {% for post in year.items %}
-    {% include post_item.html %}
+    <li>
+      {% include post_item.html %}
+    </li>
   {% endfor %}
 </ul>
 {% endfor %}

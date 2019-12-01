@@ -67,6 +67,7 @@ a.site-title:hover {
 
 .post-title {
   font-size: 32px;
+  font-weight: 400;
   letter-spacing: 0;
   line-height: 1.2;
 }
@@ -189,6 +190,10 @@ pre.highlight {
   display: block;
 }
 
+.post-list.archive {
+  margin-left: 20px
+}
+
 .post-date {
   font-size: 0.8em;
   color: #828282
@@ -206,9 +211,15 @@ pre.highlight {
     line-height: 1.8
   }
 
+  center {
+    font-size: 0.9em;
+    margin-bottom: 20px
+  }
+
   img {
     display:block;
-    margin: auto
+    margin: auto;
+    box-shadow: 0 10px 10px -5px rgba(0,0,0,0.1)
   }
 }
 

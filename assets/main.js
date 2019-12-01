@@ -45,7 +45,8 @@
        selectedTag.classList.add(TAG_ACTIVE_CLASS);
       }
 
-      this.archivesByTag[selectedTagId].classList.add(TAG_ARCHIVE_ACTIVE_CLASS);
+      let selectedArchive = this.archivesByTag[selectedTagId];
+      selectedArchive && selectedArchive.classList.add(TAG_ARCHIVE_ACTIVE_CLASS);
     },
 
     onClickTag: (tag) => {

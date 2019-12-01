@@ -8,7 +8,7 @@ permalink: /about/
 
 자동화와 모니터링 등 `DevOps`, `SRE` 업무에도 관심이 많습니다.
 
-### Skills
+### Interests
 
 - Python `Flask`, `Django`, `Celery`, `Beautifulsoup4`
 - Frontend `React`, `AngularJS`, `jQuery`

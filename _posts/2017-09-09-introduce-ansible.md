@@ -3,6 +3,7 @@ layout: post
 title: Ansible에 대한 간단한 정리
 date: 2017-09-09 15:06:00 +0900
 comments: true
+toc: true
 tags:
 - DevOps
 - Ansible
@@ -19,14 +20,14 @@ IT 인프라 자동화 도구 중 하나인 Ansible을 간단히 소개한다. �
 
 Provisioning, Configuration Management, Continuous Delivery, Orchestration 등의 작업들을 위한 자동화 도구.
 
-### 다른 자동화 도구들
+## 다른 자동화 도구들
 
 - Chef : <https://www.chef.io/chef/>, <https://github.com/chef>
 - Puppet : <https://puppet.com/>, <https://github.com/puppetlabs>
 - CF Engine : <https://cfengine.com/>, <https://github.com/cfengine>
 - Saltstack : <https://saltstack.com/>, <https://github.com/saltstack>
 
-### 다른 도구들과의 비교
+## 다른 도구들과의 비교
 
 | - | Ansible | Chef | Puppet | CF Engine | Saltstack |
 |-----------|------------|--------------|--------------|--------------|--------------|
@@ -34,7 +35,7 @@ Provisioning, Configuration Management, Continuous Delivery, Orchestration 등�
 | 리소스 정의  | YAML      | DSL          | DSL          | DSL          | DSL          |
 | GitHub ⭐️ | 24K        | 4K           | 4K           | 0.2K         | 8K           |
 
-### Ansible이 다른 도구들보다 좋은 점
+## Ansible이 다른 도구들보다 좋은 점
 
 - 다른 자동화도구들 DSL 배울 시간이 없다. (따로 배우기 귀찮고.. 복잡함..)
 - Master/Agent 방식의 자동화 도구는 별도의 프로비저닝이 필요하다.
@@ -43,25 +44,25 @@ Provisioning, Configuration Management, Continuous Delivery, Orchestration 등�
 - 구조가 단순하고 유연하기 때문에 다른 시스템과 엮기 쉽다.
 - 파이썬이라 좋다...
 
-### 다른 도구들보다 안 좋은 점
+## 다른 도구들보다 안 좋은 점
 
 - Push 방식이라. 마스터가 타겟 서버들 하나씩 돌면서 처리해야함. (어느정도 컨커런시를 보장하긴 하지만.)
 - 서비스가 아니라 정말로 도구이기 때문에, 변경사항 탐지나.. 뭐 그런 작업들이 필요하다면 별도로 개발해야 함.
   (이미 python 라이브러리도 있고, 젠킨스같은 자동화 도구에 이미 플러그인들이 있어서, 클릭 몇번만 하면 되긴 함.)
 - 단순한 만큼, 자동화를 위해 챙겨줘야 할 부분들이 좀 있음. (하지만 역시 유연함)
 
-### Ansible 동작 방식
+## Ansible 동작 방식
 
 아래와 같은 서비스 구조가 있다고 하자.
 
 ![fig1](/assets/2017-09-09/fig1.png)
 <center>< figure 1. master 서버가 3대의 웹서버 호스트에 ssh로 명령을 내리는 모습 ></center>
 
-#### inventory
+### inventory
 
 앤서블에서 타겟 호스트들을 정의하는 파일
 
-##### host_vars
+#### host_vars
 
 각각의 호스트마다 변수를 할당해서 사용할 수 있게 해 주는 기능
 
@@ -94,7 +95,7 @@ my_list:
 
 ```
 
-##### 변수 접근
+#### 변수 접근
 
 jinja2 문법을 이용해서, 선언한 변수에 접근이 가능하다.
 
@@ -110,12 +111,12 @@ webserver1 | SUCCESS | rc=0 >>
 hello world
 ```
 
-##### group_vars
+#### group_vars
 
 그룹에서 공통으로 사용할 수 있는 변수를 관리할 수 있음.
 host_vars와 비슷한 형식으로 group_vars/[그룹명] 식으로 yaml파일을 만들어서 관리 가능
 
-##### 더 알아보기 - Dynamic inventory
+#### 더 알아보기 - Dynamic inventory
 
 Dynamic inventory는 inventory를 실행 가능한 프로그램으로 만들어, 동적으로 인벤토리 정보를 참조할 수 있도록 하는 스크립트다.
 
@@ -126,7 +127,7 @@ Dynamic inventory는 inventory를 실행 가능한 프로그램으로 만들어,
 
 ref: <http://docs.ansible.com/ansible/latest/intro_dynamic_inventory.html>
 
-#### module
+### module
 
 앤서블에는 타겟 호스트로 실제 작업을 처리하는 단위로 module이라는 개념을 사용한다.
 
@@ -183,7 +184,7 @@ webserver3 | SUCCESS | rc=0 >>
 webserver3
 ```
 
-##### Dry-run
+#### Dry-run
 
 실제로 환경에 적용하기 전에 변경사항들을 체크할 수 있다.
 
@@ -194,7 +195,7 @@ $ ansible -i inventory all -m service -a "name=nginx state=restarted" --check
 :
 ```
 
-#### Playbook
+### Playbook
 
 여러 모듈(작업)들을 모아서 하나의 큰 역할을 수행할 수 있도록 해 주는 기능
 
@@ -217,7 +218,7 @@ $ ansible -i inventory all -m service -a "name=nginx state=restarted" --check
         update_cache: yes
 ```
 
-##### Templating
+#### Templating
 
 ansible에서는 동작을 정의하는 yaml을 좀 더 유연하게 사용할 수 있도록, jinja2 template 문법으로 템플릿 형식으로도 작성할 수 있음.
 
@@ -226,7 +227,7 @@ ansible에서는 동작을 정의하는 yaml을 좀 더 유연하게 사용할 �
 
 terraform의 interpolation과 비슷한 방식임.
 
-###### example.1 with_items
+#### example.1 with_items
 
 tasks에서 사용되는 하나의 아이템(모듈)과 더불어, template기능을 활용한 특별한 기능들 중에.. with_items라는 key로 리스트를 작성하면, loop 기능을 사용할 수 있음.
 
@@ -263,11 +264,11 @@ tasks에서 사용되는 하나의 아이템(모듈)과 더불어, template기�
         - memory_profiler
 ```
 
-#### Role
+### Role
 
 여러 플레이북에서 공통으로 사용할 수 있는 task 묶음들을 Role 이라는 개념으로 묶어서 사용할 수 있다.
 
-##### Role 만들어 보기
+#### Role 만들어 보기
 
 ansible role은 정해진 디렉토리 구조를 따라야 한다.
 
@@ -288,7 +289,7 @@ $ tree
         └── templates
 ```
 
-##### Role 사용하기
+#### Role 사용하기
 
 playbook안에서 롤을 사용할 때는 아래와 같이 사용할 수 있음.
 
@@ -304,13 +305,13 @@ playbook안에서 롤을 사용할 때는 아래와 같이 사용할 수 있음.
     - nginx
 ```
 
-#### Galaxy
+### Galaxy
 
 사용자들이 사용하는 playbook들을 공유할 수 있는 기능. (docker hub 같은 느낌)
 제너럴하게 사용할 수 있는 playbook들을 사용자들끼리 공유할 수 있음.
 npm의 package.json 처럼 의존성 관리를 requirements.txt로 관리할 수 있음.
 
-##### requirements.yml
+#### requirements.yml
 
 ``` yaml
 # file: requirements.yml
@@ -328,22 +329,22 @@ npm의 package.json 처럼 의존성 관리를 requirements.txt로 관리할 수
   name: nginx_role
 ```
 
-##### requirements.yml에서 playbook 의존성 설치
+#### requirements.yml에서 playbook 의존성 설치
 
 ``` sh
 $ ansible-galaxy install -r requirements.yml
 ```
 
-### 사용 패턴
+## 사용 패턴
 
-#### 기본
+### 기본
 
 ![fig2](/assets/2017-09-09/fig2.png)
 <center>< figure 2. master 서버가 타겟 호스트에 ssh로 명령을 내리는 모습 ></center>
 
 예제로 사용되었던 기본적인 구성.
 
-#### 로컬 프로비저닝
+### 로컬 프로비저닝
 
 ![fig3](/assets/2017-09-09/fig3.png)
 <center>< figure 3. ansible로 로컬호스트를 대상으로 프로비저닝 작업이 처리되는 모습 ></center>
@@ -361,7 +362,7 @@ $ ansible all -c local -m ping
 $ ansible-playbook -c local ping.yml
 ```
 
-#### ssh 프록시를 통한 타겟서버 프로비저닝
+### ssh 프록시를 통한 타겟서버 프로비저닝
 
 ![fig4](/assets/2017-09-09/fig4.png)
 <center>< figure 4. ssh proxy 서버들을 통해 타겟 서버로 접근하는 모습 ></center>
@@ -392,7 +393,7 @@ ssh_args = -F ./ssh.cfg -o ControlMaster=auto -o ControlPersist=30m -o ForwardAg
 control_path = ~/.ssh/ansible-%%r@%%h:%%p
 ```
 
-#### 여러 프로비저닝 노드를 이용하는 방법
+### 여러 프로비저닝 노드를 이용하는 방법
 
 ![fig5](/assets/2017-09-09/fig5.png)
 <center>< figure 5. 프로비저닝을 위한 슬레이브 워커들을 통해 분산처리 되는 모습 ></center>
@@ -403,7 +404,7 @@ jenkins같은 태스크 자동화 도구를 이용해서 여러 프로비저닝 
 많은 수의 타겟 서버들을 다룰 때 쓰면 좋겠지만,
 관리하는 서버들이 100대 이상 아니면 굳이 필요가 없다고 생각함.
 
-### References
+## References
 
 - Sysadmin Study Google Group wiki - <http://wiki.tunelinux.pe.kr/display/sysadmin/Ansible>
 - Puppet mini seminar - 2015.10.14 - <http://wiki.tunelinux.pe.kr/display/sysadmin/Puppet+mini+seminar+-+2015.10.14>

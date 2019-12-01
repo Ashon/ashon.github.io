@@ -3,6 +3,7 @@ layout: post
 title: 파이썬에서의 의존성 주입 문제 해결
 date: 2019-11-02 20:51:45 +0900
 comments: true
+toc: true
 tags:
 - Web
 - Python

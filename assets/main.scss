@@ -53,7 +53,7 @@ a.site-title:hover {
   .page-link:not(:last-child) {
     margin: 0
   }
- .page-link {
+  .page-link {
     display: inline-block;
     padding: 0 20px;
     line-height:56px;
@@ -207,6 +207,17 @@ pre.highlight {
   margin-top: 20px;
   padding-top: 10px;
 
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 40px;
+    margin-bottom: 10px
+  }
+  h1 { font-size: 32px }
+  h2 { font-size: 28px }
+  h3 { font-size: 24px }
+  h4 { font-size: 20px }
+  h5 { font-size: 18px }
+  h6 { font-size: 16px }
+
   p {
     line-height: 1.8
   }
@@ -219,7 +230,8 @@ pre.highlight {
   img {
     display:block;
     margin: auto;
-    box-shadow: 0 10px 10px -5px rgba(0,0,0,0.1)
+    border-radius: 3px;
+    box-shadow: 0 10px 10px -5px rgba(0,0,0,0.1);
   }
 }
 

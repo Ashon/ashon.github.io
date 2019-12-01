@@ -6,6 +6,11 @@
 @import 'minima';
 @import 'syntax';
 
+::selection {
+  background-color: #FD0766;
+  color: #fff;
+}
+
 body {
   font: 300 16px/1.5 'Noto Sans KR', sans-serif;
   background: #fff;
@@ -44,6 +49,22 @@ a.site-title:hover {
   color: #fefefe
 }
 
+.site-nav {
+  .page-link:not(:last-child) {
+    margin: 0
+  }
+ .page-link {
+    display: inline-block;
+    padding: 0 20px;
+    line-height:56px;
+    margin: 0;
+  }
+  .page-link:hover {
+    background: #004966;
+    color: #fefefe
+  }
+}
+
 .post-title {
   font-size: 32px;
   letter-spacing: 0;
@@ -66,6 +87,18 @@ a.post-title {
     border: 0;
     background: #fff;
     box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+    overflow: hidden;
+
+    input:checked ~ .trigger {
+      padding: 0;
+    }
+
+    .page-link {
+      display: block;
+      padding: 0 20px;
+      line-height:36px;
+      margin: 0;
+    }
   }
 }
 
@@ -168,6 +201,10 @@ pre.highlight {
 .post-content {
   margin-top: 20px;
   padding-top: 10px;
+
+  p {
+    line-height: 1.8
+  }
 
   img {
     display:block;

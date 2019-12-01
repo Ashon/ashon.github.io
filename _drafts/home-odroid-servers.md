@@ -7,4 +7,4 @@ tags:
 - devops
 ---
 
-![home-servers](/assets/20191102/home-servers.png)
+![home-servers](/assets/2019-11-02/home-servers.png)

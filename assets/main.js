@@ -6,7 +6,7 @@
   const TAG_ARCHIVE_ACTIVE_CLASS = 'active';
   const TAG_ARCHIVE_ID_PREFIX = 'tag-archive-';
 
-  const Context = {
+  const TagCloud = {
     tags: [],
     archivesByTag: {},
 
@@ -20,9 +20,9 @@
         this.archivesByTag[tag.id] = document.getElementById(archiveId);
       });
 
-      Array.from(this.tags).forEach((tag) => Context.onClickTag(tag));
+      Array.from(this.tags).forEach((tag) => TagCloud.onClickTag(tag));
 
-      Context.invalidate();
+      TagCloud.invalidate();
     },
 
     clearSelectedTag: () => {
@@ -52,8 +52,8 @@
     onClickTag: (tag) => {
       let that = this;
       tag.onclick = function(e) {
-        Context.clearSelectedTag();
-        Context.clearSelectedArchive();
+        TagCloud.clearSelectedTag();
+        TagCloud.clearSelectedArchive();
 
         tag.classList.add(TAG_ACTIVE_CLASS);
         that.archivesByTag[tag.id].classList.add(TAG_ARCHIVE_ACTIVE_CLASS);
@@ -61,7 +61,30 @@
     }
   };
 
+  const POST_CONTENT_CLASS = 'post-content';
+  const TABLE_WRAPPER_CLASS = 'table-wrapper';
+  const TableWrapper = {
+    post_content: undefined,
+    tables: [],
+    init: () => {
+      let post_collection = document.getElementsByClassName(POST_CONTENT_CLASS);
+      this.post_content = post_collection && post_collection.item(0);
+      if (this.post_content) {
+        this.tables = this.post_content.getElementsByTagName('table');
+
+        Array.from(this.tables).forEach((table) => {
+          let tableWrapper = document.createElement('div');
+          tableWrapper.className = TABLE_WRAPPER_CLASS;
+
+          table.parentNode.insertBefore(tableWrapper, table);
+          tableWrapper.appendChild(table);
+        });
+      }
+    }
+  };
+
   document.addEventListener('DOMContentLoaded', (e) => {
-    Context.init();
+    TagCloud.init();
+    TableWrapper.init();
   });
 })();

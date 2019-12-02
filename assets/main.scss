@@ -233,6 +233,13 @@ pre.highlight {
     border-radius: 3px;
     box-shadow: 0 10px 10px -5px rgba(0,0,0,0.1);
   }
+
+  .table-wrapper {
+    overflow-x: scroll
+  }
+  .table-wrapper::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .utterances {

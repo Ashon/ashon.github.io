@@ -10,8 +10,6 @@ tags:
 - Software-Design
 ---
 
-## 개요
-
 나는 주로 파이썬의 `Flask`, `Django`, `Sanic`, `Vibora` 등의 웹 프레임워크들을
 이용해서 간단한 프로젝트들을 만들어 오고 있다.
 
@@ -25,7 +23,7 @@ Django같은 DI(Dependency Injection) Framework가 내장되어 있지 않아,
 `importlib`와 `Module namespace`를 이용해 단순한 구조의 `DI Container`를 만들어 사용하는
 방법을 소개한다.
 
-### Simple DI in python
+## Simple DI in python
 
 파이썬은 모듈들을 간단한 방법으로 Dynamic import할 수 있게 만들어져 있기 때문에,
 DI를 위한 기능도 손쉽게 구현할 수 있다.
@@ -35,7 +33,7 @@ application에 내가 설정을 통해 원하는 미들웨어나 의존성들을
 
 아래는 파이썬에서 내가 주로 사용했던 DI를 위한 dynamic import 로직과 injection의 예시이다.
 
-#### Core module
+### Core module
 
 ``` python
 # file: utils.py
@@ -85,7 +83,7 @@ def build_application(settings):
     return app
 ```
 
-#### User Application
+### User Application
 
 정의된 코어 소스코드들로 애플리케이션 라이프사이클을 제어하도록 하고, 사용자는
 필요한 모듈만을 정의하여 애플리케이션을 작성할 수 있게 된다.
@@ -162,13 +160,13 @@ app.route('/hello', methods=['GET'])(hello)
 위에서 설명한 DI와 조합하면, 애플리케이션 설정으로 사용자가 필요한 API들을 하나의 `suite`로서
 관리할 수 있게 되는 장점이 있다.
 
-## 결론
+## Conclusion
 
 `Zen of Python`의 맨 마지막 문구로 대신한다.
 
 > Namespaces are one honking great idea -- let's do more of those!
 
-## 참고
+## References
 
 - [Python Importlib](https://docs.python.org/3/library/importlib.html)
 - [Zen of Python Explained](https://inventwithpython.com/blog/2018/08/17/the-zen-of-python-explained/)

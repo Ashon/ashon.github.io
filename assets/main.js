@@ -83,8 +83,6 @@
     }
   };
 
-  document.addEventListener('DOMContentLoaded', (e) => {
-    TagCloud.init();
-    TableWrapper.init();
-  });
+  TagCloud.init();
+  TableWrapper.init();
 })();

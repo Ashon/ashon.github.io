@@ -319,13 +319,13 @@ Integration 환경으로 배포
 
 하나의 굵은 브랜치에 작은 피쳐들을 합쳐 나가는 git-flow방식은 CI에 적합하지 않다고 판단하였음.
 비슷한 내용의 Topic이 이미 오래전에 온라인 상에서 논의되었고
-(<https://groups.google.com/forum/#!topic/gitflow-users/1Cu8ml4opoQ>),
+([link](https://groups.google.com/forum/#!topic/gitflow-users/1Cu8ml4opoQ>)),
 
 나도 당시에 비슷한 생각을 가지고 있었으므로, 좀 더 유연한 브랜칭 전략을 가져가기로 팀원들과 논의하였다.
 브랜칭 전략에 대한 자세한 내용은 아래 링크로 대신한다.
 
-- <https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html> - git workflows(7)
-- <http://www.slideshare.net/ktateish/the-gitworkflows7-illustrated?qid=ec8eb5a5-3233-453b-be03-56056b09d287&v=&b=&from_search=1> - slideshare: git workflows(7) illustrated
+- [git workflows(7)](https://www.kernel.org/pub/software/scm/git/docs/gitworkflows.html)
+- [slideshare: git workflows(7) illustrated](http://www.slideshare.net/ktateish/the-gitworkflows7-illustrated?qid=ec8eb5a5-3233-453b-be03-56056b09d287&v=&b=&from_search=1)
 
 ## 배포 파이프라인 톺아보기
 
@@ -499,6 +499,6 @@ Slack integration을 달아서 언제든지 Build Status를 확인 가능하도�
 
 ## 참고
 
-- <https://en.wikipedia.org/wiki/Infrastructure_as_Code> - Wikipedia : Infrastructure as code
-- <https://blog.outsider.ne.kr/1173> - HashiCorp의 도 (The Tao of HashiCorp)
-- <http://rosstuck.com/multistage-environments-with-ansible/> - Multistage environments with Ansible
+- [Wikipedia : Infrastructure as code](https://en.wikipedia.org/wiki/Infrastructure_as_Code)
+- [HashiCorp의 도 (The Tao of HashiCorp)](https://blog.outsider.ne.kr/1173)
+- [Multistage environments with Ansible](http://rosstuck.com/multistage-environments-with-ansible/)

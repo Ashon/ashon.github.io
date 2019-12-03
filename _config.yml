@@ -17,8 +17,10 @@ minima:
     rss: subscribe
 
 plugins:
+- jekyll-seo-tag
 - jekyll-feed
 - jekyll-archives
+- jekyll-sitemap
 
 jekyll-archives:
   enabled: []

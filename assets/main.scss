@@ -3,8 +3,13 @@
 ---
 
 @charset 'UTF-8';
-@import 'minima';
+@import 'base';
 @import 'syntax';
+
+::selection {
+  background-color: #FD0766;
+  color: #fff;
+}
 
 body {
   font: 300 16px/1.5 'Noto Sans KR', sans-serif;
@@ -44,8 +49,25 @@ a.site-title:hover {
   color: #fefefe
 }
 
+.site-nav {
+  .page-link:not(:last-child) {
+    margin: 0
+  }
+  .page-link {
+    display: inline-block;
+    padding: 0 20px;
+    line-height:56px;
+    margin: 0;
+  }
+  .page-link:hover {
+    background: #004966;
+    color: #fefefe
+  }
+}
+
 .post-title {
   font-size: 32px;
+  font-weight: 400;
   letter-spacing: 0;
   line-height: 1.2;
 }
@@ -66,6 +88,18 @@ a.post-title {
     border: 0;
     background: #fff;
     box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+    overflow: hidden;
+
+    input:checked ~ .trigger {
+      padding: 0;
+    }
+
+    .page-link {
+      display: block;
+      padding: 0 20px;
+      line-height:36px;
+      margin: 0;
+    }
   }
 }
 
@@ -156,6 +190,10 @@ pre.highlight {
   display: block;
 }
 
+.post-list.archive {
+  margin-left: 20px
+}
+
 .post-date {
   font-size: 0.8em;
   color: #828282
@@ -169,9 +207,38 @@ pre.highlight {
   margin-top: 20px;
   padding-top: 10px;
 
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 40px;
+    margin-bottom: 10px
+  }
+  h1 { font-size: 32px }
+  h2 { font-size: 28px }
+  h3 { font-size: 24px }
+  h4 { font-size: 20px }
+  h5 { font-size: 18px }
+  h6 { font-size: 16px }
+
+  p {
+    line-height: 1.8
+  }
+
+  center {
+    font-size: 0.9em;
+    margin-bottom: 20px
+  }
+
   img {
     display:block;
-    margin: auto
+    margin: auto;
+    border-radius: 3px;
+    box-shadow: 0 10px 10px -5px rgba(0,0,0,0.1);
+  }
+
+  .table-wrapper {
+    overflow-x: scroll
+  }
+  .table-wrapper::-webkit-scrollbar {
+    display: none;
   }
 }
 

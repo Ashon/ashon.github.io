@@ -10,8 +10,6 @@ tags:
 - Kitchen-CI
 ---
 
-## 개요
-
 `Hashicorp`에서 만든 `Terraform`은 `Cloud Native`한 환경에서, 컴퓨팅 자원을 선언적 코드로
 정의할 수 있게 해 주는 클라우드 인프라스트럭쳐 자동화 도구이다.
 

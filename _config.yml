@@ -21,6 +21,7 @@ plugins:
 - jekyll-feed
 - jekyll-archives
 - jekyll-sitemap
+- jekyll-last-modified-at
 
 jekyll-archives:
   enabled: []

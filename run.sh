@@ -1,3 +1,6 @@
 #!/bin/bash
 
-bundle exec jekyll build && bundle exec jekyll serve --host 0.0.0.0 --watch --incremental
+JEKYLL="bundle exec jekyll"
+
+$JEKYLL build && \
+$JEKYLL serve --host 0.0.0.0 --watch --incremental

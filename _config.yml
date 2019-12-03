@@ -5,6 +5,7 @@ description: >-
   for Software Development
 baseurl: ""
 url: "https://ashon.github.io"
+lang: ko_KR
 
 google_analytics: UA-151348212-1
 

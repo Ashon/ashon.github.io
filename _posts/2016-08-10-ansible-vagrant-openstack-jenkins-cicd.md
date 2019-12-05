@@ -2,6 +2,9 @@
 layout: post
 title: Vagrant, Openstack, Jenkins, Ansible을 활용한 서비스 통합 테스트를 위한 CI/CD 구축
 date: 2016-08-10 13:35:00 +0900
+excerpt: |
+  복잡한 서비스 구성에 대한 통합 테스트를 여러 자동화 도구를 이용해
+  효율적으로 개선해 나간 경험을 소개한다.
 comments: true
 toc: true
 tags:

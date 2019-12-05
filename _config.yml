@@ -33,5 +33,7 @@ jekyll-archives:
     tag: '/tag/:name/'
     category: '/category/:name/'
 
+show_excerpts: true
+
 paginate: 20
 paginate_path: /pages/:num/

@@ -72,6 +72,10 @@ a.site-title:hover {
   line-height: 1.2;
 }
 
+.post-excerpts {
+  margin-top: 10px;
+  font-size: 0.9em
+}
 a.post-title {
   font-size: 22px;
 }
@@ -189,7 +193,11 @@ pre.highlight {
 .archive-group.active {
   display: block;
 }
-
+.post-list {
+  >li {
+    margin-bottom:50px
+  }
+}
 .post-list.archive {
   margin-left: 20px
 }

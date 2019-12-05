@@ -2,6 +2,7 @@
 layout: post
 title: Ansible에 대한 간단한 정리
 date: 2017-09-09 15:06:00 +0900
+excerpt: IT 인프라 자동화 도구 중 하나인 Ansible의 기능을 간단하게 알아본다.
 comments: true
 toc: true
 tags:

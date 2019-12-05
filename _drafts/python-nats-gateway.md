@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Python과 Nats를 이용한 메시지 기반의 간단한 API Gateway"
-date: 2019-11-02
+title: "[WIP] Python과 Nats를 이용한 메시지 기반의 간단한 API Gateway"
+date: "2019-12-02"
 toc: true
 comments: true
 tags:
-- toy-project
-- python
-- nats
+- Python
+- Nats
+- Messaging
 ---
 
 예전에 다른 개발자 분들과 함께 `CNCF`에서 인큐베이팅 되고 있는 오픈소스 프로젝트들에 대해

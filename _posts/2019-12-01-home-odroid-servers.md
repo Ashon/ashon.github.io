@@ -5,9 +5,9 @@ date: 2019-12-01 22:42:17 +0900
 comments: true
 toc: true
 tags:
-- devops
-- server
-- network
+- DevOps
+- Server
+- Network
 ---
 
 예전부터 항상 개인 공부를 위한 서버 클러스터를 가지고 싶었다.

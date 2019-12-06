@@ -5,10 +5,9 @@
 
 <a class="post-title" href="{{ post.url | relative_url }}">
   {{ post.title | escape }}
+  <div class="post-excerpts">
+  {%- if site.show_excerpts -%}
+    {{ post.excerpt }}
+  {%- endif -%}
+  </div>
 </a>
-
-<div class="post-excerpts">
-{%- if site.show_excerpts -%}
-  {{ post.excerpt }}
-{%- endif -%}
-</div>

@@ -2,7 +2,9 @@
 layout: post
 title: "[WIP] Kubernetes Flannel CNI 성능 측정"
 date: 2019-12-02 00:07:50 +0900
+excerpt: Kubernetes CNI중 하나인 Flannel에 대한 성능을 측정
 comments: true
+toc: true
 tags:
 - Kubernetes
 - Network

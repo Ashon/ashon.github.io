@@ -1,3 +1,4 @@
+// tag interaction handler
 (() => {
   const TAG_CLASS = 'tag-item';
   const TAG_ACTIVE_CLASS = 'active';
@@ -61,8 +62,14 @@
     }
   };
 
+  TagCloud.init();
+})();
+
+// table scroll wrapper
+(() => {
   const POST_CONTENT_CLASS = 'post-content';
   const TABLE_WRAPPER_CLASS = 'table-wrapper';
+
   const TableWrapper = {
     post_content: undefined,
     tables: [],
@@ -83,6 +90,5 @@
     }
   };
 
-  TagCloud.init();
   TableWrapper.init();
 })();

@@ -19,7 +19,7 @@ figure {
 }
 
 body {
-  font: 300 16px "Noto Sans KR", sans-serif;
+  font: 300 16px sans-serif;
   color: #111;
   background-color: #fdfdfd;
   -webkit-text-size-adjust: 100%;
@@ -83,7 +83,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 800;
+  font-weight: 500;
 }
 
 a {
@@ -120,7 +120,7 @@ blockquote > :last-child {
 pre,
 code {
   background: #4290af;
-  font-family: "Roboto Mono", "Noto Sans KR", monospace;
+  font-family: monospace;
   font-size: 0.9em;
   color: #efefef;
   border: 0;

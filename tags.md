@@ -4,13 +4,12 @@ permalink: /tags/
 title: Tags
 ---
 
-<ul class="tag-cloud">
+<ul class="tag-container">
 {% for tag in site.tags %}
   {% capture tag_name %}{{ tag|first|slugize }}{% endcapture %}
-  {% capture font_size %}{{ tag|last|size| times:100 | divided_by:site.tags.size | plus: 50 }}%{% endcapture %}
   {% capture tag_size %}{{ tag|last|size }}{% endcapture %}
-  <li class="tag-item" id="tag-{{ tag_name }}" style="font-size: {{ font_size }}%">
-    <a href="#{{ tag_name }}">{{ tag_name }} <small>| {{ tag_size }}</small></a>
+  <li>
+    <a class="tag-item large" id="tag-{{ tag_name }}" href="#{{ tag_name }}">{{ tag_name }} <small>| {{ tag_size }}</small></a>
   </li>
 {% endfor %}
 </ul>

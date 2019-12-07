@@ -110,8 +110,8 @@ a.site-title:hover {
 
 a.post-title {
   font-size: 22px;
-  padding: 10px 20px;
-  margin: 2px -20px -10px;
+  padding: 10px 15px;
+  margin: 2px -15px -10px;
   display: inline-block;
 
   .post-excerpts {
@@ -130,6 +130,25 @@ a.post-title:hover {
     font-size: 22px;
     line-height: 28px;
     letter-spacing: 0;
+  }
+}
+
+.toc-container {
+  font-size:0.9em;
+  line-height: 1.6em;
+  ul {
+    margin: 0 0 0 20px;
+    li {
+      list-style: none
+    }
+    li:before {
+      content: '-';
+      margin-right: 5px;
+      color: #828282
+    }
+  }
+  >ul {
+    margin-left: 5px
   }
 }
 

@@ -31,3 +31,4 @@ title: Tags
   </div>
 {% endfor %}
 </div>
+<script src="{{ "assets/tags.js" | relative_url }}"></script>

@@ -1,5 +1,8 @@
 <div class="post-meta-wrapper">
-  <span class="post-date">{{ post.date | date: "%Y %b %d" }}</span>
+  <span class="post-date">
+    {{ post.date | date: "%Y %b %d" }},
+    {% include read_time.html content=post.content %}
+  </span>
   {% include post_tags.html %}
 </div>
 

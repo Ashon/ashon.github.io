@@ -2,7 +2,7 @@
 ---
 
 @charset 'UTF-8';
-@import "syntax";
+@import 'syntax';
 
 :root {
   --bg-color: #fff;
@@ -647,3 +647,5 @@ a.post-title:hover {
   padding-top: 10px;
   border-top: 1px solid var(--border-color);
 }
+
+@import 'night';

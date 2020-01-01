@@ -43,7 +43,7 @@ figure {
 }
 
 body {
-  font: 300 16px sans-serif;
+  font: 16px sans-serif;
   color: var(--primary-font-color);
   background-color: var(--bg-color);
   -webkit-text-size-adjust: 100%;
@@ -250,7 +250,6 @@ table td {
 
 .site-title {
   font-size: 26px;
-  font-weight: 300;
   letter-spacing: -1px;
   margin-bottom: 0;
   float: left;
@@ -355,7 +354,6 @@ table td {
 
 .footer-heading {
   font-size: 18px;
-  font-weight: 300;
 }
 
 .contact-list,
@@ -582,7 +580,6 @@ a.post-title {
   .post-excerpts {
     margin-top: 10px;
     font-size: 0.7em;
-    font-weight: 300;
     color: var(--secondary-font-color);
   }
 }

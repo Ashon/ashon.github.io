@@ -1,0 +1,17 @@
+{% assign category = include.category | default: '' %}
+{% assign paginate = include.paginate | default: 3 %}
+{% assign show_excerpts = include.show_excerpts | default: false %}
+
+{% if category == '' %}
+  {% assign _posts = site.posts %}
+{% else %}
+  {% assign _posts = site.categories[category] %}
+{% endif %}
+
+<ul class="post-list">
+  {% for post in _posts %}
+    <li>
+      {% include post_item.html show_excerpts=show_excerpts %}
+    </li>
+  {% endfor %}
+</ul>

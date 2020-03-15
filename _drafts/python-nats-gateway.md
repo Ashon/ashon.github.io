@@ -6,6 +6,7 @@ excerpt: |
   CNCF에서 관리되고 있는 메시징 프로젝트인 Nats를 이용해 마이크로 서비스를 구축한 경험을
   공유한다.
 comments: true
+category: blog
 toc: true
 tags:
 - Python

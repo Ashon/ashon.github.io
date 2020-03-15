@@ -6,6 +6,7 @@ excerpt: |
   클라우드 환경의 인프라스트럭쳐 정의 도구인 Terraform의 테스트 자동화를 위해
   terraform-kitchen을 사용해 본 이야기
 comments: true
+category: blog
 toc: true
 tags:
 - DevOps

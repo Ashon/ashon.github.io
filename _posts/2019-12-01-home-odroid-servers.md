@@ -6,6 +6,7 @@ excerpt: |
   ODROID-H2 머신을 이용해서 홈 서버 클러스터를 구성해 보고 가벼운 네트워크
   벤치마크 테스트를 진행해 본 내용을 공유한다.
 comments: true
+category: blog
 toc: true
 tags:
 - DevOps

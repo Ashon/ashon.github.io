@@ -6,6 +6,7 @@ excerpt: |
   복잡한 서비스 구성에 대한 통합 테스트를 여러 자동화 도구를 이용해
   효율적으로 개선해 나간 경험을 소개한다.
 comments: true
+category: blog
 toc: true
 tags:
 - DevOps

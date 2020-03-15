@@ -6,6 +6,7 @@ excerpt: |
   Python의 GC 모듈을 이용해 동작하는 애플리케이션의 힙 사용량을 측정해 보고,
   Prometheus에서 메트릭을 수집할 수 있도록 exporter를 만들어 본 내용을 공유한다.
 comments: true
+category: blog
 toc: true
 tags:
 - Python

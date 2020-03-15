@@ -5,6 +5,7 @@ date: 2019-11-02 20:51:45 +0900
 excerpt: |
   파이썬을 사용하면서 코드를 좀 더 유연하게 다루기 위해 간단하게 DI를 구현해 본 내용을 공유한다.
 comments: true
+category: blog
 toc: true
 tags:
 - Web

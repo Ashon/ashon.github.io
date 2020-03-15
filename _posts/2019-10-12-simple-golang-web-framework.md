@@ -5,8 +5,8 @@ date: 2019-10-12 00:47:23 +0900
 excerpt: |
   Go 언어를 공부해 보면서 "net/http" 모듈을 간단히 살펴보고 Go에서는 어떤식으로 사용자 요청을
   관리하면 좋을지 고민해 본다.
-
 comments: true
+category: blog
 toc: true
 tags:
 - Web

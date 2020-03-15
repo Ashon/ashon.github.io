@@ -6,6 +6,7 @@ excerpt: |
   RabbitMQ shovel plugin을 활용해서 Queue로 들어오는 메시지들을 다른 Queue로 미러링을
   구성해 실 서비스에서 흘러가는 메시지들을 트레이싱하는 방법을 알아본다.
 comments: true
+category: blog
 toc: true
 tags:
 - RabbitMQ

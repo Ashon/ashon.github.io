@@ -6,6 +6,7 @@ excerpt: |
   큰 인프라 환경을 코드로 관리하면서 발생할 수 있는 몇가지 문제들을 소프트웨어 개발 방법론에서
   잘 알려진 전략 패턴을 이용해서 코드를 깔끔하게 관리하기 위한 방법을 찾아보았다.
 comments: true
+category: blog
 toc: true
 tags:
 - DevOps

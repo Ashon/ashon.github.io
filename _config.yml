@@ -5,6 +5,7 @@ description: >-
 baseurl: ""
 url: "https://ashon.github.io"
 lang: ko_KR
+copyright: Copyright 2016-2020. Ju-won Lee. All rights reserved.
 
 google_analytics: UA-151348212-1
 

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  ashon.github.io:
+    container_name: ashon.github.io
+    build:
+      context: .
+    command:
+    - bundle
+    - exec
+    - jekyll
+    - serve
+    - --host
+    - 0.0.0.0
+    - --watch
+    - --incremental
+    - --drafts
+    volumes:
+    - ./:/blog/
+    ports:
+    - 4000:4000

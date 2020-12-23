@@ -8,9 +8,9 @@
   --bg-color: #fff;
   --border-color: #efefef;
 
-  --primary-active-color: #004966;
-  --secondary-active-color: #087ba8;
-  --minor-active-color: #4290af;
+  --primary-active-color: #003f91;
+  --secondary-active-color: #005091;
+  --minor-active-color: #c2ff94;
 
   --primary-font-color: #222;
   --secondary-font-color: #333;
@@ -155,12 +155,12 @@ code {
   background: var(--minor-active-color);
   font-family: monospace;
   font-size: 0.9em;
-  color: #efefef;
+  color: var(--primary-font-color);
   border: 0;
 }
 
 code {
-  padding: 1px 5px;
+  padding: 4px;
 }
 
 pre {

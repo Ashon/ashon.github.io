@@ -1,7 +1,7 @@
 ---
 layout: post
 title: CNCF CNI 프로젝트 살펴보기
-date: 2021-02-05 21:17:02 +0900
+date: 2021-02-08 00:26:02 +0900
 excerpt: |
   CNCF에서 관리되고 있고, Kubernetes에서 컨테이너 네트워킹을 달성하기 위해 표준으로
   사용하고 있는 CNI 프로젝트에 대해서 살펴보고 중요하다고 생각한 내용들을 정리한다.
@@ -16,7 +16,7 @@ tags:
 ---
 
 과거에 [컨테이너로 데이터센터 네트워크를 모방해 볼 수 있을까?](/blog/2020/12/20/homemade-datacenter-network.html)
-라는 제목으로 컨테이너를 활용한 데이터센터 네트워크를 모방해 보기 위한 글을 올린 적이 있다.
+라는 제목으로 컨테이너를 활용해 데이터센터 네트워크를 모방하는 내용의 글을 포스팅한 적이 있다.
 
 이에 대한 연장선으로서, 그리고 **Open Container Korea** 슬랙에서 Kubernetes에 관심이
 많은 분들과 스터디를 진행하면서 **CNI**에 대한 발표를 할 기회가 생겨서 공부를 하면서 정리해
@@ -33,6 +33,12 @@ tags:
 런타임으로는 Kubernetes, Mesos, rkt 등이 있고, 컨테이너 네트워크 플러그인은 Weave NET,
 Calico, Cillium, Flannel 등이 있다. `CNI`는 **컨테이너 런타임**과 **네트워크 플러그인**
 둘 사이의 인터페이스에 대한 스펙을 정의한 프로젝트이며, `libcni`라는 driver API를 제공한다.
+
+이 인터페이스를 사용해서 다양한 네트워크 드라이버 구현체들과의 통신을 통해 Kubernetes 안에서
+컨테이너 네트워크 구성이 관리된다.
+
+![what-is-cni](/assets/2021-02-07/fig1.png)
+<center>< figure 1. CNI는 Kubernetes에서 컨테이너들의 네트워크 구성을 담당하는 드라이버 인터페이스 계층이다. ></center>
 
 ## CNI에서 관리되는 컴포넌트들
 
@@ -73,14 +79,41 @@ bridge CNI 플러그인 소개 문서는 아래를 참고한다.
 - (CNI) bridge: <https://www.cni.dev/plugins/main/bridge/>
 - (IPAM) host-local: <https://www.cni.dev/plugins/ipam/host-local/>
 
+### 준비물
+
+[CNI Reference Plugins](https://github.com/containernetworking/plugins) 저장소를 클론받은 후 빌드한다.
+
+``` sh
+$ git clone https://github.com/containernetworking/plugins
+
+$ cd plugins
+
+# 저장소에서 관리하는 빌드 스크립트를 통해 빌드한다.
+$ ./build_linux.sh
+
+# ./bin 디렉토리 안에 빌드된 바이너리들이 위치하게 된다.
+$ ls bin
+bandwidth  dhcp      flannel      host-local  loopback  portmap  sbr     tuning  vrf
+bridge     firewall  host-device  ipvlan      macvlan   ptp      static  vlan
+```
+
 #### 컨테이너 생성하기
 
 CNI를 적용하기 위해서는 미리 컨테이너가 생성되어 있어야 한다.
-어떤 컨테이너가 하나 있고 아래와 같은 정보를 가지고 있다고 가정한다.
+간단히 nginx컨테이너를 `network=none` 으로 하나 생성해 본다.
 
 ```sh
-container ID: b4cc640b25ea
-container network sandbox: /var/run/docker/netns/5fe32f1805bd
+$ docker run --rm --network=none -itd nginx
+
+efe41b3a1753a6..
+```
+
+구동한 컨테이너의 netns 경로를 조회한다.
+
+```sh
+{% raw %}$ docker inspect efe41b3a1753a6.. -f '{{ .NetworkSettings.SandboxKey }}'{% endraw %}
+
+/var/run/docker/netns/329f3b3c3f1c
 ```
 
 #### bridge.conf 설정파일 준비하기
@@ -91,7 +124,7 @@ container network sandbox: /var/run/docker/netns/5fe32f1805bd
 > 값을 넘겨서 네트워크를 구성하기도 한다.
 
 ```sh
-# file bridge.conf
+# file: ./bridge.conf
 
 {
     "cniVersion": "0.3.1",
@@ -114,16 +147,108 @@ container network sandbox: /var/run/docker/netns/5fe32f1805bd
 프로비저닝에 필요한 인자들을 환경변수로 설정하여 플러그인을 실행하면, 프로비저닝이 완료된다.
 
 ```sh
-# shell
-CNI_COMMAND="ADD"
-CNI_CONTAINERID="b4cc640b25ea"
-CNI_NETNS="/var/run/docker/netns/5fe32f1805bd"
-CNI_IFNAME="br0"
-CNI_PATH="/vagrant/plugins/bin/bridge"
-./bridge < bridge.conf
+# * pwd는 클론받은 플러그인 저장소다.
+$ CNI_COMMAND="ADD" \
+  CNI_CONTAINERID="efe41b3a1753a6.." \
+  CNI_NETNS="/var/run/docker/netns/329f3b3c3f1c" \
+  CNI_IFNAME="eth0" \
+  CNI_PATH="$(pwd)/bin" \
+  ./bin/bridge < bridge.conf
+
+# 아래와 같은 결과가 shell STDOUT으로 출력되었다.
+{
+    "cniVersion": "0.3.1",
+    "interfaces": [
+        {
+            "name": "mynet0",
+            "mac": "22:1b:aa:2f:fa:2f"
+        },
+        {
+            "name": "vethb186937e",
+            "mac": "e6:2a:c9:f0:f6:a2"
+        },
+        {
+            "name": "eth0",
+            "mac": "2a:45:59:ba:97:95",
+            "sandbox": "/var/run/docker/netns/329f3b3c3f1c"
+        }
+    ],
+    "ips": [
+        {
+            "version": "4",
+            "interface": 2,
+            "address": "10.10.0.2/16",
+            "gateway": "10.10.0.1"
+        }
+    ],
+    "routes": [
+        {
+            "dst": "0.0.0.0/0",
+            "gw": "10.10.0.1"
+        }
+    ],
+    "dns": {}
+}
 ```
 
-#### 요약
+bridge plugin을 통해 `10.0.0.1/16` 컨테이너 네트워크 대역이 만들어졌고,
+준비한 컨테이너의 ipv4 address 가 `10.10.0.2` 임을 확인할 수 있다.
+
+#### 구성된 네트워크를 통해 트래픽 전달하기, DataPlane 확인
+
+curl 테스트를 통해 컨테이너로 http 요청이 잘 진행되는지 테스트한다.
+
+```sh
+$ curl 10.10.0.2
+<!DOCTYPE html>
+<html>
+...
+```
+
+코드에서 파악한 bridge 플러그인이 dataplane에 어떻게 프로비저닝 되었는지 확인한다.
+
+brctl show로도 확인할 수 있지만, iproute2의 bridge 명령을 사용해 본다.
+
+``` sh
+$ bridge link
+5: vethb186937e state UP @docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master mynet0 state forwarding priority 32 cost 2
+
+```
+
+host에서 보이는 veth 인터페이스를 확인한다.
+
+``` sh
+$ ip link
+5: vethb186937e@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master mynet0 state UP mode DEFAULT group default
+    link/ether e6:2a:c9:f0:f6:a2 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+```
+
+container의 PID를 조회한 후 nsenter 명령어를 통해 컨테이너 내부 인터페이스를 확인한다.
+
+``` sh
+{% raw %}$ docker inspect efe41b3a1753a6.. -f '{{ .State.Pid }}'{% endraw %}
+6203
+```
+
+``` sh
+$ sudo nsenter -t 6203 -n ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 2a:45:59:ba:97:95 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 10.10.0.2/16 brd 10.10.255.255 scope global br0
+       valid_lft forever preferred_lft forever
+```
+
+![bridge-example](/assets/2021-02-07/fig2.png)
+<center>< figure 2. Host에 `mynet0` 브릿지와 컨테이너와 호스트를 잇는 veth 쌍이 만들어진 모습 ></center>
+
+결과를 통해서 Host에 `mynet0` bridge, 그리고 호스트와 컨테이너를 잇는 `veth` 인터페이스
+쌍이 만들어진 것을 확인할 수 있다.
+
+#### 예제를 통해서 알아 본 CNI 동작 방식 정리
 
 사용 예에서 설명한 것 처럼 CNI 플러그인들은 다음과 같은 같은 특징들이 있다.
 
@@ -205,10 +330,10 @@ CNI 플러그인은 컨테이너 네트워크 네임스페이스에 대해 네�
   - **Params**: `ADD` 때 사용된 값과 동일
   - 모든 패러미터들은 `ADD` 오퍼레이션때 사용된 값과 동일해야 한다.
   - 제거 작업은 컨테이너 구성에 사용된 모든 네트워크 리소스를 해제해야한다.
-  - 제거 이전에 `ADD` 작업이 있는 경우 `prevResult` 필드를 추가해야 한다.
+  - 제거 이전에 `ADD` 작업이 있는 경우 **prevResult** 필드를 추가해야 한다.
   바로 이전 `ADD` 작업의 결과가 들어간다. (꼭)
-  - 컨테이너 런타임은 결과 캐싱에 대해 `libcni` 의 지원을 사용할 수 있음.
-  - `CNI_NETNS` 또는 `prevResult` 값이 넘어오지 경우, 플러그인은 가능한 많은 리소스를 제거하고 결과를 반환하도록 해야한다.
+  - 컨테이너 런타임은 결과 캐싱에 대해 **libcni** 의 지원을 사용할 수 있음.
+  - `CNI_NETNS` 또는 **prevResult** 값이 넘어오지 경우, 플러그인은 가능한 많은 리소스를 제거하고 결과를 반환하도록 해야한다.
   - 컨테이너 런타임이 컨테이너에 대한 `ADD` 결과를 캐싱하고 있는 경우,
   `DEL` 에서는 캐시된 결과를 제거해야 한다.
 
@@ -218,29 +343,34 @@ CNI 플러그인은 컨테이너 네트워크 네임스페이스에 대해 네�
 - `CHECK` : 컨테이너 네트워크가 기대한 대로 잘 있는지 확인한다.
   - **Params**: `ADD` 때 사용된 값과 동일
   - **Result**: 플러그인이 에러 없이 잘 끝나야함.
-  - 플러그인은 기대한 결과를 위해 `prevResult` 를 참조해야 한다.
+  - 플러그인은 기대한 결과를 위해 **prevResult** 를 참조해야 한다.
 - `VERSION` : CNI의 버전을 리포팅한다.
   - **Params**: 없음
   - **Result**: CNI 스펙의 버전과 지원되는 버전 정보
 
 컨테이너 런타임은 네트워크 타입을 호출할 실행파일 이름으로 사용해야 한다. 런타임은 사전 정의된 디렉토리 목록에서 이 실행파일을 찾아야 한다.
 
-런타임이 플러그인 파일을 찾게되면 다음 환경변수를 사용해서 파일을 실행한다.
+런타임이 플러그인 파일을 찾게되면 다음 **환경변수**를 사용해서 파일을 실행한다.
 
 - `CNI_COMMAND`: 위에서 소개한 오퍼레이션 목록 (`ADD`, `DEL`, `CHECK`, `VERSION`)
 - `CNI_CONTAIERID`: 컨테이너 ID
 - `CNI_NETNS`: netns 경로
 - `CNI_IFNAME`: 셋업 할 네트워크 인터페이스 이름. 플러그인에서 주어진 인터페이스 이름을 사용할 수 없다면 반드시 에러를 일으켜야한다.
-- `CNI_ARGS`: 호출시 전달하는 별도 인자들, `FOO=BAR;ABC=123` 형태
+- `CNI_ARGS`: 호출시 전달하는 별도 인자들, **FOO=BAR;ABC=123** 형태
 - `CNI_PATH`: CNI 플러그인의 실행가능한 경로들. OS-specific seperator를 사용한다.
-  - Linux에서는 `:` 윈도는 `;` (`PATH` 환경변수를 생각하면 될듯)
+  - Linux에서는 `:` 윈도는 `;` (PATH 환경변수를 생각하면 될듯)
 
-네트워크 플러그인으로 넘어가는 설정은 `stdin` 을 통한다. (꼭 파일을 통해 전달되지 않아도됨을 의미함)
+네트워크 플러그인으로 넘어가는 설정은 `STDIN` 을 통한다. (꼭 파일을 통해 전달되지 않아도됨을 의미함)
 
 ### * 중간 정리
 
 그럼 여기까지 알아본 내용을 다시 정리하고 넘어가면, 앞서 설명한 실행 예제의 과정들이 왜 이렇게
 진행되어야 했는지 알 수 있을 것이라 생각한다.
+
+- 예제에서 알아본 것 처럼 CNI의 구현체는 실행가능한 파일이다.
+- 환경변수를 통해 실행파일로 넘겨질 인자들이 결정된다.
+- CNI 에서 관리하는 네트워크 구성의 라이프사이클은 대표적으로 `ADD`, `DEL`을 통해 관리된다.
+- 구현체 내부로 넘겨지는 구성 설정은 **파일**이나 **STDIN** 으로 전달된다.
 
 이후 아래 섹션부터는 CNI 스펙의 세부적인 디테일들을 설명하고 있다.
 
@@ -346,7 +476,7 @@ CNI 플러그인이 동작하고 난 결과는 이런 형태의 응답을 출력
     // host-local이라는 IPAM 플러그인을 사용한다.
     // 앞서 소개한 CNI 플러그인의 형태를 따른다.
     // (실행가능한 파일이고, 환경변수를 통한 설정 등...)
-    "type": "host-local", /
+    "type": "host-local",
 
     // ipam specific
     "subnet": "10.1.0.0/16",
@@ -409,11 +539,23 @@ CNI 플러그인이 동작하고 난 결과는 이런 형태의 응답을 출력
 ### * 이후 섹션들 (Well-known Structures, Error Codes, ...)
 
 - 이 부분에서는 Network Configuration에서 소개한 각 입출력 스키마들을 예시를 통해서 설명하고 있다.
-- 원문을 보는것이 크게 부담이 되지 않는 상황이라 정리는 생략한다.
+- 여기서부터는 원문을 보는것이 크게 부담이 되지 않는 상황이라 정리는 생략한다.
 
 ## 정리
 
+지금까지 CNI가 무엇이고 Kubernetes 안에서는 어떤 역할을 하고 있는지, 그리고 CNI가 제시한
+인터페이스를 간단한 레퍼런스 구현체를 통해 동작을 알아보았다.
+
+Kubernetes 안에서는 다양한 네트워크 가상화 솔루션들이 이 CNI 인터페이스를 통해 컨테이너의
+네트워킹 문제를 해결하고 있다.
+
+그리고 CNI 생태계를 통해, 네트워크 가상화가 필요한 여러 부문에서도 CNI 구현체들을 통해 달성할
+수 있을 것이라는 생각이 들었다. 좀 더 응용해서 필요하다면 VM과 Container가 같은 데이터플레인을
+가질 수 있게도 만들 수 있을 것이라는 생각이 든다.
+
 ## 함께 보면 좋은 내용들
 
-- [https://kubernetes.io/ko/docs/concepts/cluster-administration/networking/](https://kubernetes.io/ko/docs/concepts/cluster-administration/networking/)
-- [https://www.cncf.io/wp-content/uploads/2020/08/Introduction-to-CNI-2.pdf](https://www.cncf.io/wp-content/uploads/2020/08/Introduction-to-CNI-2.pdf)
+- <https://kubernetes.io/ko/docs/concepts/cluster-administration/networking/>
+- <https://www.cncf.io/wp-content/uploads/2020/08/Introduction-to-CNI-2.pdf>
+- <https://ssup2.github.io/theory_analysis/Container_Network_Interface/>
+- [Open Container Korea - Cillium 정리](https://www.notion.so/asbubam/Kubernetes-Network-Cilium-1d4371f562ea4acdb5e679e376a7c992?fbclid=IwAR2lBhPrRpHuwVKv-NMNdnKuTZto5osgxUXtpj350ZW8hj6vq7Lh5h4yRlk)

@@ -1,0 +1,97 @@
+@font-face {
+  font-family: 'GowunDodum-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunDodum-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  font-family: 'GowunDodum-Regular', serif;
+  font-weight: 100;
+  color: #555;
+  line-height: 2em;
+}
+.layout {
+  max-width: 450px;
+  margin: auto
+}
+
+a {
+  cursor: pointer;
+  color: #555;
+  text-decoration: underline;
+  text-decoration-color: #aaa;
+  text-decoration-thickness: 1%;
+}
+a:hover {
+  color: #333;
+}
+.splash {
+  height: 500px;
+  margin: 0 -5px;
+  background-size:auto 100%;
+  background-position: 50%;
+}
+section {
+  padding: 0 5px
+}
+section.title-section {
+  min-height: 100vh;
+  box-shadow: 0 40px 30px -20px rgba(0, 0, 0, .2);
+}
+section.subtitle-section {
+  min-height: 100vh;
+}
+section.info-section {
+  margin-bottom: 200px;
+}
+.table {
+  padding: 5px;
+  margin: auto;
+  max-width:400px
+}
+.table .row {
+  display: flex;
+}
+.row .thumb {
+  width: 150px;
+  height: 150px;
+  margin: 0 5px 5px 0;
+  background-position: 50%;
+  background-size:100%;
+  background-repeat: no-repeat;
+}
+.row .thumb:last-child {
+  margin-right:0
+}
+
+p {
+  padding: 10px;
+}
+
+strong {
+  font-size: 1.2rem;
+  margin: 0 5px;
+  color: #333;
+}
+
+dt {
+  color: #aaa;
+  font-size: 0.9em;
+  margin-top: 20px
+}
+dd {
+  margin-left: 10px
+}
+footer .copyright {
+  font-size: 0.8em;
+  text-align: center;
+  padding: 20px 0
+}
+
+@media (min-width: 700px) {
+  section.title-section, section.subtitle-section {
+    min-height: initial;
+  }
+}

@@ -10,14 +10,7 @@ permalink: /about/
 
 ### Interests
 
-- Python `Flask`, `Django`, `Celery`, `Beautifulsoup4`
-- Frontend `React`, `AngularJS`, `jQuery`
-- Automation `Ansible`, `Chef`, `Terraform`, `Vagrant`
-- CI/CD `Spinnaker`, `Jenkins`
-- Messaging `RabbitMQ`, `Nats`
-- Monitoring `Prometheus`, `Nagios`
-- Cloud `AWS`, `Openstack`
-- Container `Docker`, `Kubernetes`
+- `Clean Architecture`, `Cloud`, `DevOps`, `SRE`
 
 ### Careers
 

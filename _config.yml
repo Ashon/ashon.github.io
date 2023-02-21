@@ -5,7 +5,7 @@ description: >-
 baseurl: ""
 url: "https://ashon.github.io"
 lang: ko_KR
-copyright: Copyright 2016-2021. Ju-won Lee. All rights reserved.
+copyright: Copyright 2016-2023. Ju-won Lee. All rights reserved.
 
 google_analytics: UA-151348212-1
 
@@ -18,19 +18,19 @@ minima:
     rss: subscribe
 
 plugins:
-- jekyll-seo-tag
-- jekyll-archives
-- jekyll-last-modified-at
+  - jekyll-seo-tag
+  - jekyll-archives
+  - jekyll-last-modified-at
 
 jekyll-archives:
   enabled: []
   layout: archive
   permalinks:
-    year: '/:year/'
-    month: '/:year/:month/'
-    day: '/:year/:month/:day/'
-    tag: '/tag/:name/'
-    category: '/category/:name/'
+    year: "/:year/"
+    month: "/:year/:month/"
+    day: "/:year/:month/:day/"
+    tag: "/tag/:name/"
+    category: "/category/:name/"
 
 show_excerpts: true
 

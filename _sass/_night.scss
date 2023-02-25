@@ -45,6 +45,12 @@
   .tag-item:hover {
     background: #444;
   }
+  .tag-item.large {
+    small {
+      background: #333;
+      color: #eee;
+    }
+  }
   a.post-title:hover {
     background: #333;
   }

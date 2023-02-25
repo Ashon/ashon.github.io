@@ -9,7 +9,7 @@ title: Tags
   {% capture tag_name %}{{ tag|first|slugize }}{% endcapture %}
   {% capture tag_size %}{{ tag|last|size }}{% endcapture %}
   <li>
-    <a class="tag-item large" id="tag-{{ tag_name }}" href="#{{ tag_name }}">{{ tag_name }} <small>| {{ tag_size }}</small></a>
+    <a class="tag-item large" id="tag-{{ tag_name }}" href="#{{ tag_name }}">{{ tag_name }} <small>{{ tag_size }}</small></a>
   </li>
 {% endfor %}
 </ul>

@@ -121,6 +121,7 @@ a, a:visited {
   color: var(--secondary-active-color);
 }
 a:hover {
+  background-color: rgba(0, 0, 0, 0.05);
   color: var(--primary-active-color);
 }
 

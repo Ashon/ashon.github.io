@@ -14,7 +14,8 @@ permalink: /about/
 
 ### Careers
 
-- 2022.12 ~ Present - 당근마켓 \| SRE
+- 2026.02 ~ Present - Rebellions.ai \| Cloud Platform
+- 2022.12 ~ 2026.02 - 당근마켓 \| SRE
 - 2018.02 ~ 2022.12 - Kakao \| Cloud Computing
 - 2017.02 ~ 2017.12 - 더핑크퐁컴퍼니 \| Development Team
 - 2014.08 ~ 2017.02 - CDNetworks \| Web Portal

@@ -1,0 +1,56 @@
+{{- /* Header override.
+       Reason: PaperMod's active detection uses exact eq between the
+       menu URL and the current page's Permalink. With uglyURLs=true,
+       Hugo emits `/tags/index.html` (or `/tags.html`) for the tag
+       taxonomy listing, which never equals `/tags/`. Make the match
+       trailing-slash + index.html tolerant, and treat any descendant
+       of a section URL as belonging to that menu item. */ -}}
+<header class="header">
+  <nav class="header-nav">
+    <div class="logo">
+      {{- $label_text := (site.Params.label.text | default site.Title) }}
+      {{- if site.Title }}
+      <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ $label_text }} (Alt + H)">
+        {{- $label_text -}}
+      </a>
+      {{- end }}
+    </div>
+
+    {{- $currentPage := . }}
+    {{- /* Normalize the current page URL: strip trailing index.html and
+           guarantee a trailing slash, so /tags/index.html → /tags/ . */ -}}
+    {{- $page_url := $currentPage.Permalink | absLangURL }}
+    {{- $page_url = replace $page_url "index.html" "" }}
+    {{- if and (ne $page_url "/") (not (strings.HasSuffix $page_url "/")) }}
+      {{- $page_url = printf "%s/" $page_url }}
+    {{- end }}
+
+    <ul id="menu" class="menu">
+      {{- range site.Menus.main }}
+      {{- $menu_item_url := (cond (strings.HasSuffix .URL "/") .URL (printf "%s/" .URL)) | absLangURL }}
+      {{- $is_search := eq (site.GetPage .KeyName).Layout `search` }}
+      {{- /* Active when current page URL == menu URL OR is a descendant
+             of the menu's section (e.g. /tags/ebpf/ activates "Tags"). */ -}}
+      {{- $active := or
+            (eq $menu_item_url $page_url)
+            (and (ne $menu_item_url "/") (strings.HasPrefix $page_url $menu_item_url)) }}
+      <li>
+        <a href="{{ .URL | absLangURL }}" title="{{ .Title | default .Name }}{{- cond $is_search (" (Alt + /)" | safeHTMLAttr) ("" | safeHTMLAttr) }}"
+          {{- cond $is_search (" accesskey=/" | safeHTMLAttr) ("" | safeHTMLAttr) }}>
+          <span {{- if $active }} class="active" {{- end }}>
+            {{- .Pre -}}{{- .Name -}}{{- .Post -}}
+          </span>
+          {{- if (findRE "://" .URL) }}&nbsp;
+          <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+            <path d="M15 3h6v6"></path>
+            <path d="M10 14L21 3"></path>
+          </svg>
+          {{- end }}
+        </a>
+      </li>
+      {{- end }}
+    </ul>
+  </nav>
+</header>

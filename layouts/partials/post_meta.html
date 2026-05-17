@@ -1,0 +1,27 @@
+{{- /* Unified post meta block — same markup for home list, archive,
+       and single post. Renders:
+         <div class="entry-meta-top">
+           <span class="entry-date">2024 Aug 25</span>
+           <span class="entry-readtime">9 mins</span>
+           <span class="entry-tags"><a class="entry-tag">…</a>…</span>
+         </div>
+       Reason for the manual English month: site.Params.DateFormat with
+       Korean locale strips the "Jan" token to an empty string. */ -}}
+{{- $months := slice "Jan" "Feb" "Mar" "Apr" "May" "Jun"
+                     "Jul" "Aug" "Sep" "Oct" "Nov" "Dec" -}}
+<div class="entry-meta-top">
+  {{- if not .Date.IsZero -}}
+  {{- $mname := index $months (sub (int (.Date.Format "1")) 1) -}}
+  <span class="entry-date" title="{{ .Date }}">{{ .Date.Format "2006" }} {{ $mname }} {{ .Date.Format "02" }}</span>
+  {{- end }}
+  {{- if (.Param "ShowReadingTime") -}}
+  <span class="entry-readtime">{{ i18n "read_time" .ReadingTime | default (printf "%d min" .ReadingTime) }}</span>
+  {{- end }}
+  {{- with .Params.tags }}
+  <span class="entry-tags">
+    {{- range . }}
+    <a class="entry-tag" href="{{ "tags/" | absURL }}{{ . | urlize }}/">{{ . }}</a>
+    {{- end }}
+  </span>
+  {{- end }}
+</div>

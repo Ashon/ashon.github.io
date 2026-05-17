@@ -1,0 +1,116 @@
+baseURL = "https://ashon.github.io/"
+title = "Lifestack"
+theme = "PaperMod"
+copyright = "Copyright 2016-2026. Ju-won Lee. All rights reserved."
+
+defaultContentLanguage = "ko"
+
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+googleAnalytics = "UA-151348212-1"
+
+# Preserve legacy Jekyll URLs: /blog/YYYY/MM/DD/slug.html
+uglyURLs = true
+
+[languages.ko]
+  locale = "ko-kr"
+  languageName = "한국어"
+  weight = 1
+
+[permalinks]
+  blog = "/blog/:year/:month/:day/:slug"
+
+[pagination]
+  pagerSize = 20
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+
+[outputFormats.SearchIndex]
+  mediaType = "application/json"
+  baseName = "index"
+  isPlainText = true
+  notAlternative = true
+
+[minify]
+  disableXML = true
+  minifyOutput = true
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    noClasses = false
+    style = "monokai"
+    tabWidth = 4
+  [markup.tableOfContents]
+    endLevel = 4
+    ordered = false
+    startLevel = 2
+
+[taxonomies]
+  tag = "tags"
+
+[[menu.main]]
+  identifier = "about"
+  name = "About"
+  url = "/about/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "archive"
+  name = "Archive"
+  url = "/archive/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "tags"
+  name = "Tags"
+  url = "/tags/"
+  weight = 30
+
+[params]
+  env = "production"
+  description = "Experience and Thinking about Software Development"
+  author = "Ju-won Lee"
+  defaultTheme = "auto"
+  disableThemeToggle = true
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = false
+  ShowCodeCopyButtons = true
+  ShowWordCount = false
+  ShowRssButtonInSectionTermList = true
+  ShowToc = true
+  TocOpen = true
+  ShowLastMod = true
+  comments = true
+  DateFormat = "2006 Jan 02"
+  mainSections = ["blog"]
+  disableSpecial1stPost = true
+  email = "ashon8813@gmail.com"
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/ashon"
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/ju-won-lee-9662108a"
+  [[params.socialIcons]]
+    name = "x"
+    title = "X (Twitter)"
+    url = "https://x.com/ashon_lee"
+  [[params.socialIcons]]
+    name = "rss"
+    url = "/index.xml"
+
+  [params.assets]
+    disableHLJS = true

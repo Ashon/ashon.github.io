@@ -1,0 +1,7 @@
+[read_time]
+one = "1 min"
+other = "{{ .Count }} mins"
+
+[words]
+one = "{{ .Count }} word"
+other = "{{ .Count }} words"

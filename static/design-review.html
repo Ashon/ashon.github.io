@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lifestack · 디자인 리뷰</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #fafbfc;
+    --surface-2: #f3f5f8;
+    --border: #e6e8ec;
+    --border-strong: #d2d6dc;
+    --text: #1a1d21;
+    --text-muted: #5b6068;
+    --text-faint: #8a9099;
+    --accent: #2a7ae2;
+    --accent-soft: #eef3fa;
+    --code-bg: #f4f5f7;
+
+    --sev-crit-bg: #fff1f0;
+    --sev-crit-fg: #b3261e;
+    --sev-crit-bd: #f6c2bd;
+    --sev-high-bg: #fff7e6;
+    --sev-high-fg: #a35a00;
+    --sev-high-bd: #f3d7a3;
+    --sev-med-bg: #fff8db;
+    --sev-med-fg: #7a5d00;
+    --sev-med-bd: #efe1a3;
+    --sev-low-bg: #ecf6ec;
+    --sev-low-fg: #1d6f3c;
+    --sev-low-bd: #c7e3c9;
+    --sev-info-bg: #eef3fa;
+    --sev-info-fg: #1f5fb8;
+    --sev-info-bd: #c8d8ef;
+
+    --grade-a-bg: #e9f6ec; --grade-a-fg: #1d6f3c;
+    --grade-b-bg: #fff8db; --grade-b-fg: #7a5d00;
+    --grade-c-bg: #fff1e0; --grade-c-fg: #a35a00;
+    --grade-d-bg: #fff1f0; --grade-d-fg: #b3261e;
+
+    --radius: 8px;
+    --radius-sm: 4px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+  }
+  html[data-theme="dark"] {
+    --bg: #15171a;
+    --surface: #1c1f23;
+    --surface-2: #22262b;
+    --border: #2c3137;
+    --border-strong: #3a3f47;
+    --text: #e6e8ec;
+    --text-muted: #aab0b8;
+    --text-faint: #7a8189;
+    --accent: #79b8ff;
+    --accent-soft: #1f2a3a;
+    --code-bg: #1a1d20;
+
+    --sev-crit-bg: #3a1a1a; --sev-crit-fg: #ff8a85; --sev-crit-bd: #5a2424;
+    --sev-high-bg: #3a2a14; --sev-high-fg: #ffc16a; --sev-high-bd: #5b3b1a;
+    --sev-med-bg: #353015; --sev-med-fg: #ffe184; --sev-med-bd: #54481c;
+    --sev-low-bg: #14301c; --sev-low-fg: #8edb9f; --sev-low-bd: #1d4a2c;
+    --sev-info-bg: #1a2a40; --sev-info-fg: #9ec5ff; --sev-info-bd: #284260;
+
+    --grade-a-bg: #14301c; --grade-a-fg: #8edb9f;
+    --grade-b-bg: #353015; --grade-b-fg: #ffe184;
+    --grade-c-bg: #3a2a14; --grade-c-fg: #ffc16a;
+    --grade-d-bg: #3a1a1a; --grade-d-fg: #ff8a85;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    letter-spacing: -0.003em;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+  code, pre { font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+  code { background: var(--code-bg); border-radius: 3px; padding: 1px 6px; font-size: 0.88em; }
+  pre {
+    background: var(--code-bg); padding: 14px 16px; border-radius: var(--radius);
+    overflow-x: auto; font-size: 0.85em; line-height: 1.6;
+    border: 1px solid var(--border); margin: 10px 0 0 0;
+  }
+  pre code { background: transparent; padding: 0; font-size: 1em; }
+
+  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 24px 96px; }
+  header.page {
+    border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 32px;
+    display: flex; justify-content: space-between; gap: 16px; align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .page h1 {
+    font-size: 28px; font-weight: 600; margin: 0 0 4px 0; letter-spacing: -0.02em;
+  }
+  .page .sub { color: var(--text-muted); font-size: 14px; margin: 0; }
+  .page .sub strong { color: var(--text); font-weight: 500; }
+  .toolbar { display: flex; gap: 8px; align-items: center; }
+  .toolbar button {
+    background: transparent; border: 1px solid var(--border); color: var(--text);
+    padding: 6px 12px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer;
+    line-height: 1.4;
+  }
+  .toolbar button:hover { background: var(--surface-2); }
+
+  /* TOC / Score grid */
+  .scores {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px;
+  }
+  @media (max-width: 720px) { .scores { grid-template-columns: repeat(2, 1fr); } }
+  .score-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .score-card .label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.02em; }
+  .score-card .row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 4px; }
+  .score-card .name { font-size: 16px; font-weight: 600; }
+  .grade {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 50%; font-weight: 700; font-size: 14px;
+    border: 1px solid transparent;
+  }
+  .grade.A { background: var(--grade-a-bg); color: var(--grade-a-fg); }
+  .grade.B { background: var(--grade-b-bg); color: var(--grade-b-fg); }
+  .grade.C { background: var(--grade-c-bg); color: var(--grade-c-fg); }
+  .grade.D { background: var(--grade-d-bg); color: var(--grade-d-fg); }
+  .score-card .note { font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.45; }
+
+  /* Summary callout */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    padding: 18px 20px; border-radius: var(--radius);
+    margin-bottom: 28px;
+  }
+  .callout h2 { font-size: 16px; margin: 0 0 6px 0; font-weight: 600; }
+  .callout p { margin: 0; color: var(--text-muted); font-size: 14px; }
+
+  /* Filter bar */
+  .filters {
+    position: sticky; top: 0; z-index: 5; background: var(--bg);
+    margin: 0 -24px; padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+  }
+  .filter-group { display: inline-flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+  .filter-group .label { font-size: 12px; color: var(--text-muted); margin-right: 4px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 999px; font-size: 12px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text); cursor: pointer; user-select: none; line-height: 1.6;
+  }
+  .chip:hover { background: var(--surface-2); }
+  .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .chip .count {
+    font-size: 11px; opacity: 0.65; margin-left: 2px;
+  }
+  .chip.active .count { opacity: 0.85; }
+  .summary-count {
+    margin-left: auto; font-size: 12px; color: var(--text-muted);
+  }
+
+  /* Findings */
+  .findings { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .finding {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; transition: opacity 0.15s ease;
+  }
+  .finding[data-hidden="true"] { display: none; }
+  .finding[data-done="true"] { opacity: 0.55; }
+  .finding[data-done="true"] .f-title { text-decoration: line-through; text-decoration-color: var(--text-faint); }
+
+  .f-head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 16px;
+    cursor: pointer;
+  }
+  .f-head:hover { background: var(--surface-2); }
+  .f-num {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--surface-2);
+    color: var(--text-muted); display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+  }
+  .f-title-wrap {
+    min-width: 0;
+  }
+  .f-title {
+    font-weight: 500; font-size: 15px; color: var(--text);
+    margin: 0; line-height: 1.45;
+  }
+  .f-meta {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;
+    font-size: 11px;
+  }
+  .tag {
+    display: inline-flex; align-items: center; padding: 1px 8px; border-radius: 3px;
+    background: var(--accent-soft); color: var(--accent); font-weight: 500;
+    border: 1px solid transparent;
+  }
+  .tag.cat-tg { background: var(--accent-soft); color: var(--accent); }
+  .tag.cat-st { background: #eaf6f0; color: #1f6f47; }
+  .tag.cat-ix { background: #f6e8fa; color: #7c2f9d; }
+  .tag.cat-co { background: #fff1e6; color: #a14e00; }
+  .tag.cat-bg { background: #fdeaea; color: #a02323; }
+  html[data-theme="dark"] .tag.cat-st { background: #18302a; color: #8fd5b1; }
+  html[data-theme="dark"] .tag.cat-ix { background: #2c1d36; color: #d6a8ec; }
+  html[data-theme="dark"] .tag.cat-co { background: #3a2614; color: #f1b67a; }
+  html[data-theme="dark"] .tag.cat-bg { background: #3a1d1d; color: #ee9d9d; }
+
+  .sev {
+    font-weight: 600; padding: 1px 8px; border-radius: 3px; font-size: 11px; border: 1px solid;
+  }
+  .sev.critical { background: var(--sev-crit-bg); color: var(--sev-crit-fg); border-color: var(--sev-crit-bd); }
+  .sev.high { background: var(--sev-high-bg); color: var(--sev-high-fg); border-color: var(--sev-high-bd); }
+  .sev.medium { background: var(--sev-med-bg); color: var(--sev-med-fg); border-color: var(--sev-med-bd); }
+  .sev.low { background: var(--sev-low-bg); color: var(--sev-low-fg); border-color: var(--sev-low-bd); }
+  .effort {
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 1px 8px; border-radius: 3px;
+  }
+
+  .f-actions { display: inline-flex; gap: 4px; align-items: center; }
+  .icon-btn {
+    border: 1px solid transparent; background: transparent; color: var(--text-muted);
+    width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:hover { background: var(--surface-2); color: var(--text); }
+  .caret { transition: transform 0.15s ease; }
+  .finding[data-open="true"] .caret { transform: rotate(180deg); }
+
+  .f-body { display: none; padding: 4px 16px 18px 56px; border-top: 1px solid var(--border); }
+  .finding[data-open="true"] .f-body { display: block; }
+
+  .block { margin-top: 14px; }
+  .block .heading {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .block .content { font-size: 14px; color: var(--text); line-height: 1.7; }
+  .block .content p { margin: 0 0 8px 0; }
+  .block .content p:last-child { margin-bottom: 0; }
+  .block .content ul { margin: 4px 0; padding-left: 20px; }
+  .block .content li { margin: 2px 0; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 24px 16px 80px; }
+    .filters { margin: 0 -16px; padding: 12px 16px; }
+    .f-body { padding-left: 16px; }
+  }
+
+  /* Print: open everything */
+  @media print {
+    .toolbar, .filters { display: none; }
+    .finding { break-inside: avoid; border-color: #ccc; }
+    .f-body { display: block !important; padding-left: 56px; }
+    body { background: white; color: black; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="page">
+  <div>
+    <h1>Lifestack — 디자인 리뷰</h1>
+    <p class="sub">
+      대상: <strong>http://localhost:1313/</strong> ·
+      범위: 홈·아카이브·태그·About·단일 포스트 (데스크탑 1440px / 모바일 390px) ·
+      관점: 가독성·정보구조·인터랙션·컬러
+    </p>
+  </div>
+  <div class="toolbar">
+    <button id="expand-all" type="button">모두 펼치기</button>
+    <button id="collapse-all" type="button">모두 접기</button>
+    <button id="theme-toggle" type="button" aria-label="테마 전환">🌓</button>
+  </div>
+</header>
+
+<div class="callout">
+  <h2>한 줄 결론</h2>
+  <p>
+    PaperMod 위에 깔끔한 미니마식 오버라이드를 잘 얹은 블로그입니다.
+    골격은 견고한데, <strong>치명적인 날짜 포맷 버그 하나</strong>와
+    <strong>스캔성을 떨어뜨리는 정보구조 결정 몇 가지</strong>가 첫인상을 갉아먹고 있습니다.
+    먼저 P0 버그 3개를 처리하고, 그다음 홈·포스트 헤더의 메타 정보 위계를 다시 짜는 순서를 추천합니다.
+  </p>
+</div>
+
+<div class="scores" aria-label="영역별 점수">
+  <div class="score-card">
+    <div class="label">TYPOGRAPHY · 여백</div>
+    <div class="row"><div class="name">B+</div><div class="grade B">B+</div></div>
+    <p class="note">본문 폰트·라인하이트는 단단함. 단일 포스트 헤더 위계와 코드/본문 간 여백 리듬이 약함.</p>
+  </div>
+  <div class="score-card">
+    <div class="label">정보 구조 · 스캔성</div>
+    <div class="row"><div class="name">C</div><div class="grade C">C</div></div>
+    <p class="note">홈 인트로 부재, 태그 case 불일치, 포스트 헤더에 태그 누락 등 첫 진입의 단서가 부족.</p>
+  </div>
+  <div class="score-card">
+    <div class="label">인터랙션 · 트랜지션</div>
+    <div class="row"><div class="name">C-</div><div class="grade C">C-</div></div>
+    <p class="note">호버·테마전환 피드백이 거의 없음. 검색 없음. TOC 기본 닫힘이 긴 글에서 답답함.</p>
+  </div>
+  <div class="score-card">
+    <div class="label">컬러 · 테마</div>
+    <div class="row"><div class="name">B</div><div class="grade B">B</div></div>
+    <p class="note">라이트·다크 둘 다 일관적. 다만 다크 모드 태그칩 대비비 부족과 액센트 단조함.</p>
+  </div>
+</div>
+
+<div class="filters" role="toolbar" aria-label="필터">
+  <div class="filter-group" data-filter="sev">
+    <span class="label">우선순위</span>
+    <button class="chip active" data-value="all">전체 <span class="count" data-count="all"></span></button>
+    <button class="chip" data-value="critical">Critical <span class="count" data-count="critical"></span></button>
+    <button class="chip" data-value="high">High <span class="count" data-count="high"></span></button>
+    <button class="chip" data-value="medium">Medium <span class="count" data-count="medium"></span></button>
+    <button class="chip" data-value="low">Low <span class="count" data-count="low"></span></button>
+  </div>
+  <div class="filter-group" data-filter="cat">
+    <span class="label">카테고리</span>
+    <button class="chip active" data-value="all">전체</button>
+    <button class="chip" data-value="tg">타이포·여백</button>
+    <button class="chip" data-value="st">정보구조·스캔성</button>
+    <button class="chip" data-value="ix">인터랙션·트랜지션</button>
+    <button class="chip" data-value="co">컬러·테마</button>
+    <button class="chip" data-value="bg">버그</button>
+  </div>
+  <div class="summary-count"><span id="visible-count">0</span> / <span id="total-count">0</span> 표시 중</div>
+</div>
+
+<section class="findings" id="findings"></section>
+
+<script>
+const FINDINGS = [
+  /* =========================== CRITICAL =========================== */
+  {
+    id: 'date-month-missing',
+    title: '포스트 단일 페이지 날짜에서 월(月)이 사라진다 — 모든 포스트 메타가 "2024 25"로 표시됨',
+    sev: 'critical', cat: ['bg', 'st'], effort: 'Quick',
+    problem: `archive 페이지와 단일 포스트 페이지의 메타 라인이 <code>2024 Aug 25</code> 가 아니라 <code>2024 25</code> 로 렌더링됩니다. 월이 통째로 사라져 있어요. <code>hugo.toml</code> 의 <code>DateFormat = "2006 Jan 02"</code> 가 한국 로케일(<code>ko-kr</code>)의 Hugo <code>time.Format</code> 에서 <code>Jan</code> 토큰을 빈 문자열로 치환하면서 발생합니다.`,
+    where: `<ul>
+      <li>홈 (<code>layouts/list.html</code>의 <code>entry-meta-top</code>)은 직접 영문 월 슬라이스를 인덱싱해 정상 표시.</li>
+      <li>단일 포스트 (<code>themes/PaperMod/layouts/_partials/post_meta.html</code>)와 archive 는 <code>site.Params.DateFormat</code>을 그대로 사용 → 월 누락.</li>
+    </ul>`,
+    fix: `둘 중 하나:
+    <pre><code># hugo.toml — 로케일 영향 받지 않는 숫자 포맷
+DateFormat = "2006-01-02"</code></pre>
+    또는 홈에서 쓴 것처럼 메타 partial 을 오버라이드해 영문 월을 강제:
+    <pre><code>{{- $months := slice "Jan" "Feb" "Mar" "Apr" "May" "Jun"
+                     "Jul" "Aug" "Sep" "Oct" "Nov" "Dec" -}}
+{{- $m := index $months (sub (int (.Date.Format "1")) 1) -}}
+{{ .Date.Format "2006" }} {{ $m }} {{ .Date.Format "02" }}</code></pre>`,
+  },
+  {
+    id: 'read-time-i18n',
+    title: '“9 mins” — 한국어 사이트에 영문 단위가 그대로 노출',
+    sev: 'critical', cat: ['bg', 'st'], effort: 'Quick',
+    problem: `사이트 기본 언어는 한국어(<code>ko-kr</code>)이고 <code>themes/PaperMod/i18n/ko.yaml</code> 에 <code>read_time</code> 번역(<code>{{ .Count }} 분</code>)이 정의돼 있는데도 실제 화면에는 <code>9 mins</code> 가 표시됩니다. <code>layouts/list.html</code> 의 호출 시그니처가 <code>i18n "read_time" .ReadingTime | default "9 min"</code> 형태라 i18n 리졸브에 실패하면 영문 fallback 으로 떨어지는 구조입니다.`,
+    where: `<ul>
+      <li>홈 / 아카이브 / 단일 포스트 모두 동일하게 “9 mins” 노출.</li>
+      <li><code>layouts/list.html</code> Line 70 · <code>themes/PaperMod/layouts/_partials/post_meta.html</code></li>
+    </ul>`,
+    fix: `i18n 인자를 dict 로 넘기거나 직접 출력으로 바꿉니다.
+<pre><code>&lt;span class="entry-readtime"&gt;
+  {{ i18n "read_time" (dict "Count" .ReadingTime) }}
+&lt;/span&gt;</code></pre>
+혹은 더 단순하게:
+<pre><code>&lt;span class="entry-readtime"&gt;{{ .ReadingTime }} 분 분량&lt;/span&gt;</code></pre>`,
+  },
+  {
+    id: 'tag-case-dup',
+    title: '태그 케이스 정규화 누락 — <code>eBPF</code> / <code>EBPF</code>, <code>Kitchen-CI</code> / <code>Kitchen-Ci</code> 등 분리 위험',
+    sev: 'critical', cat: ['bg', 'st'], effort: 'Quick',
+    problem: `포스트 메타에서는 <code>eBPF</code>(소문자 e) 로 노출되지만 <code>/tags/</code> 목록 페이지에는 <code>EBPF</code> 1건이 추가로 잡혀 있습니다. Hugo 는 태그 키를 normalize 하지 않으므로 front-matter 표기가 미세하게 다르면 같은 태그가 둘로 갈립니다. <code>Kitchen-CI</code> · <code>CI/CD</code> · <code>Software-Design</code> 처럼 표기 규칙이 들쭉날쭉한 점도 같은 위험을 가집니다.`,
+    where: `<code>/tags/</code> 목록 24개 중 동일 카테고리 추정 분리 의심. <code>content/blog/**/*.md</code> front-matter <code>tags:</code> 필드 일괄 점검 필요.`,
+    fix: `<ol>
+      <li>표기 규칙을 정합니다 — 추천: kebab-case + 영문 lowercase (<code>ebpf, ci-cd, software-design</code>) 또는 “고유명사는 케이스 유지, 나머지 lowercase”.</li>
+      <li><code>grep -RhoE "tags: ?\\[.*\\]" content/blog</code> 로 현황 확인 후 일괄 치환.</li>
+      <li>장기적으로는 <code>front-matter</code> 린트(<code>markdownlint</code> + 커스텀 규칙)를 git pre-commit 에 추가.</li>
+    </ol>`,
+  },
+
+  /* =========================== HIGH =========================== */
+  {
+    id: 'post-header-tags',
+    title: '포스트 헤더에 태그가 없다 — 글의 주제를 헤더에서 파악할 수 없음',
+    sev: 'high', cat: ['st', 'tg'], effort: 'Quick',
+    problem: `홈 카드에는 제목 위에 컬러 칩으로 태그가 잘 노출되는데, 단일 포스트 페이지에 들어가면 메타가 <em>날짜 · 읽기시간 · 저자</em> 셋뿐입니다. 글 본문이 길면 “지금 내가 어떤 주제 글에 들어와있지?” 가 헷갈리고, 검색 유입 사용자의 컨텍스트 회복이 늦어집니다. 본문 맨 아래 <code>.post-tags</code> 칩이 있긴 한데, 그것은 “나가는 동선”이지 “들어온 직후의 단서”가 아닙니다.`,
+    where: `<code>themes/PaperMod/layouts/_partials/post_meta.html</code> · 단일 포스트 헤더`,
+    fix: `<code>post_meta.html</code> 를 layouts 폴더에 오버라이드해서 태그 칩을 메타 라인 옆/아래에 추가:
+<pre><code>{{- with .Params.tags }}
+&lt;span class="post-meta-tags"&gt;
+  {{- range . }}
+  &lt;a class="entry-tag" href="{{ "tags/" | absURL }}{{ . | urlize }}/"&gt;{{ . }}&lt;/a&gt;
+  {{- end }}
+&lt;/span&gt;
+{{- end }}</code></pre>
+홈에서 쓰는 <code>.entry-tag</code> 스타일을 그대로 재사용하면 시각 자산도 절약됩니다.`,
+  },
+  {
+    id: 'home-intro-missing',
+    title: '홈에 “이 블로그는 누구의 어떤 글인가” 한 줄이 없다',
+    sev: 'high', cat: ['st'], effort: 'Quick',
+    problem: `홈에 진입하면 헤더 바로 아래 글 목록이 시작됩니다. “Lifestack” 이라는 단어 외에는 누가, 어떤 톤으로, 어떤 주제(SRE/DevOps/Cloud)를 다루는 블로그인지 한 줄도 없어요. 첫 방문자는 1~2개 글 제목을 보고 추측해야 합니다. <code>hugo.toml</code> 에는 <code>description = "Experience and Thinking about Software Development"</code> 가 있는데 화면에는 노출되지 않습니다.`,
+    where: `홈페이지 헤더 ~ 첫 포스트 카드 사이 빈 영역.`,
+    fix: `PaperMod 의 <code>params.homeInfoParams</code> 를 사용하거나 (이 테마가 기본 지원), 더 가볍게 <code>layouts/list.html</code> 의 <code>{{- if .IsHome }}</code> 블록에 한 줄 인트로를 박습니다:
+<pre><code>[params.homeInfoParams]
+  Title = "Lifestack"
+  Content = "Ju-won Lee · SRE/DevOps/Cloud에 대한 경험과 생각."</code></pre>
+한 줄이지만 “이게 누구 블로그인지”의 인지 비용을 0 으로 만듭니다.`,
+  },
+  {
+    id: 'search-missing',
+    title: '검색 기능 부재 — RSS/JSON 인덱스는 생성되는데 UI가 없음',
+    sev: 'high', cat: ['st', 'ix'], effort: 'Medium',
+    problem: `<code>hugo.toml</code> 의 <code>outputs.home = ["HTML", "RSS", "JSON"]</code> 로 검색용 <code>index.json</code> 은 빌드되지만, 메뉴/헤더 어디에도 검색 진입점이 없습니다. 태그 24개·포스트 14개+ 규모에서 “Ansible 관련 글 다시 보고 싶다” 같은 동선은 아카이브 스크롤로 해결해야 하는 상태입니다.`,
+    where: `헤더 메뉴 <code>About / Archive / Tags</code> 옆.`,
+    fix: `PaperMod 가 기본으로 fastsearch 를 지원합니다 — <code>content/search.md</code> 파일을 만들고 <code>layout: search</code> 지정 + 메뉴 등록만 하면 검색 페이지가 자동으로 동작합니다:
+<pre><code># content/search.md
+---
+title: "Search"
+layout: "search"
+placeholder: "포스트 검색…"
+---</code></pre>
+<pre><code># hugo.toml
+[[menu.main]]
+  identifier = "search"
+  name = "🔍"
+  url = "/search/"
+  weight = 5</code></pre>`,
+  },
+  {
+    id: 'toc-default-closed',
+    title: '긴 글에서 TOC 가 기본 닫힘 — 데스크탑에서도 무조건 한 번 클릭해야 구조가 보임',
+    sev: 'high', cat: ['st', 'ix'], effort: 'Quick',
+    problem: `<code>hugo.toml: TocOpen = false</code> 라서 모든 글이 “▶ 목차” 로 접힌 채 시작합니다. eBPF 글처럼 본문이 길고 H2 가 7~8 개인 경우, 사용자는 어떤 챕터가 있는지 확인하려고 매번 toggle 해야 합니다. 또한 데스크탑에는 720~740px 본문 옆에 빈 영역이 충분히 남는데 sticky TOC 가 활용되지 않고 있습니다.`,
+    where: `<code>hugo.toml</code> 의 <code>[params]</code> · <code>layouts/_partials/toc.html</code> · 본문 너비 740px 기준 양옆 여백.`,
+    fix: `<ol>
+      <li>최소 조치: <code>TocOpen = true</code>. 모바일에서도 한 화면을 크게 차지하지 않음(접을 수 있게는 유지).</li>
+      <li>강하게: 데스크탑에서만 좌/우 sticky TOC. <code>@media (min-width: 1200px)</code> 에서 TOC 를 <code>position: sticky; top: 80px</code> 로 main 옆에 띄우기.</li>
+      <li>현재 스크롤된 헤딩 highlight 까지 추가하면 긴 글 가독성이 크게 올라감.</li>
+    </ol>`,
+  },
+  {
+    id: 'breadcrumb-blogs',
+    title: 'Breadcrumb “홈 > Blogs” — 한국어 + 영문 + 의미 없는 trail',
+    sev: 'high', cat: ['st', 'co'], effort: 'Quick',
+    problem: `모든 포스트의 breadcrumb 가 <code>홈 &gt; Blogs</code> 로 고정되어 있습니다. 첫 항목은 한국어(<code>홈</code>)인데 두 번째 항목은 영문(<code>Blogs</code>) 이라 톤 미스매치이고, 모든 포스트에 같은 trail 이라 사실상 정보 가치도 없습니다 (가나다순/태그/연도 같은 구분이 없음).`,
+    where: `<code>themes/PaperMod/layouts/_partials/breadcrumbs.html</code> · <code>content/blog/_index.md</code> 의 <code>title</code>.`,
+    fix: `<ol>
+      <li>섹션 타이틀을 한국어로: <code>content/blog/_index.md</code> 에 <code>title: "글"</code> 또는 <code>title: "블로그"</code>.</li>
+      <li>또는 첫 태그를 두 번째 trail 로 사용해서 의미를 부여: <code>홈 &gt; Linux &gt; ebpf-network-monitor</code>. breadcrumbs partial 을 오버라이드해 <code>.Params.tags</code> 의 첫 요소를 끼워넣기.</li>
+    </ol>`,
+  },
+  {
+    id: 'home-grouping-weak',
+    title: '포스트 카드 간 시각적 그루핑이 너무 약함',
+    sev: 'high', cat: ['tg', 'st'], effort: 'Quick',
+    problem: `<code>assets/css/extended/custom.css</code> 에서 <code>.post-entry</code> 의 카드 chrome (border, background, padding, hover transform) 을 <code>!important</code> 로 모두 제거했기 때문에, 한 글의 끝과 다음 글의 시작을 구분하는 단서가 <code>margin-bottom: 2.5rem</code> 하나뿐입니다. 스크롤하면서 “여기서 글이 바뀌었나?” 헷갈립니다. 동일 태그 (Network, Linux) 가 반복되는 시점에 특히 두드러집니다.`,
+    where: `<code>assets/css/extended/custom.css:110-119</code> · 홈 / 태그 페이지 / 아카이브.`,
+    fix: `옵션 A — 카드는 살리되 chrome 만 약화:
+<pre><code>.post-entry {
+  padding: 0 0 1.75rem 0;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.post-entry:last-child { border-bottom: 0; }</code></pre>
+옵션 B — 메타 정렬을 더 명확히. 제목과 본문 사이 행간을 줄이고, 메타 + 본문 사이만 살짝 띄워서 “블록” 으로 묶어 보이게 합니다.`,
+  },
+
+  /* =========================== MEDIUM =========================== */
+  {
+    id: 'tag-chip-monotone',
+    title: '태그 칩 24종이 모두 동일한 라이트블루 — 정보 변별 0',
+    sev: 'medium', cat: ['co', 'st'], effort: 'Medium',
+    problem: `현재 모든 태그 칩이 <code>#eef3fa / #2a7ae2</code> 한 가지 톤입니다. <em>Network · Linux · Container</em> 처럼 인접 카테고리도, <em>Ansible · Terraform</em> 같은 도구도, <em>Web · GPT</em> 같은 영역도 시각적으로 동등하게 처리됩니다. 가독성 자체는 깔끔하지만, 스캔할 때 카테고리 단서가 색에서 전혀 나오지 않습니다.`,
+    where: `<code>assets/css/extended/custom.css:154-173</code></p>`,
+    fix: `상위 5~6 개 “토픽 그룹” 만 색을 다르게 주면 정보 밀도가 크게 올라갑니다.
+<pre><code>/* 예시: 토픽 그룹별 액센트 */
+.entry-tag[href*="/tags/network"],
+.entry-tag[href*="/tags/linux"],
+.entry-tag[href*="/tags/cni"]     { color: #2a7ae2; }
+.entry-tag[href*="/tags/devops"],
+.entry-tag[href*="/tags/ansible"],
+.entry-tag[href*="/tags/terraform"]{ color: #1f6f47; }
+.entry-tag[href*="/tags/python"],
+.entry-tag[href*="/tags/web"]      { color: #7a4ea3; }</code></pre>
+배경은 그대로 유지해도 글자색만 분기되면 깔끔하게 군집화됩니다.`,
+  },
+  {
+    id: 'tag-hover-disappears',
+    title: '태그 칩 hover 시 배경이 <code>--border</code> 로 변해 거의 안 보임',
+    sev: 'medium', cat: ['ix', 'co'], effort: 'Quick',
+    problem: `<code>.entry-tag:hover { background: var(--border); }</code> — 라이트 모드 <code>--border</code> 는 <code>#e6e8ec</code>, 본문 배경 <code>#fff</code> 위에서 칩이 사실상 “지워진” 것처럼 보입니다. hover 어포던스가 negative 로 작동합니다.`,
+    where: `<code>assets/css/extended/custom.css:171-173</code>`,
+    fix: `<pre><code>.entry-tag:hover {
+  background: var(--accent);
+  color: #fff;
+}</code></pre>
+또는 더 절제하려면 같은 톤에서 한 단계 진하게:
+<pre><code>.entry-tag:hover { background: #dce8f7; color: #1a5fb8; }</code></pre>`,
+  },
+  {
+    id: 'separator-spacing',
+    title: '메타 라인 “2024 Aug 25 , 9 mins” 콤마 앞 빈 칸',
+    sev: 'medium', cat: ['tg', 'bg'], effort: 'Quick',
+    problem: `<code>.entry-date + .entry-readtime::before { content: ", " }</code> 의 separator 가 “25<u>&nbsp;,&nbsp;</u>9 mins” 처럼 콤마 앞에 공백을 끌어옵니다. 한국어 타이포 규칙상 콤마 앞 공백은 어색하고, 미세하지만 메타 라인 전체가 깔끔해 보이지 않게 만드는 원인입니다.`,
+    where: `<code>assets/css/extended/custom.css:148-152</code>`,
+    fix: `<pre><code>.entry-meta-top .entry-date + .entry-readtime::before {
+  content: " · ";   /* 또는 ", " 와 margin-left: -0.05em */
+  color: var(--text-faint);
+  margin: 0 0.15rem;
+}</code></pre>
+<code>·</code> 가운데점이 한국어/영문 혼용 메타 라인에 가장 무난합니다.`,
+  },
+  {
+    id: 'code-overflow-mobile',
+    title: '모바일에서 코드 블록이 화면을 벗어남 — 가로 스크롤 필요',
+    sev: 'medium', cat: ['tg', 'ix'], effort: 'Medium',
+    problem: `eBPF 글의 <code>bpftool</code> 출력처럼 한 줄이 긴 코드 블록은 모바일(390px) 에서 가로 스크롤됩니다. 본문은 줄바꿈하는데 코드 영역만 스크롤이라 “한 화면에서 다 못 본다” 는 인식을 강하게 줍니다. 또 <code>::before "복사"</code> 버튼이 짧은 코드 라인에서도 항상 떠 있어 시각 잡음입니다.`,
+    where: `<code>themes/PaperMod/assets/css/common/md-content.css</code> · 모바일 viewport.`,
+    fix: `<ol>
+      <li>코드블록 wrap 옵션을 사용자에게 토글로 노출하거나 (PaperMod 의 <code>copy-code</code> 옆에 “wrap” 버튼 추가), 모바일에서만 <code>white-space: pre-wrap; word-break: break-all</code>.</li>
+      <li>“복사” 버튼을 hover/long-press 시에만 노출 (모바일에서는 항상 표시되어 잡음). 현재는 hover 만 표시되도록 돼있는 듯하나 모바일에선 첫 탭에 떴다 사라짐.</li>
+      <li>장문 출력은 <code>&lt;details&gt;</code> 로 접어주는 shortcode 추가.</li>
+    </ol>`,
+  },
+  {
+    id: 'theme-toggle-discoverability',
+    title: '다크모드 토글이 너무 작고 로고 옆에 묻혀 있음',
+    sev: 'medium', cat: ['ix', 'co'], effort: 'Quick',
+    problem: `17×17 SVG 토글이 “Lifestack” 로고 바로 옆에 붙어 있어, 처음 보면 로고의 일부처럼 인식됩니다. 평균 클릭 영역 권장(44px) 보다도 작습니다. 다크/라이트 전환 시 transition 도 없어 색이 즉시 바뀌어 “깜빡임” 으로 인식되는 경우가 있습니다.`,
+    where: `<code>themes/PaperMod/layouts/_partials/header.html</code> · <code>header.css</code>.`,
+    fix: `<pre><code>.theme-toggle {
+  padding: 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+.theme-toggle:hover { background: var(--surface-2); }
+:root { transition: background-color .2s ease, color .2s ease; }</code></pre>
+또한 클릭 영역을 늘리고 hover 시 배경을 살짝 보여주면 어포던스가 즉시 살아납니다.`,
+  },
+  {
+    id: 'about-interests-codeish',
+    title: 'About 페이지의 “Interests” 가 인라인 코드 스타일로 표시',
+    sev: 'medium', cat: ['tg', 'co'], effort: 'Quick',
+    problem: `<code>Clean Architecture</code>, <code>Cloud</code>, <code>DevOps</code>, <code>SRE</code> 가 모두 monospace + 코드 배경 칩으로 보입니다. 글 본문 안의 “기술 키워드” 라면 일관성이 있지만, About 페이지에서 “관심사 태그” 의미라면 코드 칩 보다는 글 페이지에서 쓰는 라이트블루 태그 칩이 의미적으로 더 맞습니다.`,
+    where: `<code>content/about/_index.md</code> 마크다운 안에서 <code>\`Clean Architecture\`</code> 와 같이 인라인 코드로 쓰여있을 가능성.`,
+    fix: `마크다운에서 <code>\`...\`</code> 를 제거하고 일반 텍스트 + 콤마 구분, 또는 Hugo shortcode 로 칩 스타일을 부여:
+<pre><code>{{&lt; tag "Clean Architecture" /&gt;}} {{&lt; tag "Cloud" /&gt;}}</code></pre>
+같은 톤이 홈 카드와 통일됩니다.`,
+  },
+  {
+    id: 'no-related-posts',
+    title: '글 끝에서 다음 행동(이전/다음 글·관련 글)이 없다',
+    sev: 'medium', cat: ['st', 'ix'], effort: 'Medium',
+    problem: `<code>ShowPostNavLinks = true</code> 가 설정돼 있지만 화면에는 이전/다음 글 카드가 안 보입니다 — 단일 포스트 끝에는 곧장 utterances 댓글 영역으로 점프합니다. 글을 다 읽은 사용자에게 “다음 행동” 이 “스크롤 위로 다시 가기” 밖에 없습니다.`,
+    where: `<code>themes/PaperMod/layouts/_partials/post_nav_links.html</code>. 렌더링 결과 확인 필요. 또 <code>mainSections = ["blog"]</code> 와 <code>RegularPagesRecursive</code> 관계.`,
+    fix: `<ol>
+      <li>먼저 <code>post_nav_links</code> partial 이 실제 렌더 누락인지 점검 (블로그 첫/마지막 글이라 안 뜬 것일 수도). 메인 두 글 중간 글에서도 안 뜨면 조건 분기 버그.</li>
+      <li>같은 태그 글 N 개를 “관련 글” 로 보여주는 partial 추가 — 14개 글 규모에서는 “같은 태그 1~3개” 표시가 충분히 의미 있음.</li>
+    </ol>`,
+  },
+  {
+    id: 'header-not-sticky',
+    title: '헤더가 sticky 가 아니라 긴 글에서 메뉴 접근까지 항상 “위로”',
+    sev: 'medium', cat: ['ix', 'st'], effort: 'Quick',
+    problem: `포스트 본문이 길 때 (eBPF 글 9분 분량) About/Tags 로 이동하려면 항상 맨 위로 스크롤해야 합니다. “위로 가기” FAB 가 있긴 하지만 그건 “읽던 글의 상단” 으로 가는 것일 뿐, 사이트 탐색을 위해서는 한 번 더 클릭해야 합니다.`,
+    where: `<code>themes/PaperMod/layouts/_partials/header.html</code> · 글로벌 CSS.`,
+    fix: `<pre><code>.header {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--theme) 92%, transparent);
+  backdrop-filter: saturate(180%) blur(8px);
+}</code></pre>
+<code>backdrop-filter</code> 미지원 브라우저에서는 단순히 불투명 배경. 헤더가 위에 떠 있으면 사이드 sticky TOC 없이도 탐색 비용이 크게 줄어듭니다.`,
+  },
+  {
+    id: 'footer-density-mobile',
+    title: '푸터가 모바일에서 두 줄, 정보 밀도가 낮음',
+    sev: 'medium', cat: ['tg', 'st'], effort: 'Quick',
+    problem: `<em>“Copyright 2016-2026. Ju-won Lee. All rights reserved. · Powered by Hugo & PaperMod”</em> 가 모바일에서 두 줄로 줄바꿈됩니다. 마지막 시각 인상이 “법적 고지+크레딧” 한 줄로 끝나는데 그게 살짝 무거운 인상을 줍니다. 또 “Powered by Hugo & PaperMod” 는 본인 블로그 푸터로서는 굳이 강조될 정보가 아닙니다.`,
+    where: `<code>themes/PaperMod/layouts/_partials/footer.html</code>`,
+    fix: `“Powered by” 라인은 작은 글씨로 약화시키거나 제거. 푸터에 차라리 RSS / GitHub / LinkedIn 아이콘 (configured: <code>params.socialIcons</code>) 을 한 줄 띄우는 게 더 가치가 큼.`,
+  },
+
+  /* =========================== LOW =========================== */
+  {
+    id: 'tag-contrast-dark',
+    title: '다크모드 태그 칩의 대비비가 WCAG AA 미달 (3.5:1)',
+    sev: 'low', cat: ['co'], effort: 'Quick',
+    problem: `<code>--tag-bg: rgb(31, 41, 55)</code> 위에 <code>--tag-fg: #79b8ff</code> 조합은 대비비 약 3.5:1. WCAG AA(작은 텍스트 4.5:1) 미달. 태그 텍스트가 12px 정도라 더 보수적으로 가야 합니다.`,
+    where: `<code>assets/css/extended/custom.css:28-33</code>`,
+    fix: `<pre><code>html[data-theme="dark"] {
+  --tag-bg: rgb(28, 38, 54);
+  --tag-fg: #9ec5ff;     /* 4.7:1 */
+}</code></pre>`,
+  },
+  {
+    id: 'no-link-anchor-style',
+    title: '본문 H2/H3 의 anchor 링크 hover 시 # 가 갑작스럽게 등장',
+    sev: 'low', cat: ['ix', 'tg'], effort: 'Quick',
+    problem: `<code>anchored_headings.html</code> partial 이 만들어내는 “#” 앵커가 hover 시 즉시 노출됩니다. transition 이 없어 갑작스럽게 “뿅” 등장하는 느낌. heading 위치에 시각적 노이즈도 약간.`,
+    where: `<code>themes/PaperMod/layouts/_partials/anchored_headings.html</code> · 본문 H2/H3 hover.`,
+    fix: `<pre><code>.post-content h2 a.anchor,
+.post-content h3 a.anchor {
+  opacity: 0;
+  transition: opacity .15s ease;
+  margin-left: 0.25em;
+  color: var(--text-faint);
+}
+.post-content h2:hover a.anchor,
+.post-content h3:hover a.anchor { opacity: 1; }</code></pre>`,
+  },
+  {
+    id: 'about-toc-noise',
+    title: 'About 페이지에 자동 TOC 가 끼는데, 약력 페이지에 목차는 잡음',
+    sev: 'low', cat: ['st'], effort: 'Quick',
+    problem: `About 페이지가 짧고 섹션 4~5 개인데도 본문 상단에 “▶ 목차” 가 노출됩니다. 사용자가 한 번 toggle 하지 않으면 본문 첫 줄이 한 단계 아래로 밀려납니다.`,
+    where: `<code>content/about/_index.md</code> front-matter.`,
+    fix: `<pre><code>---
+title: "About"
+ShowToc: false
+---</code></pre>`,
+  },
+  {
+    id: 'logo-no-hover',
+    title: '“Lifestack” 로고에 hover/active 상태가 없다',
+    sev: 'low', cat: ['ix'], effort: 'Quick',
+    problem: `로고 텍스트가 링크인데 hover 시 색 변경, underline, opacity 변화 등 어떤 피드백도 없습니다. 같은 페이지에서 클릭해도 무반응으로 보입니다.`,
+    where: `<code>assets/css/extended/custom.css:90-94</code>`,
+    fix: `<pre><code>.logo a:hover { color: var(--accent); }
+.logo a:active { opacity: 0.7; }</code></pre>`,
+  },
+  {
+    id: 'comments-section-gap',
+    title: '댓글(utterances) 영역으로의 전환이 갑작스러움',
+    sev: 'low', cat: ['st', 'tg'], effort: 'Quick',
+    problem: `본문이 끝나자마자 곧장 “0 Comments — powered by utteranc.es” 가 등장합니다. 본문과 댓글 사이에 명시적 구분이 없어 “이 글에 어디까지가 본문인지” 모호합니다. 또 utterances iframe 의 회색 배경이 본문 배경과 미세하게 달라 더 어색합니다.`,
+    where: `<code>layouts/partials/comments.html</code>`,
+    fix: `<pre><code>.post-content + .comments {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.comments::before {
+  content: "댓글";
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}</code></pre>`,
+  },
+  {
+    id: 'no-reading-progress',
+    title: '긴 글에 읽기 진행률 인디케이터가 없음',
+    sev: 'low', cat: ['ix'], effort: 'Medium',
+    problem: `9분 분량의 글을 읽는 중에는 “지금 어디쯤?” 의 단서가 없습니다. 모바일에서는 더 답답하게 느껴집니다.`,
+    where: `(미구현)`,
+    fix: `간단한 <code>position: fixed; top: 0; height: 2px</code> 진행률 바를 sticky header 하단에 두는 것만으로 충분히 인지 비용을 낮춥니다. <code>window.scrollY / (documentHeight - viewportHeight)</code> 한 줄 스크립트로 끝.`,
+  },
+  {
+    id: 'accent-color-monotone',
+    title: '액센트가 한 가지 블루뿐, 정보 위계가 단조로움',
+    sev: 'low', cat: ['co'], effort: 'Heavy',
+    problem: `타이틀 링크, 태그 칩, 본문 링크 모두 같은 <code>#2a7ae2</code>. 깔끔하기는 한데 “지금 이 색이 무엇을 의미하는지” 의 단서가 없습니다 — 클릭 가능한 것 vs 강조 vs 카테고리 칩이 한 색으로 통합돼 있어요.`,
+    where: `<code>assets/css/extended/custom.css</code> 전반.`,
+    fix: `<ul>
+      <li>본문 인라인 링크: 살짝 어두운 블루 (<code>#1f5fb8</code>) + 점선 underline.</li>
+      <li>제목 링크: 현재 색 유지.</li>
+      <li>태그 칩: 블루-그린 계열 보조 액센트 (Finding #9 와 연동).</li>
+    </ul>`,
+  },
+  {
+    id: 'social-icons-missing',
+    title: 'socialIcons 설정은 있는데 화면 어디에도 노출 안 됨',
+    sev: 'low', cat: ['st'], effort: 'Quick',
+    problem: `<code>params.socialIcons</code> 에 GitHub / LinkedIn / RSS 가 등록돼 있지만, 헤더·푸터·About 어디에도 아이콘 모음이 노출되지 않습니다. PaperMod 의 profileMode 가 비활성화돼 있기 때문 (<code>params.profileMode.enabled</code> 없음).`,
+    where: `<code>hugo.toml: params.socialIcons</code> · <code>params.homeInfoParams</code>.`,
+    fix: `<code>homeInfoParams</code> 를 켜면 소셜 아이콘 자동 노출됩니다 (Finding #5 와 함께 묶음 처리).
+<pre><code>[params.homeInfoParams]
+  Title = "Lifestack"
+  Content = "Ju-won Lee · SRE/DevOps/Cloud."</code></pre>`,
+  },
+  {
+    id: 'archive-month-label',
+    title: '아카이브의 월 라벨이 “8월 / 12월 / 2월” 만 표시 — 정렬·검색성 약함',
+    sev: 'low', cat: ['st', 'tg'], effort: 'Quick',
+    problem: `<code>/archive/</code> 페이지에서 연도 아래 월 라벨이 “8월”·“12월”·“2월” 식으로 나옵니다. 같은 연도에 글이 1~2개 있는 현재 규모에서는 큰 문제는 아니지만, 정렬 단서(연도 안 월별 순서) 가 시각적으로 약합니다. 예: 2023년에 12월 하나만 있어 보이지만 사실은 연중 가장 늦은 글이라는 정보가 빠져있음.`,
+    where: `<code>themes/PaperMod/layouts/_partials/archive_*</code>`,
+    fix: `월 라벨을 <code>2024년 8월</code> 처럼 짧지만 명시적으로 바꾸고, 연도-월 모두에 글 개수를 한 자리수가 아니라 “1개 글” 처럼 라벨링.`,
+  },
+];
+
+/* === Render === */
+function escapeHtml(s) {
+  // Used only for plain text titles; bodies are already trusted HTML.
+  return s;
+}
+
+function render(list) {
+  const root = document.getElementById('findings');
+  root.innerHTML = '';
+  list.forEach((f, idx) => {
+    const el = document.createElement('article');
+    el.className = 'finding';
+    el.dataset.sev = f.sev;
+    el.dataset.cat = f.cat.join(' ');
+    el.dataset.id = f.id;
+    el.dataset.open = 'false';
+    el.dataset.done = 'false';
+
+    const catLabels = {
+      tg: '타이포·여백', st: '정보구조', ix: '인터랙션', co: '컬러', bg: '버그',
+    };
+    const catChips = f.cat.map(c => `<span class="tag cat-${c}">${catLabels[c]}</span>`).join('');
+    const sevLabel = {critical:'Critical', high:'High', medium:'Medium', low:'Low'}[f.sev];
+
+    el.innerHTML = `
+      <div class="f-head" data-toggle>
+        <div class="f-num">${String(idx + 1).padStart(2, '0')}</div>
+        <div class="f-title-wrap">
+          <h3 class="f-title">${escapeHtml(f.title)}</h3>
+          <div class="f-meta">
+            <span class="sev ${f.sev}">${sevLabel}</span>
+            ${catChips}
+            <span class="effort">난이도: ${f.effort}</span>
+          </div>
+        </div>
+        <div class="f-actions">
+          <button class="icon-btn" data-action="done" title="완료 표시">✓</button>
+          <button class="icon-btn" data-action="toggle" title="자세히 보기">
+            <span class="caret">▾</span>
+          </button>
+        </div>
+      </div>
+      <div class="f-body">
+        <div class="block">
+          <div class="heading">문제</div>
+          <div class="content">${f.problem}</div>
+        </div>
+        <div class="block">
+          <div class="heading">발생 위치 / 증거</div>
+          <div class="content">${f.where}</div>
+        </div>
+        <div class="block">
+          <div class="heading">제안 수정</div>
+          <div class="content">${f.fix}</div>
+        </div>
+      </div>
+    `;
+    root.appendChild(el);
+  });
+}
+
+function applyFilters() {
+  const sev = document.querySelector('[data-filter="sev"] .chip.active').dataset.value;
+  const cat = document.querySelector('[data-filter="cat"] .chip.active').dataset.value;
+  let visible = 0;
+  document.querySelectorAll('.finding').forEach(el => {
+    const sevOK = sev === 'all' || el.dataset.sev === sev;
+    const cats = el.dataset.cat.split(' ');
+    const catOK = cat === 'all' || cats.includes(cat);
+    const hidden = !(sevOK && catOK);
+    el.dataset.hidden = hidden;
+    if (!hidden) visible++;
+  });
+  document.getElementById('visible-count').textContent = visible;
+}
+
+function updateCounts() {
+  const total = FINDINGS.length;
+  document.getElementById('total-count').textContent = total;
+  ['all', 'critical', 'high', 'medium', 'low'].forEach(v => {
+    const c = v === 'all' ? total : FINDINGS.filter(f => f.sev === v).length;
+    document.querySelectorAll(`[data-count="${v}"]`).forEach(n => n.textContent = c);
+  });
+}
+
+document.addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip');
+  if (chip) {
+    chip.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    applyFilters();
+    return;
+  }
+  const head = e.target.closest('.f-head');
+  if (head) {
+    const action = e.target.closest('[data-action]');
+    const finding = head.closest('.finding');
+    if (action) {
+      e.stopPropagation();
+      if (action.dataset.action === 'done') {
+        finding.dataset.done = finding.dataset.done === 'true' ? 'false' : 'true';
+      } else {
+        finding.dataset.open = finding.dataset.open === 'true' ? 'false' : 'true';
+      }
+      return;
+    }
+    finding.dataset.open = finding.dataset.open === 'true' ? 'false' : 'true';
+  }
+});
+
+document.getElementById('expand-all').addEventListener('click', () => {
+  document.querySelectorAll('.finding').forEach(el => el.dataset.open = 'true');
+});
+document.getElementById('collapse-all').addEventListener('click', () => {
+  document.querySelectorAll('.finding').forEach(el => el.dataset.open = 'false');
+});
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const cur = document.documentElement.dataset.theme || 'light';
+  document.documentElement.dataset.theme = cur === 'light' ? 'dark' : 'light';
+});
+
+/* Init */
+(function init() {
+  // Respect OS theme on first load
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.dataset.theme = prefersDark ? 'dark' : 'light';
+
+  render(FINDINGS);
+  updateCounts();
+  applyFilters();
+})();
+</script>
+</div>
+</body>
+</html>

@@ -1,4 +1,12 @@
+# Hugo
+public/
+resources/
+.hugo_build.lock
+
+# Jekyll (legacy, to be removed)
 _site
 .sass-cache
 .jekyll-metadata
+
+# misc
 tmp

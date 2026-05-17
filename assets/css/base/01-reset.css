@@ -43,6 +43,15 @@ body {
     background: var(--theme);
 }
 
+/* Explicit monospace stack for code/pre/kbd/samp/tt — otherwise the
+   browser falls back to bare "monospace" which renders as Courier on
+   some macOS configurations. */
+code, pre, kbd, samp, tt {
+    font-family: ui-monospace, "SF Mono", Menlo, Monaco,
+        "Cascadia Mono", Consolas, "Liberation Mono",
+        "Courier New", monospace;
+}
+
 article,
 aside,
 figcaption,

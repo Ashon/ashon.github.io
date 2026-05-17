@@ -15,7 +15,7 @@
   <span class="entry-date" title="{{ .Date }}">{{ .Date.Format "2006" }} {{ $mname }} {{ .Date.Format "02" }}</span>
   {{- end }}
   {{- if (.Param "ShowReadingTime") -}}
-  <span class="entry-readtime">{{ i18n "read_time" .ReadingTime | default (printf "%d min" .ReadingTime) }}</span>
+  <span class="entry-readtime">{{ .ReadingTime }} 분</span>
   {{- end }}
   {{- with .Params.tags }}
   <span class="entry-tags">

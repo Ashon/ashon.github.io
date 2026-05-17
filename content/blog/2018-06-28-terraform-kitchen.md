@@ -261,7 +261,7 @@ $ export AWS_DEFAULT_REGION="ap-northeast-2"
 `test_keypair_public_key` 변수로 관리하고 있기 때문에, 꼭 실제 사용할 `keypair`로 할당해 줘야한다.
 
 ``` sh
-# TF_VAR_{% raw %}{{ variable name }}{% endraw %}으로 환경변수로 넘길 수 있다.
+# TF_VAR_{{ variable name }}으로 환경변수로 넘길 수 있다.
 $ TF_VAR_test_keypair_public_key=$(cat ~/.ssh/id_rsa.pub) terraform plan
 
 :

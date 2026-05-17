@@ -36,8 +36,14 @@
     text-decoration: underline;
 }
 
-.md-content del {
+/* Strikethrough — fade the foreground so deleted/corrected text reads
+   as "set aside" rather than just "annotated", and tint the strike
+   with a hint of accent so the line itself is visible. */
+.md-content :is(del, s) {
+    color: var(--secondary);
     text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .md-content dl:not(:last-child),
@@ -59,6 +65,45 @@
 
 .md-content li p {
     margin-bottom: 0;
+}
+
+/* Softer bullet markers — the default heavy black disc fights Korean
+   prose. Use a muted middle dot at level 1, en-dash at level 2, and a
+   small horizontal stroke deeper. */
+.md-content ul {
+    list-style: none;
+    padding-inline-start: 1.4rem;
+}
+
+.md-content ul > li {
+    position: relative;
+}
+
+.md-content ul > li::before {
+    content: "·";
+    position: absolute;
+    left: -1rem;
+    top: -0.1em;
+    color: var(--secondary);
+    font-weight: 700;
+    font-size: 1.5em;
+    line-height: 1;
+}
+
+.md-content ul ul > li::before {
+    content: "–";
+    font-size: 0.95em;
+    top: 0;
+    font-weight: 500;
+}
+
+.md-content ul ul ul > li::before {
+    content: "";
+    width: 6px;
+    height: 1px;
+    background: var(--secondary);
+    top: 0.7em;
+    left: -0.95rem;
 }
 
 .md-content dl {
@@ -84,19 +129,34 @@
 }
 
 .md-content table {
-    margin-bottom: var(--content-gap);
+    margin: 1.25rem 0 var(--content-gap);
+    width: 100%;
+    font-size: 0.95em;
+    border-collapse: collapse;
 }
 
+/* Body rows use horizontal rules only — vertical borders make data
+   tables feel boxed in. Header gets a stronger underline so the head
+   visually separates from the body without a full background fill. */
 .md-content table th,
 .md-content table:not(.highlighttable, .highlight table, .gist .highlight) td {
-    min-width: 80px;
-    padding: 6px 13px;
+    padding: 0.55rem 0.85rem;
     line-height: 1.5;
-    border: 1px solid var(--border);
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
 }
 
 .md-content table th {
-    text-align: start;
+    background: var(--code-bg);
+    font-weight: 600;
+    border-bottom: 2px solid var(--tertiary);
+    color: var(--primary);
+}
+
+.md-content table tbody tr:hover td {
+    background: var(--hover-bg);
 }
 
 .md-content table:not(.highlighttable) td code:only-child {
@@ -112,6 +172,32 @@
     background: var(--code-block-bg) !important;
     border-radius: var(--radius);
     direction: ltr;
+    position: relative;
+}
+
+/* Language label — extend_head.html copies the inner `data-lang` up
+   to .highlight, so a CSS-only chip is enough. On hover the label
+   fades out so the copy button (positioned at the same slot in
+   03-main.css) reads clearly without overlapping the language text. */
+.md-content .highlight[data-lang]::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    z-index: 1;
+    font-family: ui-monospace, "SF Mono", Menlo, Monaco, "Cascadia Mono",
+                 Consolas, monospace;
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.15s ease;
+}
+
+.md-content .highlight[data-lang]:hover::before {
+    opacity: 0;
 }
 
 .md-content li>.highlight {
@@ -144,11 +230,15 @@
 }
 
 .post-content code {
-    padding: 0.2rem 0.3rem;
-    font-size: 0.78em;
+    padding: 0.1em 0.4em;
+    font-size: 0.92em;
     line-height: 1.5;
     background: var(--code-bg);
-    border-radius: 0.2rem;
+    border-radius: 0.25rem;
+    /* Baseline lift compensates for the smaller mono x-height next to
+       Korean glyphs. */
+    vertical-align: 0.04em;
+    word-break: keep-all;
 }
 
 .md-content pre code {
@@ -163,11 +253,45 @@
 }
 
 .md-content blockquote {
-    border-inline-start: 4px solid var(--border);
-    padding-inline-start: 1rem;
+    border-inline-start: 3px solid var(--accent);
+    padding: 0.25rem 1rem;
     margin: 1.25rem 0;
-    color: var(--secondary);
+    color: var(--primary);
+    background: var(--code-bg);
+    border-radius: 0 var(--radius) var(--radius) 0;
     font-style: normal;
+}
+
+/* Aside — short side notes ("혼잣말") inline with the body flow.
+   Lighter than blockquote: no box, no border, just an indented
+   muted line with a corner-down-right marker icon. Use via the
+   short code
+*/
+.md-content .aside {
+    display: block;
+    margin-top: -0.4rem;
+    font-size: 0.92em;
+    line-height: 1.6;
+    color: var(--secondary);
+    user-select: none;
+}
+
+.md-content .aside-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    margin-right: 0.35em;
+    opacity: 0.7;
+    /* stroke="currentColor" inherits .aside color. */
+}
+
+.md-content .aside-body {
+    /* Inline wrapper so ~~strikethrough~~ and *em* flow naturally. */
+}
+
+.md-content .aside :is(s, del) {
+    opacity: 0.8;
 }
 
 .md-content blockquote p {
@@ -178,16 +302,37 @@
     color: inherit;
 }
 
+/* Inside a blockquote, the surrounding bg is already --code-bg, so
+   inline `code` blends in invisibly. Mix the foreground color into
+   transparent — the chip auto-darkens in light mode and lightens
+   in dark mode, giving a strong contrast against the quote panel
+   in both themes. */
 .md-content blockquote code {
-    background: var(--code-bg);
-    opacity: 0.85;
+    background: color-mix(in srgb, var(--primary) 15%, transparent);
+    color: var(--primary);
+    opacity: 1;
 }
 
+/* HR — a deliberate "section break" rather than a full-width bar.
+   Three centered dots feel more editorial than a continuous rule and
+   work in both light and dark mode without needing a strong color. */
 .md-content hr {
-    margin: 30px 0;
-    height: 2px;
-    background: var(--tertiary);
     border: 0;
+    height: auto;
+    background: none;
+    margin: 2.5rem auto;
+    text-align: center;
+    color: var(--secondary);
+    overflow: visible;
+}
+
+.md-content hr::before {
+    content: "···";
+    display: inline-block;
+    letter-spacing: 0.5em;
+    font-size: 0.9em;
+    line-height: 1;
+    opacity: 0.7;
 }
 
 .md-content iframe {
@@ -196,43 +341,55 @@
 
 .md-content img {
     border-radius: var(--radius);
-    margin: 1rem 0;
+    margin: 1rem auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
 
 .md-content img[src*="#center"] {
     margin: 1rem auto;
 }
 
+/* Diagrams in posts are typically white-background PNG/JPG. In dark
+   mode they would otherwise glare against the page bg. A subtle white
+   inset + brightness trim keeps the artwork legible without forcing
+   it onto a black page. */
+html[data-theme="dark"] .md-content :is(p, figure) > img,
+html[data-theme="dark"] .md-content a > img {
+    background: #fff;
+    padding: 6px;
+    filter: brightness(0.94) contrast(0.97);
+}
+
 .md-content figure.align-center {
     text-align: center;
 }
 
-.md-content figure>figcaption {
-    color: var(--primary);
-    font-size: 16px;
-    font-weight: bold;
-    margin: 8px 0 16px;
+.md-content figure {
+    margin: 1.25rem auto;
 }
 
-.md-content figure>figcaption>p {
+.md-content figure > figcaption {
     color: var(--secondary);
-    font-size: 14px;
+    font-size: 0.88em;
     font-weight: normal;
+    text-align: center;
+    margin: 0.5rem 0 0;
+    line-height: 1.5;
 }
 
-.md-content h1:hover .anchor,
-.md-content h2:hover .anchor,
-.md-content h3:hover .anchor,
-.md-content h4:hover .anchor,
-.md-content h5:hover .anchor,
-.md-content h6:hover .anchor {
-    display: inline-flex;
+.md-content figure > figcaption > p {
     color: var(--secondary);
-    margin-inline-start: 0.5em;
-    font-weight: 500;
-    user-select: none;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
 }
 
+/* Anchor "#" markers stay laid out the same in hover/non-hover so
+   only opacity animates — see 03-post-single.css for the opacity
+   transition. The `:hover .anchor` color tweak is preserved as a
+   distinct affordance when the user actually hovers the anchor. */
 .anchor:hover {
     color: var(--content) !important;
 }
@@ -245,6 +402,24 @@
 mark {
     border-radius: 2px;
     padding: 0 2px;
+}
+
+/* Keyboard key — looks like a physical key with a slight inset bottom.
+   Distinct from inline code so `Ctrl` + `C` reads as keys, not code. */
+.md-content kbd {
+    display: inline-block;
+    padding: 0.1em 0.45em;
+    font-family: ui-monospace, "SF Mono", Menlo, Monaco, "Cascadia Mono",
+                 Consolas, monospace;
+    font-size: 0.82em;
+    line-height: 1.4;
+    color: var(--primary);
+    background: var(--theme);
+    border: 1px solid var(--tertiary);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    vertical-align: 0.05em;
+    white-space: nowrap;
 }
 
 audio {

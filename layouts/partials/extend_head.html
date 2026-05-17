@@ -1,15 +1,109 @@
 {{- /* Force OS-based theme: ignore any cached pref-theme override and
-       react live when the user flips OS dark/light without reloading. */ -}}
+       react live when the user flips OS dark/light without reloading.
+       Also drives the utterances comments iframe (if present) so the
+       site theme is the single source of truth — utterances follows
+       via its postMessage API rather than racing on its own
+       prefers-color-scheme listener. */ -}}
 <script>
   (function () {
     try { localStorage.removeItem("pref-theme"); } catch (e) {}
     var mq = window.matchMedia("(prefers-color-scheme: dark)");
-    function apply(e) {
-      document.documentElement.dataset.theme = (e.matches ? "dark" : "light");
+
+    function syncUtterances(theme) {
+      var frame = document.querySelector('iframe.utterances-frame');
+      if (!frame || !frame.contentWindow) return;
+      frame.contentWindow.postMessage({
+        type: 'set-theme',
+        theme: theme === 'dark' ? 'github-dark' : 'github-light',
+      }, 'https://utteranc.es');
     }
+
+    function apply(e) {
+      var theme = e.matches ? "dark" : "light";
+      document.documentElement.dataset.theme = theme;
+      syncUtterances(theme);
+    }
+
     apply(mq);
     if (mq.addEventListener) mq.addEventListener("change", apply);
     else if (mq.addListener) mq.addListener(apply);
+
+    /* The utterances iframe is injected asynchronously by client.js,
+       so the initial `apply(mq)` above usually fires before it exists.
+       Catch the iframe at load-time and push the current theme then. */
+    var io = new MutationObserver(function (muts) {
+      muts.forEach(function (m) {
+        m.addedNodes.forEach(function (node) {
+          if (node.nodeType !== 1) return;
+          var frame = node.matches && node.matches('iframe.utterances-frame')
+            ? node
+            : (node.querySelector && node.querySelector('iframe.utterances-frame'));
+          if (!frame) return;
+          frame.addEventListener('load', function () {
+            syncUtterances(document.documentElement.dataset.theme);
+          });
+        });
+      });
+    });
+    io.observe(document.documentElement, { childList: true, subtree: true });
+  })();
+</script>
+
+{{- /* Lift the inner `<code data-lang="...">` attribute up to the outer
+       `.highlight` wrapper so CSS can render a language label chip via
+       `.highlight[data-lang]::before` without per-language rules. */ -}}
+<script>
+  (function () {
+    function tagLangs() {
+      document.querySelectorAll('.highlight').forEach(function (h) {
+        if (h.dataset.lang) return;
+        var code = h.querySelector('code[data-lang]');
+        if (code && code.dataset.lang) h.dataset.lang = code.dataset.lang;
+      });
+    }
+    if (document.readyState !== 'loading') tagLangs();
+    else document.addEventListener('DOMContentLoaded', tagLangs);
+  })();
+</script>
+
+{{- /* TOC scrollspy — highlight the table-of-contents link matching
+       the heading currently in view, so long posts have a "you are
+       here" indicator. Single rAF debounce keeps it cheap. */ -}}
+<script>
+  (function () {
+    function setupTocSpy() {
+      var links = document.querySelectorAll('nav.toc a[href^="#"]');
+      if (!links.length) return;
+      var linkById = {};
+      links.forEach(function (a) {
+        var id = decodeURIComponent(a.getAttribute('href').slice(1));
+        if (id) linkById[id] = a;
+      });
+      var headings = document.querySelectorAll(
+        '.post-content h2[id], .post-content h3[id], .post-content h4[id]'
+      );
+      if (!headings.length) return;
+      var visible = new Set();
+      function refresh() {
+        if (!visible.size) return;
+        var first = null;
+        headings.forEach(function (h) {
+          if (visible.has(h.id) && !first) first = h.id;
+        });
+        links.forEach(function (a) { a.classList.remove('active'); });
+        if (first && linkById[first]) linkById[first].classList.add('active');
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) visible.add(e.target.id);
+          else visible.delete(e.target.id);
+        });
+        refresh();
+      }, { rootMargin: '0px 0px -65% 0px' });
+      headings.forEach(function (h) { io.observe(h); });
+    }
+    if (document.readyState !== 'loading') setupTocSpy();
+    else document.addEventListener('DOMContentLoaded', setupTocSpy);
   })();
 </script>
 

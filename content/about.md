@@ -20,7 +20,7 @@ comments: false
 
 ### Interests
 
-- `Clean Architecture`, `Cloud`, `DevOps`, `SRE`
+Clean Architecture, Cloud, DevOps, SRE
 
 ### Careers
 

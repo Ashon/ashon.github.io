@@ -8,8 +8,12 @@
 {{- else }}
 <body id="top">
 {{- end }}
+  {{- /* Skip link — keyboard/screen-reader users can jump past the
+         header + TOC and land directly on the main content. Hidden
+         off-screen until focused (WCAG 2.4.1 Bypass Blocks). */ -}}
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
   {{ partial "header.html" . -}}
-  <main class="main">
+  <main class="main" id="main" tabindex="-1">
     {{- block "main" . }}{{ end }}
   </main>
   {{ partial "footer.html" . -}}

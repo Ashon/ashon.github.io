@@ -45,9 +45,13 @@ html[data-theme="dark"] {
     --tag-fg: rgb(218, 218, 219);
     --tag-hover-bg: rgb(62, 64, 70);
 
-    --accent: #79b8ff;
+    /* Slightly desaturated blue — #79b8ff (HSL 212°, 100%, 74%) felt
+       too vivid against muted body text (#c4c4c5). Going to 60% sat
+       keeps the link readable and AAA-contrast while sitting more
+       calmly inside paragraphs. */
+    --accent: #8eb4e3;
     --accent-contrast: rgb(20, 22, 26);
     --hover-bg: rgb(40, 41, 45);
-    --link-hover-bg: rgba(121, 184, 255, 0.18);
+    --link-hover-bg: rgba(142, 180, 227, 0.18);
     color-scheme: dark;
 }

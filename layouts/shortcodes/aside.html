@@ -1,0 +1,18 @@
+{{- /* Aside / 사이드 코멘트 — lighter than blockquote, for short
+       author asides ("혼잣말" style) inline with the main flow.
+
+       Usage in markdown: wrap the content with the aside shortcode.
+       Inner content renders as inline Markdown so strikethrough,
+       emphasis, links, and inline code all work.
+
+       Icon = Tabler `corner-down-right` (inline SVG, no extra deps).
+       Color follows the parent text via `stroke="currentColor"`.
+       Size scales with surrounding `font-size` via `1em`. */ -}}
+<div class="aside">
+  <svg class="aside-icon" aria-hidden="true" viewBox="0 0 24 24"
+       fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 6v6a3 3 0 0 0 3 3h10l-4 -4m0 8l4 -4" />
+  </svg>
+  <span class="aside-body">{{ .Inner | markdownify }}</span>
+</div>

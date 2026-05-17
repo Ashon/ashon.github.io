@@ -56,19 +56,19 @@ eBPF에 대한 자세한 내용은 아래 링크를 참조.
 - **"eBPF를 사용한다"** 라는 말은...
   - eBPF 기술을 활용해서,
   - 내가 직접 **"커널 내부의 관측가능성을 달성하는 프로그램을 구현"**해 낸다는 말이라고 생각함.
-    > ~~엄밀히 말하면 관측가능성 문제만 푸는건 아님~~
+    {{< aside >}}~~엄밀히 말하면 관측가능성 문제만 푸는건 아님~~{{< /aside >}}
 
 - 그러므로, 커널 내부의 어떤 부분을 관측해야 할 지 사용자(개발자)가 알아야 함.
   - '커널이 어떻게 동작하는지를 알아야 관측할 대상을 지정할 수 있다.'
     - 다른말로... '커널의 어떤 부분을 관측할 수 있는지 내가 알아야 한다.'
-      > ~~... 쉽지않아.~~
+      {{< aside >}}~~... 쉽지않아.~~{{< /aside >}}
 
 현대의 리눅스 커널~~(옛날에도 그랬지만)~~은 정말 넓고 다양한 기술들을 담고 있으므로 커널을 공부해야지 하는 생각을 하면 시작부터 머리가 아득한데.. 목표치를 낮춰서 접근 할 필요가 있음.
 
 - 어차피 한사람이 모든걸 다 알수는 없음..
 - 리눅스 커널 안의 특정 부분 (네트워킹, 그 중에서도 TCP.. 예를 들자면) 을 좀 공부해 보고...
 - 이 부분의 특정 지점을 공부해서 eBPF 프로그램을 만들어 본다거나..
-  > ~~(이것도 난이도가 있긴 해...)~~
+  {{< aside >}}~~(이것도 난이도가 있긴 해...)~~{{< /aside >}}
 
 그래도 이런 식의 접근이라면.. (물론 TCP 자체를 아는것은 요즘 시대에서는 꽤 난이도가 있는 일이지만),
 한번 비벼볼 만 하다고 생각함. ~~(그리고 우리에겐 ChatGPT가 있다.)~~
@@ -81,11 +81,11 @@ eBPF에 대한 자세한 내용은 아래 링크를 참조.
 
 ## eBPF를 활용해 만들어 볼 네트워크 관측 도구
 
-보편적인 http 웹서버 애플리케이션들은 리눅스 커널 TCP 스택의 tcp_sendmsg, tcp_recvmsg 시스템콜을 이용해 네트워크 통신을 수행한다. (~~QUIC은 UDP니까 제외합니다.~~)
+보편적인 http 웹서버 애플리케이션들은 리눅스 커널 TCP 스택의 `tcp_sendmsg`, `tcp_recvmsg` 시스템콜을 이용해 네트워크 통신을 수행한다. (~~QUIC은 UDP니까 제외합니다.~~)
 
-> 엄격하게 따져보면 웹서버들은 더 다양한 tcp 시스템콜 사용할텐데, 소개하는 자리니까 간단히 tcp_sendmsg, tcp_recvmsg만 살펴보자.
+> 엄격하게 따져보면 웹서버들은 더 다양한 tcp 시스템콜 사용할텐데, 소개하는 자리니까 간단히 `tcp_sendmsg`, `tcp_recvmsg`만 살펴보자.
 
-나는 저 tcp_sendmsg, tcp_recvmsg 함수에 kprobe를 붙여서, 여러 웹서버들이 주고받는 데이터로부터 SRC IP, DST IP, payload size 등을 측정하는 애플리케이션을 만들어 보았다.
+나는 저 `tcp_sendmsg`, `tcp_recvmsg` 함수에 kprobe를 붙여서, 여러 웹서버들이 주고받는 데이터로부터 SRC IP, DST IP, payload size 등을 측정하는 애플리케이션을 만들어 보았다.
 
 ![](/assets/2024-08-25/fig1.png)
 
@@ -218,8 +218,8 @@ Lima는 MacOS 안에서 Linux VM을 구동할 수 있게 해 주는 가상화 AP
 
 eBPF 프로그램 ([Code](https://github.com/Ashon/_study-ebpf-and-bcc/blob/main/tcp_monitor/tcp_monitor.c))
 
-- tcp_sendmsg 함수로 들어오는 소켓 구조체 정보에서 필요한 데이터를 계측하는 함수 작성
-- tcp_recvmsg 함수로 들어오는 소켓 구조체 정보에서 필요한 데이터를 계측하는 함수 작성
+- `tcp_sendmsg` 함수로 들어오는 소켓 구조체 정보에서 필요한 데이터를 계측하는 함수 작성
+- `tcp_recvmsg` 함수로 들어오는 소켓 구조체 정보에서 필요한 데이터를 계측하는 함수 작성
 - 각 함수에서 src, dst, tcp payload 크기를 추출해서 BPF HASH에 저장.
 
 파이썬 프로그램 ([Code](https://github.com/Ashon/_study-ebpf-and-bcc/blob/main/tcp_monitor/tcp_monitor.py))
@@ -239,7 +239,7 @@ eBPF 프로그램 ([Code](https://github.com/Ashon/_study-ebpf-and-bcc/blob/main
 
 ### BPF 프로그램 상태 조회
 
-bpftool을 활용하면 커널에 로드된 BPF 프로그램들과 프로그램이 사용중인 데이터들을 쉽게 확인해 볼 수 있다.
+`bpftool`을 활용하면 커널에 로드된 BPF 프로그램들과 프로그램이 사용중인 데이터들을 쉽게 확인해 볼 수 있다.
 
 ```bash
 # linux 툴 설치 (우분투를 예시로.. cent계열은 패키지 따로 찾아보세용~)
@@ -282,26 +282,28 @@ $ sudo bpftool map list
 
 tcp_monitor가 사용중인 recv_bytes, send_bytes 맵들이 잘 올라간 것을 볼 수 있음.
 
-```bash
+```sh
 # 직접 map id를 덤프해서 어떤 데이터가 매핑되어 있는지도 확인할 수 있다.
 # 동작중인 애플리케이션 맵을 자세히 관찰해 볼 수 있음.
 $ sudo bpftool map dump id 8
-[{
-        "key": {
-            "src_ip": 252029120,
-            "dst_ip": 33925312,
-            "src_port": 22,
-            "dst_port": 54357
-        },
-        "value": {
-            "bytes": 21120,
-            "timestamp": 740363868867
-        }
-    }
-]
 ```
 
-bpftool 바이너리를 활용해서 프로그램 상태를 투명하게 볼 수 있는데...
+```json
+[{
+    "key": {
+        "src_ip": 252029120,
+        "dst_ip": 33925312,
+        "src_port": 22,
+        "dst_port": 54357
+    },
+    "value": {
+        "bytes": 21120,
+        "timestamp": 740363868867
+    }
+}]
+```
+
+`bpftool` 바이너리를 활용해서 프로그램 상태를 투명하게 볼 수 있는데...
 
 이 말은 굳이 BCC를 사용하지 않더라도, eBPF 프로그램 코드를 Native 로 작성하고, 다른 외부 언어들을 활용해서 BPF MAP을 통해서 데이터를 주고받을 수 있게 됨을 의미한다.
 

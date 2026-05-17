@@ -318,7 +318,7 @@ k8s-cluster:
   tasks:
   - name: Check Server is stopped
     wait_for:
-      host: "{% raw %}{{ ansible_host }}{% endraw %}"
+      host: "{{ ansible_host }}"
       port: 22
       state: stopped
       timeout: 1
@@ -328,14 +328,14 @@ k8s-cluster:
 
   - name: Start Servers
     wakeonlan:
-      mac: "{% raw %}{{ mac_addr }}{% endraw %}"
+      mac: "{{ mac_addr }}"
       broadcast: 10.0.0.0
     delegate_to: localhost
     when: not shutdown.changed
 
   - name: Wait for SSH port opening
     wait_for:
-      host: "{% raw %}{{ ansible_host }}{% endraw %}"
+      host: "{{ ansible_host }}"
       port: 22
       state: started
     delegate_to: localhost
@@ -350,7 +350,7 @@ k8s-cluster:
   tasks:
   - name: Check SSH port is opened
     wait_for:
-      host: "{% raw %}{{ ansible_host }}{% endraw %}"
+      host: "{{ ansible_host }}"
       port: 22
       state: started
       timeout: 1
@@ -368,7 +368,7 @@ k8s-cluster:
 
     - name: Wait for SSH port closing.
       wait_for:
-        host: "{% raw %}{{ ansible_host }}{% endraw %}"
+        host: "{{ ansible_host }}"
         port: 22
         state: stopped
       delegate_to: localhost

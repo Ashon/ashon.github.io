@@ -113,7 +113,7 @@ efe41b3a1753a6..
 구동한 컨테이너의 netns 경로를 조회한다.
 
 ```sh
-{% raw %}$ docker inspect efe41b3a1753a6.. -f '{{ .NetworkSettings.SandboxKey }}'{% endraw %}
+$ docker inspect efe41b3a1753a6.. -f '{{ .NetworkSettings.SandboxKey }}'
 
 /var/run/docker/netns/329f3b3c3f1c
 ```
@@ -228,7 +228,7 @@ $ ip link
 container의 PID를 조회한 후 nsenter 명령어를 통해 컨테이너 내부 인터페이스를 확인한다.
 
 ``` sh
-{% raw %}$ docker inspect efe41b3a1753a6.. -f '{{ .State.Pid }}'{% endraw %}
+$ docker inspect efe41b3a1753a6.. -f '{{ .State.Pid }}'
 6203
 ```
 

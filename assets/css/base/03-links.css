@@ -18,6 +18,12 @@ nav.toc a {
     transition: background 0.15s ease;
 }
 
+/* Inline links inside paragraphs/list items use body weight (400),
+   never the heading 600 they would inherit when wrapped in <h*>. */
+.md-content :is(p, li, td) a:not(.anchor) {
+    font-weight: inherit;
+}
+
 .link-accent:hover,
 .post-content a:not(.anchor):hover,
 .md-content a:not(.anchor):hover,

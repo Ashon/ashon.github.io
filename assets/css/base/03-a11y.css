@@ -1,0 +1,46 @@
+/* Accessibility helpers — keyboard and screen-reader affordances. */
+
+/* Skip link — invisible until a keyboard user reaches it via Tab,
+   then slides into the top-left so it can be activated to jump
+   straight to the main content. WCAG 2.4.1 Bypass Blocks. */
+.skip-link {
+    position: absolute;
+    top: -48px;
+    left: 8px;
+    z-index: 100;
+    padding: 8px 14px;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: top 0.15s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    top: 8px;
+    outline: 2px solid var(--accent-contrast);
+    outline-offset: 2px;
+}
+
+/* When the main region receives focus via the skip link, suppress
+   the default outline since the link itself is the focus signal. */
+main:focus {
+    outline: none;
+}
+
+/* Screen-reader-only utility class — content visible to AT but not
+   rendered on screen. Available if you need to add hidden labels. */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

@@ -12,9 +12,18 @@
 
 <title>{{ if not .IsHome }}{{ with .Title }}{{ . }} | {{ end }}{{ end }}{{ site.Title }}</title>
 
-<meta name="description" content="{{- with .Description -}}{{ . }}
-  {{- else -}}{{ with site.Params.description }}{{ . }}{{ end -}}
-{{- end -}}">
+{{- /* Page-specific description with proper fallback chain:
+       1. Explicit `.Description` from front matter
+       2. On post pages: auto-generated `.Summary` (first paragraph)
+       3. Site description (only for home/section pages without summary)
+       Without this, every post shares the same site slogan as its
+       share-preview description. */ -}}
+{{- $description := "" -}}
+{{- if .Description }}{{ $description = .Description }}
+{{- else if and .IsPage .Summary }}{{ $description = .Summary | plainify | htmlUnescape }}
+{{- else }}{{ $description = site.Params.description }}
+{{- end -}}
+<meta name="description" content="{{ $description }}">
 {{- with site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
 <link rel="canonical" href="{{ .Permalink }}">
 
@@ -47,8 +56,46 @@
 <meta property="og:url" content="{{ .Permalink }}">
 <meta property="og:site_name" content="{{ site.Title }}">
 <meta property="og:title" content="{{ .Title | default site.Title }}">
-<meta property="og:description" content="{{- with .Description }}{{ . }}{{ else }}{{ with site.Params.description }}{{ . }}{{ end }}{{ end -}}">
+<meta property="og:description" content="{{ $description }}">
 <meta property="og:locale" content="ko_kr">
 <meta property="og:type" content="{{ cond .IsPage "article" "website" }}">
+
+{{- /* OG image — first checks `.Params.images` (Hugo standard) then
+       `.Params.cover.image` (PaperMod-style), falling back to a
+       site-level default if defined in hugo.toml. Without an image
+       the twitter:card downgrades to `summary` (small thumbnail). */ -}}
+{{- $ogImage := "" -}}
+{{- with .Params.images }}{{ $ogImage = absURL (index . 0) }}
+{{- else with .Params.cover }}{{ with .image }}{{ $ogImage = absURL . }}{{ end }}
+{{- else with site.Params.defaultOgImage }}{{ $ogImage = absURL . }}
+{{- end -}}
+{{- if $ogImage }}
+<meta property="og:image" content="{{ $ogImage }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ $ogImage }}">
+{{- else }}
+<meta name="twitter:card" content="summary">
+{{- end }}
+<meta name="twitter:title" content="{{ .Title | default site.Title }}">
+<meta name="twitter:description" content="{{ $description }}">
+
+{{- /* Article-specific OpenGraph for post pages — gives social
+       crawlers and Google Discover proper metadata about author,
+       publish date, and topical tags. */ -}}
+{{- if and .IsPage (eq .Section "blog") }}
+{{- with .Date }}
+<meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">
+{{- end }}
+{{- with .Lastmod }}
+{{- if ne (.Format "2006-01-02") ($.Date.Format "2006-01-02") }}
+<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">
+{{- end }}{{- end }}
+{{- with site.Params.author }}
+<meta property="article:author" content="{{ . }}">
+{{- end }}
+{{- range .Params.tags }}
+<meta property="article:tag" content="{{ . }}">
+{{- end }}
+{{- end }}
 
 {{- partial "extend_head.html" . }}

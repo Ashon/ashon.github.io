@@ -161,6 +161,43 @@ body {
   text-decoration: none;
 }
 
+/* --- Mobile layout ------------------------------------------ */
+
+@media (max-width: 640px) {
+  .header-nav {
+    padding: 0 1.25rem !important;
+    column-gap: 0.5rem !important;
+    align-items: center;
+  }
+
+  #menu {
+    column-gap: 0.25rem !important;
+  }
+
+  #menu a {
+    padding: 6px 8px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .logo a {
+    font-size: 1.25rem !important;
+  }
+
+  /* Comfortable main padding on small viewports. */
+  .main {
+    padding: 1rem 1.25rem !important;
+  }
+
+  /* On mobile the hover bg bleeds to the screen edges; content
+   * inside still aligns with the meta row above (1.25rem from edge,
+   * matching .main padding). */
+  .post-entry > .entry-link {
+    margin: 0.35rem -1.25rem 0 -1.25rem !important;
+    padding: 0.5rem 1.25rem !important;
+    border-radius: 0 !important;
+  }
+}
+
 /* Keep menu items width-stable across pages.
  *
  * Root cause of the wobble: PaperMod sets `.menu .active { font-weight: 500;

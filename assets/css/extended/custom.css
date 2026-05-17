@@ -44,6 +44,7 @@ html[data-theme] {
   --accent: #2a7ae2;
   --accent-contrast: #ffffff;
   --hover-bg: rgb(247, 248, 250);
+  --link-hover-bg: rgba(42, 122, 226, 0.1);
 }
 
 html[data-theme="dark"] {
@@ -55,6 +56,7 @@ html[data-theme="dark"] {
   --accent: #79b8ff;
   --accent-contrast: rgb(20, 22, 26);
   --hover-bg: rgb(40, 41, 45);
+  --link-hover-bg: rgba(121, 184, 255, 0.18);
 }
 
 /* PaperMod tints list-mode body (.list) with --code-bg in light mode.
@@ -492,23 +494,23 @@ details.toc,
   font-weight: 400;
 }
 
+.archive-entry-title a {
+  display: inline-block;
+}
+
 .archive-meta,
 .archive-entry .entry-meta-top {
   font-size: 0.75rem !important;
   margin: 0.1rem 0 0 0 !important;
 }
 
-/* TOC stays visually grouped but without the card chrome */
-/* TOC: minima-style plain list (no card, no "목차" header). */
+/* TOC: minima-style plain list (no card, no "목차" header).
+ * Link styling itself (color/hover bg) is inherited from the shared
+ * .link-accent rule above. */
 nav.toc {
   margin: 1rem 0 0 0;
   padding: 0;
   font-size: 0.95rem;
-  color: var(--accent, #2a7ae2);
-}
-
-[data-theme="dark"] nav.toc {
-  color: #79b8ff;
 }
 
 nav.toc ul,
@@ -533,25 +535,8 @@ nav.toc li::before {
   content: "-";
   position: absolute;
   left: -0.85rem;
-  color: var(--accent, #2a7ae2);
+  color: var(--accent);
   opacity: 0.7;
-}
-
-[data-theme="dark"] nav.toc li::before {
-  color: #79b8ff;
-}
-
-nav.toc a {
-  color: var(--accent, #2a7ae2);
-  text-decoration: none;
-}
-
-[data-theme="dark"] nav.toc a {
-  color: #79b8ff;
-}
-
-nav.toc a:hover {
-  text-decoration: underline;
 }
 
 hr.toc-divider {
@@ -562,26 +547,83 @@ hr.toc-divider {
   background: none;
 }
 
-/* Pagination */
+/* Prev/Next post navigation at bottom of single posts. */
 .paginav {
-  padding: 0.5rem 0;
-}
-
-.paginav .next,
-.paginav .prev {
+  display: flex;
+  margin: 2.5rem 0 0 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   background: transparent !important;
-  padding: 0;
-  border: none;
+  border-radius: 0 !important;
+  line-height: 1.4;
+  padding: 0 !important;
 }
 
 .paginav a {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.85rem 1rem !important;
   color: var(--primary);
-  padding: 0.4rem 0.6rem;
-  border-radius: var(--radius, 4px);
+  text-decoration: none !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  min-width: 0;
+  width: auto !important;
 }
 
 .paginav a:hover {
-  background: var(--border) !important;
+  background: var(--hover-bg) !important;
+}
+
+.paginav .prev {
+  text-align: left;
+}
+
+.paginav .next {
+  text-align: right;
+  margin-inline-start: auto;
+}
+
+.paginav .title {
+  font-size: 0.75rem;
+  color: var(--secondary);
+  letter-spacing: 0;
+  text-transform: none !important;
+  font-weight: 400;
+}
+
+.paginav a > span:not(.title) {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none !important;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+}
+
+/* Kill the inherited "underline on hover" rule from base CSS. */
+.paginav span:hover:not(.title),
+.paginav a:hover span {
+  text-decoration: none !important;
+}
+
+@media (max-width: 640px) {
+  .paginav {
+    flex-direction: column;
+  }
+  .paginav a + a {
+    border-left: none !important;
+    border-top: 1px solid var(--border) !important;
+  }
+  .paginav .next {
+    text-align: left;
+  }
 }
 
 /* --- Single post page --------------------------------------- */
@@ -653,6 +695,62 @@ hr.toc-divider {
   font-feature-settings: normal;
   font-variant-ligatures: none;
   letter-spacing: 0;
+}
+
+/* Shared accent-link style: no underline, accent color, generous
+ * hover halo. Padding extends the visible hover box vertically and
+ * horizontally; matching negative margin cancels the layout impact
+ * so surrounding text never shifts.
+ *
+ * Add more places to this selector list to reuse the look. */
+.link-accent,
+.post-content a:not(.anchor),
+.md-content a:not(.anchor),
+nav.toc a {
+  color: var(--accent);
+  text-decoration: none !important;
+  border-radius: 4px;
+  padding: 4px 5px;
+  margin: -4px -5px;
+  transition: background 0.15s ease;
+}
+
+.link-accent:hover,
+.post-content a:not(.anchor):hover,
+.md-content a:not(.anchor):hover,
+nav.toc a:hover {
+  background: var(--link-hover-bg);
+}
+
+/* Links wrapping an image shouldn't get the chip-style padding/bg. */
+.post-content a:has(> img),
+.md-content a:has(> img) {
+  padding: 0;
+  margin: 0;
+  background: transparent !important;
+  border-radius: 0;
+}
+
+/* Blockquote: muted (lighter border, secondary text color, no bold contrast) */
+.md-content blockquote {
+  border-inline-start: 4px solid var(--border);
+  padding-inline-start: 1rem;
+  margin: 1.25rem 0;
+  color: var(--secondary);
+  font-style: normal;
+}
+
+.md-content blockquote p {
+  margin: 0.25rem 0;
+}
+
+.md-content blockquote :is(a, code, strong, em) {
+  color: inherit;
+}
+
+.md-content blockquote code {
+  background: var(--code-bg);
+  opacity: 0.85;
 }
 
 /* Heading anchor links: fade in on hover, no abrupt "#" pop */

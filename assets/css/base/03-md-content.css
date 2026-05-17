@@ -163,7 +163,7 @@
 }
 
 .md-content blockquote {
-    border-inline-start: 2px solid var(--border);
+    border-inline-start: 4px solid var(--border);
     padding-inline-start: 1rem;
     margin: 1.25rem 0;
     color: var(--secondary);

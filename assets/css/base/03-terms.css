@@ -15,3 +15,128 @@
     font-weight: 400;
     list-style: none;
 }
+
+/* The HTML `hidden` attribute must always win over flex/grid layouts.
+ * Without this, an element with `display: flex` ignores `hidden`. */
+[hidden] {
+    display: none !important;
+}
+
+/* Tag filter chip cloud (top of /tags/). Multi-select AND filter.
+ * Visual styling lives in 03-tags.css under .entry-tag /
+ * .entry-tag--lg / .entry-tag.selected; .tag-chip here only adds
+ * the "is a clickable button" hint. */
+
+.tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0 1.75rem 0;
+    padding: 0;
+}
+
+.tag-chip {
+    cursor: pointer;
+}
+
+/* Filtered flat list (shown when one or more chips are selected). */
+
+.tag-filter-status {
+    color: var(--secondary);
+    font-size: 0.85rem;
+    margin: 0 0 0.75rem 0;
+}
+
+.tag-filtered-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tag-filtered-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.25rem 0;
+    line-height: 1.5;
+}
+
+.tag-filtered-item a {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tag-filtered-date {
+    flex-shrink: 0;
+    color: var(--secondary);
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+.tag-empty {
+    color: var(--secondary);
+    font-size: 0.9rem;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+/* Grouped expanded view (default state — shown when no chips selected). */
+
+.tag-group {
+    margin: 1.5rem 0 0 0;
+    padding: 0 0 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.tag-group:last-of-type {
+    border-bottom: none;
+}
+
+.tag-group-header {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+}
+
+.tag-group-count {
+    font-size: 0.8rem;
+    color: var(--secondary);
+    font-weight: 400;
+}
+
+.tag-group-posts {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 0.75rem;
+}
+
+.tag-group-posts li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.15rem 0;
+    line-height: 1.5;
+}
+
+.tag-group-posts li a {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tag-group-date {
+    flex-shrink: 0;
+    color: var(--secondary);
+    font-size: 0.78rem;
+    white-space: nowrap;
+}

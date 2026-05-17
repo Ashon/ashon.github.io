@@ -61,12 +61,6 @@
     color: var(--accent);
 }
 
-.post-entry h2:hover,
-.first-entry h2:hover,
-.tag-entry h2:hover {
-    text-decoration: underline;
-}
-
 .post-entry .entry-content,
 .first-entry .entry-content {
     margin: 0.4rem 0 0 0;
@@ -92,7 +86,7 @@
     gap: 0.25rem 0.4rem;
     font-size: 0.8rem;
     color: var(--secondary);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
 }
 
 .entry-meta-top .entry-date,
@@ -113,21 +107,7 @@
     margin-left: 0.4rem;
 }
 
-.entry-meta-top .entry-tag {
-    padding: 1px 8px;
-    background: var(--tag-bg);
-    color: var(--tag-fg);
-    border-radius: 3px;
-    font-size: 0.78rem;
-    text-decoration: none;
-    line-height: 1.4;
-    transition: background 0.15s ease, color 0.15s ease;
-}
-
-.entry-meta-top .entry-tag:hover {
-    background: var(--tag-hover-bg);
-    color: var(--tag-fg);
-}
+/* Defer to the global .entry-tag rule in 03-tags.css. */
 
 .entry-hint {
     color: var(--secondary);

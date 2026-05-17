@@ -1,0 +1,24 @@
+{{- /* Term pages (e.g. /tags/ansible.html) are not a real destination
+       on this site — clicking a tag should land on /tags/?t=<name>
+       and let the chip filter take over. If anyone still hits an old
+       term URL directly, redirect them.
+ *
+ * Output is a plain HTML file (no baseof) with meta-refresh + a JS
+ * fallback and a canonical link, so search engines + crawlers see
+ * the canonical /tags/?t=<slug>. */ -}}
+{{- $slug := urlize .Title -}}
+{{- $target := printf "/tags/?t=%s" $slug -}}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>{{ .Title }} | {{ site.Title }}</title>
+<link rel="canonical" href="{{ $target }}">
+<meta http-equiv="refresh" content="0; url={{ $target }}">
+<meta name="robots" content="noindex, follow">
+<script>location.replace({{ $target | jsonify }});</script>
+</head>
+<body>
+<p>Redirecting to <a href="{{ $target }}">{{ $target }}</a>…</p>
+</body>
+</html>

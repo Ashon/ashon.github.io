@@ -1,27 +1,145 @@
 {{- define "main" }}
 
-{{- if .Title }}
+{{- /* Per-term pages are disabled (see hugo.toml `disableKinds`).
+       This template only handles Kind "taxonomy" (e.g. /tags/) —
+       a chip cloud at the top with client-side AND filtering, plus
+       a grouped expanded view as the default state. */ -}}
+
 <header class="page-header">
-    <h1>{{ .Title }}</h1>
-    {{- if .Description }}
-    <div class="post-description">
-        {{ .Description }}
-    </div>
-    {{- end }}
+  <h1>{{ .Title }}</h1>
 </header>
+
+{{- /* Build slug -> original-display-string map. Hugo lowercases
+       term keys, so this lets "eBPF", "CI/CD", "DataCenter" keep
+       their original case in the UI. */ -}}
+{{- $display := dict }}
+{{- range site.RegularPages }}
+  {{- range .Params.tags }}
+    {{- $display = merge $display (dict (urlize .) .) }}
+  {{- end }}
 {{- end }}
 
-<ul class="terms-tags">
-    {{- $type := .Type }}
-        {{- range $key, $value := .Data.Terms.Alphabetical }}
-            {{- $name := .Name }}
-            {{- $count := .Count }}
-            {{- with site.GetPage (printf "/%s/%s" $type $name) }}
-            <li>
-                <a href="{{ .Permalink }}">{{ .LinkTitle }} <sup><strong><sup>{{ $count }}</sup></strong></sup> </a>
-            </li>
-        {{- end }}
-    {{- end }}
-</ul>
+{{- /* Use site.Taxonomies.tags rather than .Data.Terms because
+       disableKinds=["term"] empties .Data.Terms but leaves the
+       global taxonomy data intact. */ -}}
+{{- $taxonomy := index site.Taxonomies "tags" }}
 
-{{- end }}{{/* end main */ -}}
+<div class="tag-filter" role="toolbar" aria-label="Tag filter">
+  {{- range $taxonomy.Alphabetical }}
+    {{- $name := .Name }}
+    {{- $count := .Count }}
+    {{- $label := index $display $name | default $name }}
+  <button class="tag-chip entry-tag entry-tag--lg" type="button"
+          data-tag="{{ $name }}">
+    {{ $label }}<span class="entry-tag-count">{{ $count }}</span>
+  </button>
+  {{- end }}
+</div>
+
+<div class="tag-filtered">
+  <p class="tag-filter-status"></p>
+  <div class="tag-empty" hidden>매칭되는 글이 없습니다.</div>
+  <ul class="tag-filtered-list">
+    {{- range (where site.RegularPages "Type" "in" site.Params.mainSections) }}
+    {{- $tagSlugs := slice }}
+    {{- range .Params.tags }}{{- $tagSlugs = $tagSlugs | append (urlize .) }}{{- end }}
+    <li class="tag-filtered-item" data-tags="{{ delimit $tagSlugs " " }}">
+      <a class="link-accent" href="{{ .Permalink }}">{{ .Title }}</a>
+      <span class="tag-filtered-date">{{ .Date.Format "2006 Jan 02" }}</span>
+    </li>
+    {{- end }}
+  </ul>
+</div>
+
+<div class="tag-grouped">
+  {{- range $taxonomy.Alphabetical }}
+    {{- $name := .Name }}
+    {{- $count := .Count }}
+    {{- $label := index $display $name | default $name }}
+  <section class="tag-group" data-tag="{{ $name }}">
+    <h2 class="tag-group-header">
+      <a class="link-accent" href="/tags/?t={{ $name }}">{{ $label }}</a>
+      <span class="tag-group-count">{{ $count }}</span>
+    </h2>
+    <ul class="tag-group-posts">
+      {{- range .Pages }}
+      <li>
+        <a class="link-accent" href="{{ .Permalink }}">{{ .Title }}</a>
+        <span class="tag-group-date">{{ .Date.Format "2006 Jan 02" }}</span>
+      </li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+</div>
+
+<script>
+(function () {
+  const filterEl = document.querySelector(".tag-filter");
+  if (!filterEl) return;
+  const chips = filterEl.querySelectorAll(".tag-chip");
+  const grouped = document.querySelector(".tag-grouped");
+  const filtered = document.querySelector(".tag-filtered");
+  const items = filtered.querySelectorAll(".tag-filtered-item");
+  const status = filtered.querySelector(".tag-filter-status");
+  const empty = filtered.querySelector(".tag-empty");
+
+  function readURL() {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("t");
+    if (!raw) return new Set();
+    return new Set(raw.split(",").map(s => s.trim().toLowerCase()).filter(Boolean));
+  }
+
+  function writeURL(selected) {
+    const params = new URLSearchParams(window.location.search);
+    if (selected.size === 0) params.delete("t");
+    else params.set("t", [...selected].join(","));
+    const qs = params.toString();
+    const url = window.location.pathname + (qs ? "?" + qs : "");
+    history.replaceState(null, "", url);
+  }
+
+  function apply(selected) {
+    chips.forEach(c => {
+      c.classList.toggle("selected", selected.has(c.dataset.tag.toLowerCase()));
+    });
+
+    if (selected.size === 0) {
+      grouped.hidden = false;
+      filtered.hidden = true;
+      empty.hidden = true;
+      return;
+    }
+
+    grouped.hidden = true;
+    filtered.hidden = false;
+
+    let matched = 0;
+    items.forEach(li => {
+      const tags = new Set(li.dataset.tags.split(/\s+/).filter(Boolean));
+      const hit = [...selected].every(t => tags.has(t));
+      li.hidden = !hit;
+      if (hit) matched++;
+    });
+    status.textContent = `${[...selected].join(" + ")} — 매칭 ${matched}개`;
+    empty.hidden = matched > 0;
+  }
+
+  const selected = readURL();
+  apply(selected);
+
+  filterEl.addEventListener("click", (e) => {
+    const chip = e.target.closest(".tag-chip");
+    if (!chip) return;
+    e.preventDefault();
+    const tag = chip.dataset.tag.toLowerCase();
+    if (selected.has(tag)) selected.delete(tag);
+    else selected.add(tag);
+    writeURL(selected);
+    apply(selected);
+  });
+})();
+</script>
+
+{{- end }}{{/* end main */}}

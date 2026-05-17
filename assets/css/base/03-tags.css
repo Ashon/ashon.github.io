@@ -1,0 +1,58 @@
+/* Tag badge system.
+ *
+ *  .entry-tag                 base (small) — used in post meta, archive,
+ *                              single-post footer, anywhere a tag link or
+ *                              chip appears at body-text size.
+ *  .entry-tag--lg             large variant — used on the /tags/ filter
+ *                              chip cloud where the badges are the primary
+ *                              interactive surface.
+ *  .entry-tag.selected        accent fill — used for active filter state.
+ *
+ * Sizing/colour tokens come from theme-vars so light and dark themes
+ * are automatic. */
+
+.entry-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 1px 8px;
+    background: var(--tag-bg);
+    color: var(--tag-fg);
+    border: none;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.entry-tag:hover {
+    background: var(--tag-hover-bg);
+    color: var(--tag-fg);
+}
+
+.entry-tag--lg {
+    gap: 0.4rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.92rem;
+}
+
+.entry-tag.selected {
+    background: var(--accent);
+    color: var(--accent-contrast);
+}
+
+.entry-tag.selected:hover {
+    background: var(--accent);
+    color: var(--accent-contrast);
+}
+
+.entry-tag-count {
+    font-size: 0.78em; /* relative to chip — scales with size variant */
+    opacity: 0.55;
+}
+
+.entry-tag.selected .entry-tag-count {
+    opacity: 0.9;
+}

@@ -1,0 +1,55 @@
+{{- /* head.html — self-hosted CSS pipeline (no PaperMod dependency).
+       Concatenates assets/css/base/*.css then assets/css/extended/*.css,
+       minifies, and fingerprints in production. */ -}}
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{{- if hugo.IsProduction | or (eq site.Params.env "production") }}
+<meta name="robots" content="index, follow">
+{{- else }}
+<meta name="robots" content="noindex, nofollow">
+{{- end }}
+
+<title>{{ if not .IsHome }}{{ with .Title }}{{ . }} | {{ end }}{{ end }}{{ site.Title }}</title>
+
+<meta name="description" content="{{- with .Description -}}{{ . }}
+  {{- else -}}{{ with site.Params.description }}{{ . }}{{ end -}}
+{{- end -}}">
+{{- with site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- /* CSS pipeline */ -}}
+{{- $base := (resources.Match "css/base/*.css") | resources.Concat "css/base.css" }}
+{{- $extended := (resources.Match "css/extended/*.css") | resources.Concat "css/extended.css" }}
+{{- $stylesheet := (slice $base $extended) | resources.Concat "css/stylesheet.css" }}
+{{- if hugo.IsProduction | or (eq site.Params.env "production") }}
+  {{- $stylesheet = $stylesheet | minify | fingerprint }}
+  <link crossorigin="anonymous" href="{{ $stylesheet.RelPermalink }}"
+        integrity="{{ $stylesheet.Data.Integrity }}" rel="preload stylesheet" as="style">
+{{- else }}
+  <link rel="stylesheet" href="{{ $stylesheet.RelPermalink }}">
+{{- end }}
+
+<link rel="icon" href="/favicon.ico">
+<link rel="alternate" type="application/rss+xml" href="/index.xml" title="rss">
+
+{{- if site.Params.googleAnalytics }}
+{{- with site.Params.googleAnalytics }}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ . }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ . }}');
+</script>
+{{- end }}
+{{- end }}
+
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ .Title | default site.Title }}">
+<meta property="og:description" content="{{- with .Description }}{{ . }}{{ else }}{{ with site.Params.description }}{{ . }}{{ end }}{{ end -}}">
+<meta property="og:locale" content="ko_kr">
+<meta property="og:type" content="{{ cond .IsPage "article" "website" }}">
+
+{{- partial "extend_head.html" . }}

@@ -1,6 +1,5 @@
 baseURL = "https://ashon.github.io/"
 title = "Lifestack"
-theme = "PaperMod"
 copyright = "Copyright 2016-2026. Ju-won Lee. All rights reserved."
 
 defaultContentLanguage = "ko"
@@ -27,14 +26,8 @@ uglyURLs = true
   pagerSize = 20
 
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
+  home = ["HTML", "RSS"]
   section = ["HTML", "RSS"]
-
-[outputFormats.SearchIndex]
-  mediaType = "application/json"
-  baseName = "index"
-  isPlainText = true
-  notAlternative = true
 
 [minify]
   disableXML = true

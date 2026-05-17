@@ -1,8 +1,22 @@
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--theme) 92%, transparent);
+    -webkit-backdrop-filter: saturate(180%) blur(8px);
+    backdrop-filter: saturate(180%) blur(8px);
+    border-bottom: 1px solid var(--border);
+}
+
+@supports not (background: color-mix(in srgb, white, transparent)) {
+    .header { background: var(--theme); }
+}
+
 .header-nav {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    max-width: calc(var(--nav-width) + var(--gap) * 2);
+    max-width: calc(var(--main-width) + var(--gap) * 2);
     margin: auto;
     line-height: var(--header-height);
     padding: 0 var(--gap);
@@ -25,60 +39,19 @@
 }
 
 .logo a {
-    font-size: 24px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    column-gap: 0.55rem;
-}
-
-.logo a img,
-.logo a svg {
-    pointer-events: none;
-    border-radius: 6px;
-}
-
-.theme-toggle {
-    padding: 0 0.4rem;
-}
-
-[data-theme="dark"] .moon {
-    display: none;
-}
-
-[data-theme="light"] .sun {
-    display: none;
-}
-
-.logo-switches {
-    display: inline-flex;
-    gap: 0.4rem;
-    align-items: inherit;
-    min-height: stretch;
-    flex-wrap: inherit;
-}
-
-.logo-switches>* {
-    min-height: inherit;
-    align-items: center;
-    display: inline-flex;
-}
-
-.nav-sep {
-    color: var(--secondary);
-}
-
-.lang-menu * {
-    display: inherit;
-    min-height: inherit;
-    align-items: inherit;
-}
-
-.lang-menu a {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 500;
-    padding: 0 0.4rem;
-    display: inline-flex
+    line-height: var(--header-height);
+    letter-spacing: -0.02em;
+    transition: color 0.15s ease;
+}
+
+.logo a:hover {
+    color: var(--accent);
+}
+
+.logo a:active {
+    opacity: 0.7;
 }
 
 .menu {
@@ -89,13 +62,45 @@
     column-gap: var(--gap);
 }
 
+/* Menu item base — width-stable across active/inactive so neighbors
+ * never shift when you navigate. The `::after` carries the active
+ * indicator bar, anchored at the bottom of the header. */
 .menu a {
-    font-size: 16px;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 6px 12px;
+    margin: 0;
+    border-radius: 0;
+    position: relative;
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.menu a:hover {
+    background: var(--hover-bg);
+    text-decoration: none;
+}
+
+.menu a span {
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.menu a::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 0;
+    height: 2px;
+    background: transparent;
+    pointer-events: none;
+}
+
+.menu a:has(.active)::after {
+    background: currentColor;
 }
 
 .menu .active {
-    font-weight: 500;
-    text-decoration: underline;
-    text-underline-offset: 0.3rem;
-    text-decoration-thickness: 2px;
+    font-weight: 400;
 }

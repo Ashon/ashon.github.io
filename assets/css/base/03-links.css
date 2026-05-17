@@ -1,0 +1,35 @@
+/* Shared accent-link style.
+ *
+ * Used by in-content links (post body, About, etc.), TOC entries,
+ * archive post titles. No underline; the active affordance is the
+ * accent text color plus a subtle bg halo on hover. Padding extends
+ * the hover box; matching negative margin cancels layout shift.
+ *
+ * Reusable: add a selector here or apply `class="link-accent"`. */
+.link-accent,
+.post-content a:not(.anchor),
+.md-content a:not(.anchor),
+nav.toc a {
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 4px 5px;
+    margin: -4px -5px;
+    transition: background 0.15s ease;
+}
+
+.link-accent:hover,
+.post-content a:not(.anchor):hover,
+.md-content a:not(.anchor):hover,
+nav.toc a:hover {
+    background: var(--link-hover-bg);
+}
+
+/* Links wrapping an image keep their natural box (no chip chrome). */
+.post-content a:has(> img),
+.md-content a:has(> img) {
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border-radius: 0;
+}

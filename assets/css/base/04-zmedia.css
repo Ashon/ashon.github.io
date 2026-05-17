@@ -1,20 +1,10 @@
-@media screen and (max-width: 768px) {
-    /* theme-vars */
+/* Responsive overrides. */
+
+@media (max-width: 768px) {
     :root {
         --gap: 14px;
     }
 
-    /* profile-mode */
-    .profile img {
-        transform: scale(0.85);
-    }
-
-    /* post-entry */
-    .first-entry {
-        min-height: 260px;
-    }
-
-    /* archive */
     .archive-month {
         flex-direction: column;
     }
@@ -22,34 +12,61 @@
     .archive-year {
         margin-top: 20px;
     }
+}
 
-    /* footer */
-    .footer {
-        padding: calc((var(--footer-height) - var(--gap) - 10px) / 2) var(--gap);
+@media (max-width: 640px) {
+    .header-nav {
+        padding: 0 1.25rem;
+        column-gap: 0.5rem;
+        align-items: center;
+    }
+
+    #menu {
+        column-gap: 0.25rem;
+    }
+
+    #menu a {
+        padding: 6px 8px;
+        font-size: 0.95rem;
+    }
+
+    .logo a {
+        font-size: 1.25rem;
+    }
+
+    .main {
+        padding: 1rem 1.25rem;
+    }
+
+    /* Hover bg bleeds to screen edges; content inside still aligns
+     * with the meta row (1.25rem from edge, matching .main padding). */
+    .post-entry > .entry-link {
+        margin: 0.35rem -1.25rem 0 -1.25rem;
+        padding: 0.5rem 1.25rem;
+        border-radius: 0;
+    }
+
+    .paginav {
+        flex-direction: column;
+    }
+    .paginav a + a {
+        border-left: none;
+        border-top: 1px solid var(--border);
+    }
+    .paginav .next {
+        text-align: left;
     }
 }
 
-/* footer */
-@media screen and (max-width: 900px) {
+@media (max-width: 900px) {
     .list .top-link {
         transform: translateY(-5rem);
     }
 }
 
-@media screen and (max-width: 340px) {
-    .share-buttons {
-        justify-content: unset;
-    }
-}
-
 @media (prefers-reduced-motion) {
-    /* terms; profile-mode; post-single; post-entry; post-entry; search; search */
-    .terms-tags a:active,
-    .button:active,
-    .post-entry:active,
     .top-link,
-    .searchResults .focus,
-    .searchResults li:active {
+    .post-entry:active {
         transform: none;
     }
 }

@@ -1,11 +1,15 @@
 :root {
     --gap: 24px;
     --content-gap: 20px;
-    --nav-width: 1024px;
-    --main-width: 720px;
-    --header-height: 60px;
+    --main-width: 740px;
+    --nav-width: 740px;
+    --header-height: 48px;
     --footer-height: 60px;
-    --radius: 8px;
+    --radius: 4px;
+    color-scheme: light;
+}
+
+html[data-theme] {
     --theme: rgb(255, 255, 255);
     --entry: rgb(255, 255, 255);
     --primary: rgb(30, 30, 30);
@@ -14,27 +18,36 @@
     --content: rgb(31, 31, 31);
     --code-block-bg: rgb(28, 29, 33);
     --code-bg: rgb(245, 245, 245);
-    --border: rgb(238, 238, 238);
-    color-scheme: light;
+    --border: rgb(232, 232, 232);
+
+    --tag-bg: rgb(245, 245, 245);
+    --tag-fg: rgb(34, 34, 34);
+    --tag-hover-bg: rgb(228, 228, 228);
+
+    --accent: #2a7ae2;
+    --accent-contrast: #ffffff;
+    --hover-bg: rgb(247, 248, 250);
+    --link-hover-bg: rgba(42, 122, 226, 0.1);
 }
 
-:root[data-theme="dark"] {
+html[data-theme="dark"] {
     --theme: rgb(29, 30, 32);
-    --entry: rgb(46, 46, 51);
+    --entry: rgb(29, 30, 32);
     --primary: rgb(218, 218, 219);
     --secondary: rgb(155, 156, 157);
     --tertiary: rgb(65, 66, 68);
     --content: rgb(196, 196, 197);
     --code-block-bg: rgb(46, 46, 51);
     --code-bg: rgb(55, 56, 62);
-    --border: rgb(51, 51, 51);
+    --border: rgb(46, 46, 51);
+
+    --tag-bg: rgb(45, 47, 52);
+    --tag-fg: rgb(218, 218, 219);
+    --tag-hover-bg: rgb(62, 64, 70);
+
+    --accent: #79b8ff;
+    --accent-contrast: rgb(20, 22, 26);
+    --hover-bg: rgb(40, 41, 45);
+    --link-hover-bg: rgba(121, 184, 255, 0.18);
     color-scheme: dark;
-}
-
-.list {
-    background: var(--code-bg);
-}
-
-[data-theme="dark"] .list {
-    background: var(--theme);
 }

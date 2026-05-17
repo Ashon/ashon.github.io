@@ -1,3 +1,5 @@
+/* Main content container. */
+
 .main {
     position: relative;
     min-height: calc(100vh - var(--header-height) - var(--footer-height));
@@ -6,10 +8,7 @@
     padding: var(--gap);
 }
 
-.page-header h1 {
-    font-size: 40px;
-}
-
+/* Section pagination (older posts / newer posts on list views). */
 .pagination {
     display: flex;
 }
@@ -27,17 +26,7 @@
     margin-inline-start: auto;
 }
 
-
-.social-icons a {
-    display: inline-flex;
-    padding: 10px;
-}
-
-.social-icons a svg {
-    height: 26px;
-    width: 26px;
-}
-
+/* Code helpers — chroma copy button. */
 code {
     direction: ltr;
 }
@@ -63,4 +52,19 @@ pre {
 div.highlight:hover .copy-code,
 pre:hover .copy-code {
     display: block;
+}
+
+/* 404 page. */
+.not-found {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.not-found h1 {
+    font-size: 5rem;
+    margin: 0;
+    font-weight: 700;
 }

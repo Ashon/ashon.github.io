@@ -1,32 +1,118 @@
-.footer,
-.top-link {
-    font-size: 12px;
+/* Site footer (minima-style: muted, info + social icons). */
+
+.site-footer {
+    display: block;
+    max-width: calc(var(--main-width) + var(--gap) * 2);
+    margin: 3rem auto 0 auto;
+    padding: 1.75rem var(--gap) 1.25rem var(--gap);
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--secondary);
+    text-align: left;
+}
+
+.site-footer .site-footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem 2rem;
+}
+
+.site-footer .footer-info {
+    min-width: 0;
+    flex: 1 1 auto;
     color: var(--secondary);
 }
 
-.footer {
-    max-width: calc(var(--main-width) + var(--gap) * 2);
-    margin: auto;
-    padding: calc((var(--footer-height) - var(--gap)) / 2) var(--gap);
-    text-align: center;
-    line-height: 24px;
+.site-footer .footer-title {
+    margin: 0 0 0.2rem 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--secondary);
+    letter-spacing: 0;
+    opacity: 0.85;
 }
 
-.footer span {
-    margin-inline-start: 1px;
-    margin-inline-end: 1px;
+.site-footer .footer-description {
+    margin: 0 0 0.3rem 0;
+    color: var(--secondary);
+    font-size: 0.78rem;
+    opacity: 0.85;
 }
 
-.footer span:last-child {
-    white-space: nowrap;
+.site-footer .footer-contact {
+    margin: 0;
+    font-size: 0.75rem;
 }
 
-.footer a {
-    color: inherit;
-    text-underline-offset: 0.25rem;
+.site-footer .footer-contact a {
+    color: var(--secondary);
+    text-decoration: none;
+    opacity: 0.85;
+    transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+.site-footer .footer-contact a:hover {
+    color: var(--primary);
+    opacity: 1;
     text-decoration: underline;
 }
 
+.site-footer .footer-contact .sep {
+    margin: 0 0.3rem;
+    color: var(--secondary);
+    opacity: 0.4;
+}
+
+.site-footer .social-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    flex-shrink: 0;
+}
+
+.site-footer .social-icons a {
+    display: inline-flex;
+    padding: 4px;
+    color: var(--secondary);
+    opacity: 0.7;
+    border-radius: 4px;
+    transition: color 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+}
+
+.site-footer .social-icons a:hover {
+    color: var(--primary);
+    opacity: 1;
+    background: var(--border);
+}
+
+.site-footer .social-icons svg {
+    width: 16px;
+    height: 16px;
+}
+
+.site-footer .footer-copyright {
+    text-align: center;
+    margin-top: 1.25rem;
+    padding-top: 0.75rem;
+    font-size: 0.7rem;
+    color: var(--secondary);
+    opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+    .site-footer .site-footer-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .site-footer .social-icons {
+        margin-top: 0.5rem;
+    }
+}
+
+/* "Back to top" floating link (unchanged from PaperMod). */
 .top-link {
     position: fixed;
     bottom: 4rem;
@@ -37,6 +123,8 @@
     height: 2.5rem;
     padding: 10px;
     border-radius: 64px;
+    color: var(--secondary);
+    font-size: 12px;
     transition: visibility .3s, opacity .3s cubic-bezier(0.4, 0, 1, 1);
 }
 
@@ -50,7 +138,6 @@
     filter: drop-shadow(0px 0px 0px var(--theme));
 }
 
-.footer a:hover,
 .top-link:hover {
     color: var(--primary);
 }

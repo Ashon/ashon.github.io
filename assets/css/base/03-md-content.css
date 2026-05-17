@@ -163,9 +163,24 @@
 }
 
 .md-content blockquote {
-    margin: 1rem 0;
+    border-inline-start: 2px solid var(--border);
     padding-inline-start: 1rem;
-    border-inline-start: 0.3rem solid var(--content);
+    margin: 1.25rem 0;
+    color: var(--secondary);
+    font-style: normal;
+}
+
+.md-content blockquote p {
+    margin: 0.25rem 0;
+}
+
+.md-content blockquote :is(a, code, strong, em) {
+    color: inherit;
+}
+
+.md-content blockquote code {
+    background: var(--code-bg);
+    opacity: 0.85;
 }
 
 .md-content hr {

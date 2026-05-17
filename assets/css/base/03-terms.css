@@ -1,19 +1,17 @@
+/* Taxonomy term list (/tags/). Styling for individual term anchors
+ * lives next to .post-tags a in 03-post-single.css since they share
+ * the same chip look. This file just lays out the wrapping list. */
+
 .terms-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 1em;
+    gap: 0.5rem;
     margin-top: var(--content-gap);
+    padding: 0;
 }
 
 .terms-tags li {
     display: inline-block;
-    font-weight: 500;
-}
-
-.terms-tags a {
-    display: block;
-    padding: 4px 10px;
-    background: var(--tertiary);
-    border-radius: var(--radius);
-    transition: transform 0.1s;
+    font-weight: 400;
+    list-style: none;
 }

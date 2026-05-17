@@ -112,11 +112,17 @@
     }
 }
 
-/* "Back to top" floating link (unchanged from PaperMod). */
+/* "Back to top" floating link. Position anchors to the content column's
+   right edge (~16px gutter) on wide screens, so the button sits next to
+   the text instead of hugging the viewport edge.
+   The 80px subtracted from the calc covers: content right padding (24px)
+   + button width (~40px) + 16px gutter.
+   max() falls back to a flat 2rem from the viewport edge on narrow
+   screens where the content fills the viewport. */
 .top-link {
     position: fixed;
     bottom: 4rem;
-    right: 2rem;
+    right: max(2rem, calc(50% - var(--main-width) / 2 - 80px));
     z-index: 99;
     background: var(--tertiary);
     width: 2.5rem;

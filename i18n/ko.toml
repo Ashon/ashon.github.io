@@ -1,7 +1,7 @@
 [read_time]
-one = "1 분"
-other = "{{ .Count }} 분"
+one = "1 min read"
+other = "{{ .Count }} min read"
 
 [words]
-one = "{{ .Count }} 단어"
-other = "{{ .Count }} 단어"
+one = "{{ .Count }} word"
+other = "{{ .Count }} words"

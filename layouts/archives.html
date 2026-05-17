@@ -27,6 +27,11 @@
   {{- end }}
 </header>
 
+{{- /* Korean locale renders GroupByDate "January" as "1월","2월",…,
+       so we group by month number and map to English names ourselves. */ -}}
+{{- $monthNames := slice "January" "February" "March" "April" "May" "June"
+                         "July" "August" "September" "October" "November" "December" -}}
+
 {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
 
 {{- if site.Params.ShowAllPagesInArchive }}
@@ -42,11 +47,12 @@
       {{- $year -}}
     </a>
   </h2>
-  {{- range .Pages.GroupByDate "January" }}
+  {{- range .Pages.GroupByDate "1" }}
+  {{- $mname := index $monthNames (sub (int .Key) 1) }}
   <div class="archive-month">
-    <h3 class="archive-month-header" id="{{ $year }}-{{ .Key }}">
-      <a class="archive-header-link" href="#{{ $year }}-{{ .Key }}">
-        {{- .Key -}}
+    <h3 class="archive-month-header" id="{{ $year }}-{{ $mname }}">
+      <a class="archive-header-link" href="#{{ $year }}-{{ $mname }}">
+        {{- $mname -}}
       </a>
     </h3>
     <div class="archive-posts">

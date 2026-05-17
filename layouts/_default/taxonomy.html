@@ -5,6 +5,11 @@
        a chip cloud at the top with client-side AND filtering, plus
        a grouped expanded view as the default state. */ -}}
 
+{{- /* Korean locale strips English month tokens from .Date.Format,
+       so we manually map month numbers to English names. */ -}}
+{{- $months := slice "Jan" "Feb" "Mar" "Apr" "May" "Jun"
+                     "Jul" "Aug" "Sep" "Oct" "Nov" "Dec" -}}
+
 <header class="page-header">
   <h1>{{ .Title }}</h1>
 </header>
@@ -45,7 +50,8 @@
     {{- range .Params.tags }}{{- $tagSlugs = $tagSlugs | append (urlize .) }}{{- end }}
     <li class="tag-filtered-item" data-tags="{{ delimit $tagSlugs " " }}">
       <a class="link-accent" href="{{ .Permalink }}">{{ .Title }}</a>
-      <span class="tag-filtered-date">{{ .Date.Format "2006 Jan 02" }}</span>
+      {{- $mname := index $months (sub (int (.Date.Format "1")) 1) -}}
+      <span class="tag-filtered-date">{{ $mname }} {{ .Date.Format "02" }}, {{ .Date.Format "2006" }}</span>
     </li>
     {{- end }}
   </ul>
@@ -65,7 +71,8 @@
       {{- range .Pages }}
       <li>
         <a class="link-accent" href="{{ .Permalink }}">{{ .Title }}</a>
-        <span class="tag-group-date">{{ .Date.Format "2006 Jan 02" }}</span>
+        {{- $mname := index $months (sub (int (.Date.Format "1")) 1) -}}
+        <span class="tag-group-date">{{ $mname }} {{ .Date.Format "02" }}, {{ .Date.Format "2006" }}</span>
       </li>
       {{- end }}
     </ul>

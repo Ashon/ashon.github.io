@@ -2,6 +2,8 @@
 title: 나도 eBPF 프로그램을 만들어 볼 수 있을까?
 date: 2024-08-25 10:53:02 +0900
 slug: ebpf-network-monitor
+categories:
+- note
 summary: '리눅스 커널 내부 TCP 통신을 위한 시스템콜을 추적하는 간단한 eBPF 프로그램을 직접 작성해 보면서,
 
   eBPF 개발 생태계와 주변에 어떤것들이 있는지 공부해 본 내용을 공유한다.

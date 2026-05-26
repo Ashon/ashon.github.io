@@ -1,0 +1,70 @@
+{{- /* Categories — handles both kinds in one file:
+       - /categories/             (Kind "taxonomy"): index of the three
+                                  categories with counts.
+       - /categories/<term>/      (Kind "term"): paginated post list,
+                                  visually consistent with the home list.
+
+       This file is picked before layouts/_default/term.html, which is
+       a tags-only redirect and would otherwise hijack term pages. */ -}}
+{{- define "main" }}
+
+{{- $months := slice "Jan" "Feb" "Mar" "Apr" "May" "Jun"
+                     "Jul" "Aug" "Sep" "Oct" "Nov" "Dec" -}}
+
+{{- if eq .Kind "term" }}
+
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+</header>
+
+{{- $paginator := .Paginate .Pages }}
+{{- range $paginator.Pages }}
+<article class="post-entry">
+  {{- partial "post_meta.html" . }}
+  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}">
+    <header class="entry-header">
+      <h2 class="entry-hint-parent">
+        {{- .Title }}
+      </h2>
+    </header>
+    {{- if (ne (.Param "hideSummary") true) }}
+    <div class="entry-content">
+      <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+    </div>
+    {{- end }}
+  </a>
+</article>
+{{- end }}
+
+{{- if gt $paginator.TotalPages 1 }}
+<footer class="page-footer">
+  <nav class="pagination">
+    {{- if $paginator.HasPrev }}
+    <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">«&nbsp;{{ i18n "prev_page" }}</a>
+    {{- end }}
+    {{- if $paginator.HasNext }}
+    <a class="next" href="{{ $paginator.Next.URL | absURL }}">{{ i18n "next_page" }}&nbsp;»</a>
+    {{- end }}
+  </nav>
+</footer>
+{{- end }}
+
+{{- else if eq .Kind "taxonomy" }}
+
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+</header>
+
+{{- $taxonomy := index site.Taxonomies "categories" }}
+<ul class="category-index">
+  {{- range $taxonomy.ByCount }}
+  <li>
+    <a class="link-accent category-index-name" href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a>
+    <span class="category-index-count">{{ .Count }}</span>
+  </li>
+  {{- end }}
+</ul>
+
+{{- end }}
+
+{{- end }}{{/* end main */}}

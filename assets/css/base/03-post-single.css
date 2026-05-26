@@ -46,6 +46,16 @@
     margin-bottom: 0.6rem;
 }
 
+/* Account for the sticky site header when an anchor link (e.g. from
+   the TOC) scrolls a heading to the top of the viewport — otherwise
+   the heading lands behind the blurred header bar. Same token as the
+   sticky TOC top offset below, so a clicked heading lands on the
+   same baseline as the pinned TOC. Applies to both hash navigation
+   and scrollIntoView() calls. */
+.post-content :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: var(--anchor-offset);
+}
+
 /* H2 gets a thin chapter divider so long articles read as sections. */
 .post-content h2 {
     margin-top: 2.75rem;
@@ -108,7 +118,7 @@ nav.toc #TableOfContents ul {
 
 nav.toc > ul,
 nav.toc #TableOfContents > ul {
-    padding-left: 0.75rem;
+    padding-left: 0rem;
 }
 
 nav.toc li {
@@ -122,13 +132,32 @@ nav.toc li::before {
     content: none;
 }
 
-/* Active heading highlight — set by the IntersectionObserver in
-   layouts/partials/extend_head.html. Stronger color + a faint bg
-   so the current section stands out without shouting. */
+/* Block-level rows for a wide click target. Color does all the
+   visual work — no background halos — so the TOC stays quiet beside
+   the article body. Overrides the .link-accent inline padding/margin
+   and accent color/hover bg from 03-links.css. */
+nav.toc a {
+    display: block;
+    padding: 2px 8px;
+    margin: 0;
+    border-radius: 3px;
+    color: var(--secondary);
+    transition: color 0.15s ease;
+}
+
+nav.toc a:hover {
+    color: var(--primary);
+    background: transparent;
+}
+
+/* Active heading — set by the IntersectionObserver in
+   layouts/partials/extend_head.html. Bumped color + weight only, no
+   background, so the current section reads as "you are here"
+   without competing with the article. */
 nav.toc a.active {
     color: var(--primary);
     font-weight: 500;
-    background: var(--link-hover-bg);
+    background: transparent;
 }
 
 hr.toc-divider {
@@ -137,6 +166,50 @@ hr.toc-divider {
     margin: 1.25rem 0 0 0;
     height: 0;
     background: none;
+}
+
+/* --- Desktop sticky TOC ----------------------------------------
+   At wide viewports the TOC lifts out of the article flow into the
+   right gutter and follows the scroll. Implementation note: the DOM
+   stays exactly as toc.html renders it. We make .post-single the
+   positioning context, absolutely position `nav.toc` into the gutter
+   so it spans the article's full height (top:0; bottom:0), and let
+   Hugo's inner `<nav id="TableOfContents">` be the sticky element
+   inside that rail. Below the breakpoint everything falls back to
+   the inline rendering above — no JS gate, no DOM swap. */
+@media (min-width: 1400px) {
+    /* Pin the TOC to the right gutter with `position: fixed` so it
+       stays put regardless of scroll, sub-pixel rendering, or zoom
+       level — sticky can drift 1px on some hardware, fixed can't.
+       Horizontal anchor: viewport center + half of .main's content
+       width + the same right padding .main applies, which lands the
+       TOC's left edge exactly at .main's right edge. Mobile falls
+       back to the inline TOC rendering above. */
+    .post-single nav.toc {
+        position: fixed;
+        top: var(--anchor-offset);
+        left: calc(50vw + var(--main-width) / 2 + var(--gap));
+        width: 300px;
+        margin: 0;
+        font-size: 0.85rem;
+    }
+
+    .post-single nav.toc > #TableOfContents {
+        max-height: calc(100vh - var(--anchor-offset) - var(--gap));
+        overflow-y: auto;
+        padding-right: 0.5rem;
+        scrollbar-width: thin;
+    }
+
+    .post-single nav.toc ul,
+    .post-single nav.toc #TableOfContents ul {
+        line-height: 1.65;
+        padding-left: 1rem;
+    }
+
+    .post-single hr.toc-divider {
+        display: none;
+    }
 }
 
 /* --- Prev/Next nav -------------------------------------------- */

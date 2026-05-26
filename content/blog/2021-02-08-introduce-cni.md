@@ -3,6 +3,8 @@ url: "/blog/2021/02/07/introduce-cni.html"
 title: CNCF CNI 프로젝트 살펴보기
 date: 2021-02-08 00:26:02 +0900
 slug: introduce-cni
+categories:
+- note
 summary: 'CNCF에서 관리되고 있고, Kubernetes에서 컨테이너 네트워킹을 달성하기 위해 표준으로
 
   사용하고 있는 CNI 프로젝트에 대해서 살펴보고 중요하다고 생각한 내용들을 정리한다.

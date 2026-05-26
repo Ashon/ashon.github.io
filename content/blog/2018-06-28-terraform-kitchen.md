@@ -2,6 +2,8 @@
 title: '"terraform-kitchen"을 이용한 Terraform 리소스 테스트하기'
 date: 2018-06-28 13:35:00 +0900
 slug: terraform-kitchen
+categories:
+- note
 summary: '클라우드 환경의 인프라스트럭쳐 정의 도구인 Terraform의 테스트 자동화를 위해
 
   terraform-kitchen을 사용해 본 이야기

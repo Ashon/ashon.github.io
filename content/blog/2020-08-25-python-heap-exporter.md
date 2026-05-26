@@ -3,6 +3,8 @@ url: "/blog/2020/08/24/python-heap-exporter.html"
 title: Prometheus와 Python GC 모듈을 이용해 동작중인 애플리케이션의 힙 사용량 측정해 본 이야기
 date: 2020-08-25 02:18:50 +0900
 slug: python-heap-exporter
+categories:
+- experience
 summary: 'Python의 GC 모듈을 이용해 동작하는 애플리케이션의 힙 사용량을 측정해 보고,
 
   Prometheus에서 메트릭을 수집할 수 있도록 exporter를 만들어 본 내용을 공유한다.

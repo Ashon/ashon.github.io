@@ -2,6 +2,8 @@
 title: 컨테이너로 데이터센터 네트워크를 모방해 볼 수 있을까?
 date: 2020-12-20 17:07:00 +0900
 slug: homemade-datacenter-network
+categories:
+- experience
 summary: '데이터센터 2-Tier BGP 네트워크의 간단한 구성을 랩탑 안에서 container로 구성해보며
 
   알게 된 내용들을 공유한다.

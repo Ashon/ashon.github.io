@@ -49,6 +49,7 @@ uglyURLs = true
     startLevel = 2
 
 [taxonomies]
+  category = "categories"
   tag = "tags"
 
 [[menu.main]]

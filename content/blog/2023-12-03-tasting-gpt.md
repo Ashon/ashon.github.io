@@ -2,6 +2,8 @@
 title: GPT 찍먹해 본 이야기 - SRE Oncall Assistant를 만들어 보자
 date: 2023-12-03 16:09:02 +0900
 slug: tasting-gpt
+categories:
+- thought
 summary: 'SRE로써 다양한 시스템 상황들을 빠르게 인지하기 위해서는 사람으로써 굉장히 수고로운 일이다.
 
   빠르게 상황을 파악하고 대처하기 위한 인사이트를 얻기 위해, GPT를 통해 어시스턴트를 만들어본 내용과

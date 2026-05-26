@@ -43,7 +43,6 @@
     color: var(--secondary);
     text-decoration: line-through;
     text-decoration-thickness: 1.5px;
-    text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .md-content dl:not(:last-child),
@@ -71,7 +70,6 @@
    prose. Use a muted middle dot at level 1, en-dash at level 2, and a
    small horizontal stroke deeper. */
 .md-content ul {
-    list-style: none;
     padding-inline-start: 1.4rem;
 }
 
@@ -80,7 +78,6 @@
 }
 
 .md-content ul > li::before {
-    content: "·";
     position: absolute;
     left: -1rem;
     top: -0.1em;
@@ -91,14 +88,12 @@
 }
 
 .md-content ul ul > li::before {
-    content: "–";
     font-size: 0.95em;
-    top: 0;
+    top: 0.4rem;
     font-weight: 500;
 }
 
 .md-content ul ul ul > li::before {
-    content: "";
     width: 6px;
     height: 1px;
     background: var(--secondary);
@@ -274,6 +269,10 @@
     line-height: 1.6;
     color: var(--secondary);
     user-select: none;
+}
+
+.md-content p + .aside  {
+    margin-top: -1.5rem;
 }
 
 .md-content .aside-icon {

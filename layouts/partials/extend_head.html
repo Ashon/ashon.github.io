@@ -91,7 +91,22 @@
           if (visible.has(h.id) && !first) first = h.id;
         });
         links.forEach(function (a) { a.classList.remove('active'); });
-        if (first && linkById[first]) linkById[first].classList.add('active');
+        if (!first || !linkById[first]) return;
+        var active = linkById[first];
+        active.classList.add('active');
+        /* Keep the active link visible inside the TOC scroll
+           container (desktop sticky mode with overflow). Only nudge
+           the TOC's own scrollTop — never the window — so reading
+           position is preserved. */
+        var scroller = active.closest('#TableOfContents');
+        if (!scroller || scroller.scrollHeight <= scroller.clientHeight) return;
+        var sr = scroller.getBoundingClientRect();
+        var ar = active.getBoundingClientRect();
+        if (ar.top < sr.top) {
+          scroller.scrollTop += ar.top - sr.top - 8;
+        } else if (ar.bottom > sr.bottom) {
+          scroller.scrollTop += ar.bottom - sr.bottom + 8;
+        }
       }
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {

@@ -94,6 +94,27 @@
     color: var(--secondary);
 }
 
+/* Category kicker — small uppercase label that anchors each post in
+   one of {thought, experience, note}. Sits at the start of the meta
+   row, before the date. Hover uses the same accent-tinted bg halo as
+   .link-accent so it matches in-content link affordance. */
+.entry-meta-top .entry-category {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 3px;
+    padding: 2px 5px;
+    margin: -2px -5px;
+    transition: background 0.15s ease;
+}
+
+.entry-meta-top .entry-category:hover {
+    background: var(--link-hover-bg);
+}
+
 .entry-meta-top .entry-date + .entry-readtime::before {
     color: var(--secondary);
     margin: 0 0.05rem;

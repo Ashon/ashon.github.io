@@ -38,6 +38,12 @@
   <link rel="stylesheet" href="{{ $stylesheet.RelPermalink }}">
 {{- end }}
 
+{{- /* Pretendard — primary UI/body typeface, served from jsDelivr.
+       Preconnect warms the TLS handshake before the CSS request. */ -}}
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
 <link rel="icon" href="/favicon.ico">
 <link rel="alternate" type="application/rss+xml" href="/index.xml" title="rss">
 

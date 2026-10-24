@@ -248,13 +248,13 @@
     word-break: break-all;
 }
 
+/* Blockquote — a quiet aside to the main text, not a callout box: no
+   fill, a thin neutral rule instead of the accent bar, muted text. */
 .md-content blockquote {
-    border-inline-start: 3px solid var(--accent);
-    padding: 0.25rem 1rem;
+    border-inline-start: 2px solid var(--tertiary);
+    padding: 0 0 0 1rem;
     margin: 1.25rem 0;
-    color: var(--primary);
-    background: var(--code-bg);
-    border-radius: 0 var(--radius) var(--radius) 0;
+    color: var(--secondary);
     font-style: normal;
 }
 
@@ -298,19 +298,14 @@
     margin: 0.25rem 0;
 }
 
-.md-content blockquote :is(a, code, strong, em) {
+.md-content blockquote :is(a, strong, em) {
     color: inherit;
 }
 
-/* Inside a blockquote, the surrounding bg is already --code-bg, so
-   inline `code` blends in invisibly. Mix the foreground color into
-   transparent — the chip auto-darkens in light mode and lightens
-   in dark mode, giving a strong contrast against the quote panel
-   in both themes. */
+/* Inline code keeps the body color: muted text on the code chip
+   would drop below 4.5:1 in dark mode (4.25). */
 .md-content blockquote code {
-    background: color-mix(in srgb, var(--primary) 15%, transparent);
-    color: var(--primary);
-    opacity: 1;
+    color: var(--content);
 }
 
 /* HR — a deliberate "section break" rather than a full-width bar.

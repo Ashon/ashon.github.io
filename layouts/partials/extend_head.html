@@ -83,6 +83,7 @@
         '.post-content h2[id], .post-content h3[id], .post-content h4[id]'
       );
       if (!headings.length) return;
+      var islandLabel = document.querySelector('.toc-island-current');
       var visible = new Set();
       function refresh() {
         if (!visible.size) return;
@@ -94,6 +95,8 @@
         if (!first || !linkById[first]) return;
         var active = linkById[first];
         active.classList.add('active');
+        /* The collapsed TOC island names the current section. */
+        if (islandLabel) islandLabel.textContent = active.textContent;
         /* Keep the active link visible inside the TOC scroll
            container (desktop sticky mode with overflow). Only nudge
            the TOC's own scrollTop — never the window — so reading
@@ -119,6 +122,46 @@
     }
     if (document.readyState !== 'loading') setupTocSpy();
     else document.addEventListener('DOMContentLoaded', setupTocSpy);
+  })();
+</script>
+
+{{- /* TOC island — open/close the floating TOC panel shown below the
+       wide-screen breakpoint (the button is hidden on wide screens,
+       so none of this runs there). Closes on link pick, Escape, or a
+       click outside; reopening scrolls the active entry into view. */ -}}
+<script>
+  (function () {
+    function setupTocIsland() {
+      var nav = document.querySelector('nav.toc');
+      var btn = nav && nav.querySelector('.toc-island');
+      var panel = nav && nav.querySelector('#TableOfContents');
+      if (!btn || !panel) return;
+
+      function setOpen(open) {
+        nav.classList.toggle('open', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (!open) return;
+        var active = panel.querySelector('a.active');
+        if (active) panel.scrollTop = active.offsetTop - panel.clientHeight / 2;
+      }
+
+      btn.addEventListener('click', function () {
+        setOpen(!nav.classList.contains('open'));
+      });
+      panel.addEventListener('click', function (e) {
+        if (e.target.closest('a')) setOpen(false);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape' || !nav.classList.contains('open')) return;
+        setOpen(false);
+        btn.focus();
+      });
+      document.addEventListener('click', function (e) {
+        if (!nav.contains(e.target)) setOpen(false);
+      });
+    }
+    if (document.readyState !== 'loading') setupTocIsland();
+    else document.addEventListener('DOMContentLoaded', setupTocIsland);
   })();
 </script>
 

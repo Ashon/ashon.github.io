@@ -3,10 +3,28 @@
        <hr> divider below it. Matches the original minima layout.
        Hugo wraps the tree in its own <nav id="TableOfContents">; turn
        that into a <div> so the TOC is one labelled landmark, not two
-       nested ones. */ -}}
+       nested ones.
+
+       Below the wide-screen breakpoint the TOC collapses into a
+       floating "island" button (bottom center) that names the current
+       section and expands the tree as a panel — see 03-post-single.css
+       and the island script in extend_head.html. The button is
+       display:none on wide screens, where the tree sits in the gutter. */ -}}
 {{- $headers := findRE "<h[1-6].*?>(.|\n])+?</h[1-6]>" .Content -}}
 {{- if ge (len $headers) 1 -}}
 <nav class="toc" aria-label="목차">
+  <button type="button" class="toc-island" aria-expanded="false" aria-controls="TableOfContents">
+    <svg class="toc-island-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 6h11M9 12h11M9 18h11M5 6v.01M5 12v.01M5 18v.01" />
+    </svg>
+    <span class="sr-only">목차, 현재 섹션:</span>
+    <span class="toc-island-current">목차</span>
+    <svg class="toc-island-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 15l6-6 6 6" />
+    </svg>
+  </button>
   {{- .TableOfContents | replaceRE `^<nav id="TableOfContents">` `<div id="TableOfContents">` | replaceRE `</nav>$` `</div>` | safeHTML -}}
 </nav>
 <hr class="toc-divider" />

@@ -212,6 +212,100 @@ hr.toc-divider {
     }
 }
 
+/* --- TOC island (below the wide-screen breakpoint) ---------------
+   Without a gutter to live in, an inline TOC pushes the article a
+   full screen down. Instead the TOC floats as a pill at the bottom
+   center naming the current section; the button expands the tree
+   upward as a panel. Bottom rather than top so it never sits over
+   the lines being read, and stays within thumb reach on phones. */
+.toc-island {
+    display: none;
+}
+
+@media (max-width: 1399.98px) {
+    .post-single nav.toc {
+        position: fixed;
+        left: 50%;
+        bottom: calc(1rem + env(safe-area-inset-bottom));
+        transform: translateX(-50%);
+        z-index: 100; /* above .top-link, so the open panel covers it */
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .toc-island {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        max-width: min(24rem, calc(100vw - var(--gap) * 2));
+        height: 2.5rem;
+        padding: 0 0.95rem;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme) 92%, transparent);
+        -webkit-backdrop-filter: saturate(180%) blur(8px);
+        backdrop-filter: saturate(180%) blur(8px);
+        box-shadow: var(--float-shadow);
+        color: var(--primary);
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    .toc-island-current {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .toc-island svg {
+        flex: none;
+        width: 1rem;
+        height: 1rem;
+        color: var(--secondary);
+    }
+
+    .toc-island-chevron {
+        transition: transform 0.2s ease;
+    }
+
+    .post-single nav.toc.open .toc-island-chevron {
+        transform: rotate(180deg);
+    }
+
+    .post-single nav.toc:not(.open) > #TableOfContents {
+        display: none;
+    }
+
+    .post-single nav.toc > #TableOfContents {
+        position: absolute;
+        bottom: calc(100% + 0.5rem);
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(36rem, calc(100vw - var(--gap) * 2));
+        max-height: min(60vh, 30rem);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 0.6rem 0.4rem;
+        border-radius: 14px;
+        background: var(--theme);
+        box-shadow: var(--float-shadow);
+    }
+
+    .post-single hr.toc-divider {
+        display: none;
+    }
+
+    /* Keep the island from covering the last lines of the footer. */
+    body:has(.post-single nav.toc) .site-footer {
+        padding-bottom: 5rem;
+    }
+}
+
+@media (max-width: 1399.98px) and (prefers-reduced-motion: reduce) {
+    .toc-island-chevron {
+        transition: none;
+    }
+}
+
 /* --- Prev/Next nav -------------------------------------------- */
 
 .paginav {

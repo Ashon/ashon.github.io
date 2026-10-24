@@ -48,9 +48,12 @@
     menu.onscroll = function () { localStorage.setItem("menu-scroll-position", menu.scrollLeft); }
   }
 
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  /* Same-page links: a bare "#id", or this page's own URL plus a
+     fragment, which is how Hugo writes "#id" links in the body. */
+  document.querySelectorAll('a[href*="#"]').forEach(anchor => {
     anchor.addEventListener("click", function (e) {
-      var hash = this.getAttribute("href");
+      if (this.origin !== location.origin || this.pathname !== location.pathname || !this.hash) return;
+      var hash = this.hash;
       var id = decodeURIComponent(hash.substr(1));
       var target = document.getElementById(id);
       if (!target) return;

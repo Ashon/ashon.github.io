@@ -4,7 +4,13 @@
        Hugo emits `/tags/index.html` (or `/tags.html`) for the tag
        taxonomy listing, which never equals `/tags/`. Make the match
        trailing-slash + index.html tolerant, and treat any descendant
-       of a section URL as belonging to that menu item. */ -}}
+       of a section URL as belonging to that menu item.
+
+       Compact mode: as the reader scrolls down, a script in
+       extend_head.html moves --hp on <html> from 0 to 1, and the logo
+       and menu labels fade into skeleton pills along with it
+       (03-header.css). The text stays in the links, only painted over,
+       so they keep their names. */ -}}
 <header class="header">
   <nav class="header-nav" aria-label="사이트 메뉴">
     <div class="logo">

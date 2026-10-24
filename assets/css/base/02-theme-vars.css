@@ -3,6 +3,11 @@
     --content-gap: 20px;
     --main-width: 740px;
     --nav-width: 740px;
+    /* Header line height: --header-height-full while the page is at
+       the top, smaller once the header turns compact on scroll
+       (03-header.css). Layout that must not move when that happens
+       uses --header-height-full. */
+    --header-height-full: 48px;
     --header-height: 48px;
     --footer-height: 60px;
     --radius: 4px;
@@ -15,7 +20,8 @@
        (6px top + bottom), which makes the rendered header taller
        than --header-height (the line-height only). Landing at
        header + --gap also keeps anchored headings clear of the
-       header's bottom fade. */
+       header's bottom fade. Follows the compact header too, so pinned
+       things move up with it. */
     --anchor-offset: calc(var(--header-height) + 12px + var(--gap));
 
     /* Type rhythm for Pretendard + Hangul. Tracking tightens as size

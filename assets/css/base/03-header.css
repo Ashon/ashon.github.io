@@ -1,6 +1,20 @@
+/* --header-height is registered so a mouse peek can ease it (browsers
+   without @property just jump). */
+@property --header-height {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 48px;
+}
+
+/* Fixed, not sticky: the bar shrinks when it turns compact, and a
+   sticky bar would pull the whole page up by that much mid-scroll
+   (Safari has no scroll anchoring to hide it). The body keeps the
+   full height reserved instead. */
 .header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 50;
     background: color-mix(in srgb, var(--theme) 92%, transparent);
     -webkit-backdrop-filter: saturate(180%) blur(8px);
@@ -28,10 +42,16 @@
     .header::after { background: linear-gradient(to bottom, var(--theme), transparent); }
 }
 
+body {
+    padding-top: calc(var(--header-height-full) + 12px);
+}
+
 .header-nav {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
+    min-height: calc(var(--header-height) + 12px);
     max-width: calc(var(--main-width) + var(--gap) * 2);
     margin: auto;
     line-height: var(--header-height);
@@ -119,4 +139,96 @@
 
 .menu .active {
     font-weight: 400;
+}
+
+/* Scroll-linked compact header. The script in extend_head.html sets
+   --hp on <html>: 0 at the top of the page, 1 after the first 72px of
+   scrolling. Everything below follows it continuously, so stopping
+   mid-scroll stops mid-way: the bar eases from 60px to 28px, and the
+   logo and menu labels fade into faint skeleton pills. The text keeps
+   its size, only faded and cut to a thin bar, so each pill is as long
+   as its word, the buttons keep their width and place, and the links
+   keep their names. A mouse pointing at the header (.is-peek, set by
+   the same script; a class rather than :hover, so a tap on iOS never
+   turns into a hover that eats the click) or keyboard focus inside it
+   brings the full header back. */
+@property --hp {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+}
+
+:root {
+    --header-height: calc(var(--header-height-full) - 32px * var(--hp));
+}
+
+.header.is-peek,
+.header:focus-within {
+    --hp: 0;
+    --header-height: var(--header-height-full);
+}
+
+/* Only around a peek, never while scrolling, so the bar never lags
+   behind the scroll position. */
+.header.peek-anim {
+    transition: --hp 0.12s ease, --header-height 0.12s ease;
+}
+
+/* Two overlapping phases, so text is never seen being cut: the label
+   blurs and fades out over the first 60% of the way (--fade), and the
+   pill only forms and thins over the last 60% (--shrink). The glyphs
+   are drawn by text-shadow over transparent text, so they can blur
+   while the pill behind them stays sharp; at --hp 0 the shadow has no
+   blur and looks exactly like plain text. All of it needs color-mix(),
+   so older browsers keep the plain labels (the bar still shrinks). */
+@supports (background: color-mix(in srgb, white, transparent)) {
+    .logo a,
+    #menu a > span {
+        --fade: min(1, calc(var(--hp) / 0.6));
+        --shrink: max(0, calc((var(--hp) - 0.4) / 0.6));
+        --ink: var(--primary);
+        --pill-end: 6px; /* logo and menu pills end up the same height */
+        border-radius: 999px;
+        color: transparent;
+        text-shadow: 0 0 calc(0.35em * var(--fade))
+            color-mix(in srgb, var(--ink) calc(100% - 100% * var(--fade)), transparent);
+    }
+
+    .logo a:hover {
+        --ink: var(--accent);
+        color: transparent;
+    }
+
+    .logo a {
+        --pill: calc(1.2em - (1.2em - var(--pill-end)) * var(--shrink));
+        display: block;
+        height: var(--pill);
+        line-height: var(--pill);
+        background: color-mix(in srgb, var(--primary) calc(12% * var(--shrink)), transparent);
+    }
+
+    /* Center the label box in the link exactly (vertical-align: middle
+       sits a pixel low against the logo), keeping the link as tall as
+       the bar. */
+    #menu a {
+        display: flex;
+        align-items: center;
+        height: calc(var(--header-height) + 12px);
+    }
+
+    #menu a > span {
+        --pill: calc(1.25em - (1.25em - var(--pill-end)) * var(--shrink));
+        display: block;
+        height: var(--pill);
+        line-height: var(--pill);
+        background: color-mix(in srgb, var(--primary) calc(12% * var(--shrink)), transparent);
+    }
+
+    #menu a > span.active {
+        background: color-mix(in srgb, var(--accent) calc(30% * var(--shrink)), transparent);
+    }
+}
+
+.menu a::after {
+    opacity: calc(1 - var(--hp));
 }

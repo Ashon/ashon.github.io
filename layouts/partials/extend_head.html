@@ -49,6 +49,56 @@
   })();
 </script>
 
+{{- /* Compact header - --hp on <html> follows the scroll position, from
+       0 at the top to 1 after the first 72px, and 03-header.css eases
+       the header into skeleton pills along with it. Under
+       prefers-reduced-motion it snaps between 0 and 1 instead. A mouse
+       pointing at the header sets .is-peek to show it in full (eased
+       by a short .peek-anim); touch is left out on purpose, so a tap
+       on a pill always navigates. */ -}}
+<script>
+  (function () {
+    var root = document.documentElement;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var RANGE = 72;
+    var last = -1, queued = false;
+    function update() {
+      queued = false;
+      var p = Math.min(1, Math.max(0, window.scrollY / RANGE));
+      p = reduce.matches ? Math.round(p) : Math.round(p * 100) / 100;
+      if (p === last) return;
+      last = p;
+      root.style.setProperty('--hp', p);
+    }
+    window.addEventListener('scroll', function () {
+      if (!queued) { queued = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+
+    function peek() {
+      var header = document.querySelector('.header');
+      if (!header) return;
+      var settle = null;
+      function set(on) {
+        if (!reduce.matches) {
+          clearTimeout(settle);
+          header.classList.add('peek-anim');
+          settle = setTimeout(function () { header.classList.remove('peek-anim'); }, 160);
+        }
+        header.classList.toggle('is-peek', on);
+      }
+      header.addEventListener('pointerenter', function (e) {
+        if (e.pointerType === 'mouse') set(true);
+      });
+      header.addEventListener('pointerleave', function () {
+        if (header.classList.contains('is-peek')) set(false);
+      });
+    }
+    if (document.readyState !== 'loading') peek();
+    else document.addEventListener('DOMContentLoaded', peek);
+  })();
+</script>
+
 {{- /* Lift the inner `<code data-lang="...">` attribute up to the outer
        `.highlight` wrapper so CSS can render a language label chip via
        `.highlight[data-lang]::before` without per-language rules. */ -}}

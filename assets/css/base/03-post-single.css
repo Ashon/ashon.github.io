@@ -237,7 +237,9 @@ hr.toc-divider {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        max-width: min(24rem, calc(100vw - var(--gap) * 2));
+        /* Leave room on both sides for the back-to-top button sharing
+           this row: gap + 2.5rem button + 0.5rem breathing space. */
+        max-width: min(24rem, calc(100vw - (var(--gap) + 3rem) * 2));
         height: 2.5rem;
         padding: 0 0.95rem;
         border-radius: 999px;
@@ -292,11 +294,6 @@ hr.toc-divider {
 
     .post-single hr.toc-divider {
         display: none;
-    }
-
-    /* Keep the island from covering the last lines of the footer. */
-    body:has(.post-single nav.toc) .site-footer {
-        padding-bottom: 5rem;
     }
 }
 

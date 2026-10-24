@@ -58,12 +58,6 @@
     }
 }
 
-@media (max-width: 900px) {
-    .list .top-link {
-        transform: translateY(-5rem);
-    }
-}
-
 @media (prefers-reduced-motion) {
     .top-link,
     .post-entry:active {

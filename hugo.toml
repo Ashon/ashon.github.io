@@ -36,6 +36,12 @@ uglyURLs = true
 [markup]
   [markup.goldmark.renderer]
     unsafe = true
+  # Keep punctuation exactly as written (ASCII quotes, "...", "--").
+  # The typographer turned them into curly quotes / ellipses and paired
+  # quotes wrongly before Korean particles ("고장"이라고 rendered with
+  # two opening quotes).
+  [markup.goldmark.extensions.typographer]
+    disable = true
   [markup.highlight]
     codeFences = true
     guessSyntax = true

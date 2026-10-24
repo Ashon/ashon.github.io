@@ -3,7 +3,9 @@
        minifies, and fingerprints in production. */ -}}
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{{- /* No zoom on phones. iOS Safari ignores user-scalable=no for pinch,
+       so the html rule in 01-reset.css also drops double-tap zoom. */}}
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
 {{- if hugo.IsProduction | or (eq site.Params.env "production") }}
 <meta name="robots" content="index, follow">
 {{- else }}

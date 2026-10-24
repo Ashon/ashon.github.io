@@ -176,7 +176,9 @@ body {
 
 /* Two overlapping phases, so text is never seen being cut: the label
    blurs and fades out over the first 60% of the way (--fade), and the
-   pill only forms and thins over the last 60% (--shrink). The glyphs
+   pill only forms and thins over the last 60% (--shrink), coming into
+   focus as it does: its blur rises and falls with --shrink, so it is
+   sharp both before it shows and once it has settled. The glyphs
    are drawn by text-shadow over transparent text, so they can blur
    while the pill behind them stays sharp; at --hp 0 the shadow has no
    blur and looks exactly like plain text. All of it needs color-mix(),
@@ -192,6 +194,8 @@ body {
         color: transparent;
         text-shadow: 0 0 calc(0.35em * var(--fade))
             color-mix(in srgb, var(--ink) calc(100% - 100% * var(--fade)), transparent);
+        /* peaks at 2.5px halfway through --shrink, 0 at either end */
+        filter: blur(calc(10px * var(--shrink) * (1 - var(--shrink))));
     }
 
     .logo a:hover {

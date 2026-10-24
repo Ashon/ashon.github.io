@@ -9,8 +9,6 @@ buildDrafts = false
 buildFuture = false
 buildExpired = false
 
-googleAnalytics = "UA-151348212-1"
-
 # Preserve legacy Jekyll URLs: /blog/YYYY/MM/DD/slug.html
 uglyURLs = true
 
@@ -78,6 +76,8 @@ uglyURLs = true
 
 [params]
   env = "production"
+  # GA4 property "ashon.github.io" (382140593), read by layouts/partials/head.html
+  googleAnalytics = "G-JDYFE0CTFZ"
   description = "Experience and Thinking about Software Development"
   author = "Ju-won Lee"
   defaultTheme = "auto"

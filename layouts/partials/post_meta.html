@@ -20,7 +20,14 @@
   <span class="entry-date" title="{{ .Date }}">{{ $mname }} {{ .Date.Format "02" }}, {{ .Date.Format "2006" }}</span>
   {{- end }}
   {{- if (.Param "ShowReadingTime") -}}
-  <span class="entry-readtime">{{ .ReadingTime }} min read</span>
+  {{- /* Same rate as .ReadingTime (213 words a minute), but without the
+         text nobody reads as prose: inline SVGs (labels, title, desc,
+         and the narrow copy of a dual figure) and term popover bodies
+         (layouts/shortcodes/term.html), which only show on demand. */ -}}
+  {{- $html := .Content | replaceRE `(?s)<svg\b.*?</svg>` ""
+                        | replaceRE `(?s)<span id="term-[^"]*" class="term-popover" popover>.*?</span></span>` "</span>" -}}
+  {{- $words := len (findRE `\S+` (plainify $html)) -}}
+  <span class="entry-readtime">{{ div (add $words 212) 213 }} min read</span>
   {{- end }}
   {{- with .Params.tags }}
   <span class="entry-tags">

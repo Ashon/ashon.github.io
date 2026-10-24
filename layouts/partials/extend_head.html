@@ -66,6 +66,52 @@
   })();
 </script>
 
+{{- /* Code scroll — for code blocks wider than the column, mark the
+       <pre> with `scroll-x` and `at-start` / `at-end` so CSS can fade
+       the edges that hide code, and make the scrolling <code> a
+       focusable, labelled region so it can be scrolled from the
+       keyboard (WCAG 2.1.1). Re-checked on resize: a block that fits
+       on desktop may overflow on a phone, and vice versa. */ -}}
+<script>
+  (function () {
+    function setupCodeScroll() {
+      var blocks = document.querySelectorAll('.post-content pre > code');
+      if (!blocks.length) return;
+
+      function update(code) {
+        var pre = code.parentElement;
+        var overflow = code.scrollWidth - code.clientWidth > 1;
+        pre.classList.toggle('scroll-x', overflow);
+        if (overflow && !code.hasAttribute('tabindex')) {
+          var lang = code.dataset.lang;
+          code.setAttribute('tabindex', '0');
+          code.setAttribute('role', 'region');
+          code.setAttribute('aria-label', '코드' + (lang ? ' (' + lang + ')' : '') + ', 좌우로 스크롤');
+        } else if (!overflow && code.hasAttribute('tabindex')) {
+          code.removeAttribute('tabindex');
+          code.removeAttribute('role');
+          code.removeAttribute('aria-label');
+        }
+        pre.classList.toggle('at-start', code.scrollLeft <= 1);
+        pre.classList.toggle('at-end', code.scrollLeft + code.clientWidth >= code.scrollWidth - 1);
+      }
+
+      blocks.forEach(function (code) {
+        update(code);
+        code.addEventListener('scroll', function () { update(code); }, { passive: true });
+      });
+      if ('ResizeObserver' in window) {
+        var ro = new ResizeObserver(function (entries) {
+          entries.forEach(function (e) { update(e.target); });
+        });
+        blocks.forEach(function (code) { ro.observe(code); });
+      }
+    }
+    if (document.readyState !== 'loading') setupCodeScroll();
+    else document.addEventListener('DOMContentLoaded', setupCodeScroll);
+  })();
+</script>
+
 {{- /* TOC scrollspy — highlight the table-of-contents link matching
        the heading currently in view, so long posts have a "you are
        here" indicator. Single rAF debounce keeps it cheap. */ -}}

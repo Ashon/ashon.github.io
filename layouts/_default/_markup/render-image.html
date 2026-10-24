@@ -1,0 +1,18 @@
+{{- /* Markdown image render hook.
+       - loading="lazy" + decoding="async": images below the fold no
+         longer download or decode before the reader gets there.
+       - width/height from the file itself (images live under static/),
+         so the browser reserves the box up front and text doesn't jump
+         as images arrive; CSS keeps them responsive with height:auto.
+       Remote or missing files render without dimensions. */ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $file := printf "static%s" $u.Path -}}
+{{- $dims := "" -}}
+{{- if and (strings.HasPrefix $u.Path "/") (fileExists $file) -}}
+  {{- with images.Config $file -}}
+    {{- $dims = printf ` width="%d" height="%d"` .Width .Height -}}
+  {{- end -}}
+{{- end -}}
+<img src="{{ .Destination | safeURL }}" alt="{{ .PlainText }}"
+  {{- with .Title }} title="{{ . }}"{{ end }}
+  {{- $dims | safeHTMLAttr }} loading="lazy" decoding="async">

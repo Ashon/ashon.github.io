@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 312" class="ent" role="img" aria-labelledby="ent-title ent-desc">
+  <title id="ent-title">서버, 랙, 파드의 집합 관계와 단위마다 있는 고장 분해 트리</title>
+  <desc id="ent-desc">파드 안에 랙 두 개가 있고, 랙마다 서버 세 대가 들어 있다. 서버, 랙, 파드는 각자 고장 분해 트리를 하나씩 가지고 있고, 그림에서는 세모로 나타낸다. 랙 안의 서버들은 PDU, ToR 스위치, 흡기를 함께 쓰고, 파드 안의 랙들은 상위 네트워크, 전원, 냉각을 함께 쓴다. 아래 단위의 공통분모는 한 단계 위 단위 트리의 최소 컷셋이 된다.</desc>
+  <!-- Triangles stand for a whole fault tree, as the transfer symbol does
+       in the example tree; the small branches inside make them read as
+       trees rather than arrows. Server triangles are too small for that,
+       so they stay plain. -->
+  <style>
+    .ent { font-family: inherit; }
+    .ent-pod { fill: color-mix(in srgb, var(--primary, #1e1e1e) 3%, var(--theme, #fff)); stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; }
+    .ent-rack { fill: color-mix(in srgb, var(--primary, #1e1e1e) 7%, var(--theme, #fff)); stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; }
+    .ent-server { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.25; }
+    .ent-tree { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; stroke-linejoin: round; }
+    .ent-branch { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1; }
+    .ent-leaf { fill: var(--secondary, #6c6c6c); }
+    .ent-name { fill: var(--primary, #1e1e1e); font-size: 13px; font-weight: 600; dominant-baseline: central; }
+    .ent-text { fill: var(--primary, #1e1e1e); font-size: 12px; dominant-baseline: central; }
+    .ent-tree-label { fill: var(--secondary, #6c6c6c); font-size: 11px; text-anchor: end; dominant-baseline: central; }
+    .ent-shared { fill: var(--secondary, #6c6c6c); font-size: 11px; dominant-baseline: central; }
+    .ent-flow { fill: var(--primary, #1e1e1e); font-size: 12px; font-weight: 600; dominant-baseline: central; }
+    .ent-arrow { fill: var(--accent, #1f6fd1); font-size: 12px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .ent-note { fill: var(--secondary, #6c6c6c); font-size: 11.5px; text-anchor: middle; dominant-baseline: central; }
+    .ent-sep { fill: none; stroke: var(--border, #e8e8e8); stroke-width: 1; }
+  </style>
+
+  <!-- pod -->
+  <rect class="ent-pod" x="6" y="6" width="348" height="246" rx="12" />
+  <text class="ent-name" x="18" y="24">파드</text>
+  <text class="ent-tree-label" x="306" y="28">파드 트리</text>
+  <path class="ent-tree" d="M330 12 L348 44 H312 Z" />
+  <path class="ent-branch" d="M330 24 L322 40 M330 24 V40 M330 24 L338 40" />
+  <circle class="ent-leaf" cx="330" cy="24" r="1.8" />
+  <circle class="ent-leaf" cx="322" cy="40" r="1.6" />
+  <circle class="ent-leaf" cx="330" cy="40" r="1.6" />
+  <circle class="ent-leaf" cx="338" cy="40" r="1.6" />
+  <text class="ent-shared" x="18" y="236">공유: 상위 네트워크, 전원, 냉각</text>
+
+  <!-- rack 1 -->
+  <rect class="ent-rack" x="18" y="52" width="156" height="168" rx="10" />
+  <text class="ent-name" x="28" y="68">랙 1</text>
+  <text class="ent-tree-label" x="132" y="70">랙 트리</text>
+  <path class="ent-tree" d="M152 57 L166 82 H138 Z" />
+  <path class="ent-branch" d="M152 67 L146 79 M152 67 V79 M152 67 L158 79" />
+  <circle class="ent-leaf" cx="152" cy="67" r="1.6" />
+  <circle class="ent-leaf" cx="146" cy="79" r="1.4" />
+  <circle class="ent-leaf" cx="152" cy="79" r="1.4" />
+  <circle class="ent-leaf" cx="158" cy="79" r="1.4" />
+  <rect class="ent-server" x="28" y="90" width="136" height="26" rx="5" />
+  <text class="ent-text" x="38" y="103">서버</text>
+  <path class="ent-tree" d="M148 95 L157 111 H139 Z" />
+  <rect class="ent-server" x="28" y="122" width="136" height="26" rx="5" />
+  <text class="ent-text" x="38" y="135">서버</text>
+  <path class="ent-tree" d="M148 127 L157 143 H139 Z" />
+  <rect class="ent-server" x="28" y="154" width="136" height="26" rx="5" />
+  <text class="ent-text" x="38" y="167">서버</text>
+  <path class="ent-tree" d="M148 159 L157 175 H139 Z" />
+  <text class="ent-shared" x="28" y="202">공유: PDU, ToR, 흡기</text>
+
+  <!-- rack 2 -->
+  <rect class="ent-rack" x="186" y="52" width="156" height="168" rx="10" />
+  <text class="ent-name" x="196" y="68">랙 2</text>
+  <text class="ent-tree-label" x="300" y="70">랙 트리</text>
+  <path class="ent-tree" d="M320 57 L334 82 H306 Z" />
+  <path class="ent-branch" d="M320 67 L314 79 M320 67 V79 M320 67 L326 79" />
+  <circle class="ent-leaf" cx="320" cy="67" r="1.6" />
+  <circle class="ent-leaf" cx="314" cy="79" r="1.4" />
+  <circle class="ent-leaf" cx="320" cy="79" r="1.4" />
+  <circle class="ent-leaf" cx="326" cy="79" r="1.4" />
+  <rect class="ent-server" x="196" y="90" width="136" height="26" rx="5" />
+  <text class="ent-text" x="206" y="103">서버</text>
+  <path class="ent-tree" d="M316 95 L325 111 H307 Z" />
+  <rect class="ent-server" x="196" y="122" width="136" height="26" rx="5" />
+  <text class="ent-text" x="206" y="135">서버</text>
+  <path class="ent-tree" d="M316 127 L325 143 H307 Z" />
+  <rect class="ent-server" x="196" y="154" width="136" height="26" rx="5" />
+  <text class="ent-text" x="206" y="167">서버</text>
+  <path class="ent-tree" d="M316 159 L325 175 H307 Z" />
+  <text class="ent-shared" x="196" y="202">공유: PDU, ToR, 흡기</text>
+
+  <!-- how the trees connect -->
+  <path class="ent-sep" d="M10 264 H350" />
+  <path class="ent-tree" d="M44 270 L53 286 H35 Z" />
+  <text class="ent-flow" x="60" y="279">서버 트리</text>
+  <text class="ent-arrow" x="130" y="279">-></text>
+  <path class="ent-tree" d="M160 269 L170 287 H150 Z" />
+  <text class="ent-flow" x="177" y="279">랙 트리</text>
+  <text class="ent-arrow" x="234" y="279">-></text>
+  <path class="ent-tree" d="M265 268 L276 288 H254 Z" />
+  <text class="ent-flow" x="283" y="279">파드 트리</text>
+  <text class="ent-note" x="180" y="302">아래 단위의 공통분모가 위 단위 트리의 최소 컷셋이 됨</text>
+</svg>

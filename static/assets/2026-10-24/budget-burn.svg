@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 222" class="ebb" role="img" aria-labelledby="ebb-title ebb-desc">
+  <title id="ebb-title">남은 에러 버짓: 서버 한 대가 꺼진 경우와 랙 하나가 통째로 내려간 경우</title>
+  <desc id="ebb-desc">설명을 위해 임의로 잡은 예시로, 서버 1,000대짜리 파드에 28일 동안 99.9%를 목표로 잡았을 때 남은 에러 버짓의 변화. 서버 한 대가 내내 꺼져 있으면 버짓은 28일에 걸쳐 일정하게 줄어 마지막 날 0이 된다. 서버 40대짜리 랙 하나가 10일째에 통째로 내려가면, 그때까지 100%로 남아 있던 버짓이 약 17시간 만에 0이 된다.</desc>
+  <!-- Two series, colors checked with the dataviz validator: blue
+       #1f6fd1 / orange #d97706 on the light surface, #4f8fe6 / #d97706
+       on the dark one (the dark rule below). Text stays in text tokens;
+       the colored line beside each label carries the identity. -->
+  <style>
+    .ebb { font-family: inherit; }
+    .ebb text { font-size: 11px; dominant-baseline: central; }
+    .ebb-grid { fill: none; stroke: var(--border, #e8e8e8); stroke-width: 1; }
+    .ebb-axis { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1; }
+    .ebb text.ebb-tick { fill: var(--secondary, #6c6c6c); }
+    .ebb text.ebb-tick-y { fill: var(--secondary, #6c6c6c); text-anchor: end; }
+    .ebb text.ebb-tick-x { fill: var(--secondary, #6c6c6c); text-anchor: middle; }
+    .ebb text.ebb-legend { fill: var(--primary, #1e1e1e); font-size: 11.5px; }
+    .ebb text.ebb-note { fill: var(--primary, #1e1e1e); font-size: 11.5px; font-weight: 600; }
+    .ebb text.ebb-event { fill: var(--secondary, #6c6c6c); }
+    .ebb-a { fill: none; stroke: #1f6fd1; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ebb-b { fill: none; stroke: #d97706; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ebb-b-spent { fill: none; stroke: #d97706; stroke-width: 2; stroke-dasharray: 3 4; }
+    .ebb-dot-a { fill: #1f6fd1; stroke: var(--theme, #fff); stroke-width: 2; }
+    .ebb-dot-b { fill: #d97706; stroke: var(--theme, #fff); stroke-width: 2; }
+    .ebb-event-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1; stroke-dasharray: 2 3; }
+    html[data-theme="dark"] .ebb-a { stroke: #4f8fe6; }
+    html[data-theme="dark"] .ebb-dot-a { fill: #4f8fe6; }
+  </style>
+
+  <!-- legend -->
+  <path class="ebb-a" d="M44 14 H60" />
+  <text class="ebb-legend" x="66" y="14">서버 한 대 꺼짐</text>
+  <path class="ebb-b" d="M170 14 H186" />
+  <text class="ebb-legend" x="192" y="14">랙 하나 다운 (서버 40대)</text>
+
+  <!-- axes: remaining budget over the 28-day window -->
+  <text class="ebb-tick" x="4" y="36">남은 에러 버짓</text>
+  <path class="ebb-grid" d="M44 52 H344 M44 121 H344" />
+  <path class="ebb-axis" d="M44 190 H344" />
+  <text class="ebb-tick-y" x="38" y="52">100%</text>
+  <text class="ebb-tick-y" x="38" y="121">50%</text>
+  <text class="ebb-tick-y" x="38" y="190">0%</text>
+  <text class="ebb-tick-x" x="44" y="206">0일</text>
+  <text class="ebb-tick-x" x="119" y="206">7일</text>
+  <text class="ebb-tick-x" x="194" y="206">14일</text>
+  <text class="ebb-tick-x" x="269" y="206">21일</text>
+  <text class="ebb-tick-x" x="344" y="206">28일</text>
+
+  <!-- the rack goes down on day 10 -->
+  <path class="ebb-event-line" d="M151 52 V190" />
+  <text class="ebb-event" x="156" y="44">10일째 랙 다운</text>
+
+  <!-- one server off the whole time: a steady burn to zero on day 28 -->
+  <path class="ebb-a" d="M44 52 L344 190" />
+  <circle class="ebb-dot-a" cx="344" cy="190" r="4" />
+  <text class="ebb-note" x="340" y="128" text-anchor="end">28일에 걸쳐 소진</text>
+
+  <!-- a whole rack down: untouched until day 10, then gone in ~17 hours -->
+  <path class="ebb-b" d="M44 52 H151 L158.5 190" />
+  <path class="ebb-b-spent" d="M158.5 190 H344" />
+  <circle class="ebb-dot-b" cx="151" cy="52" r="4" />
+  <circle class="ebb-dot-b" cx="158.5" cy="190" r="4" />
+  <text class="ebb-note" x="146" y="140" text-anchor="end">약 17시간 만에 소진</text>
+</svg>

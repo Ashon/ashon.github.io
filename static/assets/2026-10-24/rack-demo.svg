@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 262" class="rkd" role="img" aria-labelledby="rkd-title rkd-desc">
+  <title id="rkd-title">랙 하나의 구성: 공유하는 부품을 고장 내 보면 랙 전체로 번지는 모습</title>
+  <desc id="rkd-desc">랙 안에 서버 네 대가 있다. 서버마다 전원은 랙 PDU-A와 랙 PDU-B에, 네트워크는 ToR 스위치 A와 ToR 스위치 B에 하나씩 연결되어 있고, 네 대 모두 같은 흡기를 쓴다. PDU나 ToR 스위치는 하나만 고장 나면 서버들이 나머지 하나로 버티지만, 둘 다 고장 나면 네 대가 한꺼번에 내려간다. 흡기는 하나뿐이라 고장 나는 순간 네 대가 함께 내려간다. 번호 1, 2, 3은 랙 수준 트리의 최소 컷셋 번호다.</desc>
+  <!-- Rack for the fault-tree-demo shortcode: the rack-level tree
+       (rack-fta.svg) wired onto the rack's parts instead of drawn as a
+       tree. The gates are empty <g data-gate> elements; the parts carry
+       data-event, so a reader fails them by clicking; servers carry the
+       top event's data-node, so they go down when the rack does. Lines
+       and markers carry the node they belong to and turn red with it.
+       Gates are listed top-down, so the verdicts read bottom-up. -->
+  <style>
+    .rkd { font-family: inherit; }
+    .rkd-rack { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; stroke-dasharray: 5 4; }
+    .rkd text { font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .rkd text.rkd-label { fill: var(--secondary, #6c6c6c); text-anchor: start; }
+    .rkd rect, .rkd circle, .rkd path, .rkd text { transition: fill 0.15s ease, stroke 0.15s ease, opacity 0.15s ease; }
+    .rkd-server rect { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .rkd-server text, .rkd-tor text, .rkd-pdu text, .rkd-inlet text { fill: var(--primary, #1e1e1e); }
+    .rkd-tor rect { fill: color-mix(in srgb, var(--ev-tor, #7c3aed) 22%, var(--theme, #fff)); stroke: var(--ev-tor, #7c3aed); stroke-width: 1.5; }
+    .rkd-pdu rect { fill: color-mix(in srgb, var(--ev-pdu, #d97706) 22%, var(--theme, #fff)); stroke: var(--ev-pdu, #d97706); stroke-width: 1.5; }
+    .rkd-inlet rect { fill: color-mix(in srgb, var(--ev-inlet, #0d9488) 22%, var(--theme, #fff)); stroke: var(--ev-inlet, #0d9488); stroke-width: 1.5; }
+    .rkd-air { fill: color-mix(in srgb, var(--ev-inlet, #0d9488) 12%, var(--theme, #fff)); }
+    .rkd-air-arrow { fill: none; stroke: var(--ev-inlet, #0d9488); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .rkd-net { fill: none; stroke: var(--ev-tor, #7c3aed); stroke-width: 1.25; opacity: 0.75; }
+    .rkd-power { fill: none; stroke: var(--ev-pdu, #d97706); stroke-width: 1.25; opacity: 0.75; }
+    .rkd text.rkd-note { fill: var(--secondary, #6c6c6c); font-size: 11px; }
+    .rkd-note-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1; stroke-dasharray: 3 3; }
+    .rkd-mark circle { stroke: var(--theme, #fff); stroke-width: 2; }
+    .rkd-mark-inlet circle { fill: var(--ev-inlet, #0d9488); }
+    .rkd-mark-pdu circle { fill: var(--ev-pdu, #d97706); }
+    .rkd-mark-tor circle { fill: var(--ev-tor, #7c3aed); }
+    .rkd-mark text { fill: var(--theme, #fff); font-size: 11px; font-weight: 700; }
+    .rkd [data-event] { cursor: pointer; }
+    .rkd [data-event]:hover rect { stroke: var(--danger, #c62828); }
+    /* failed: what broke, the lines it cut, and the servers it took down */
+    .rkd [data-event].is-failed rect { fill: var(--danger, #c62828); stroke: var(--danger, #c62828); }
+    .rkd [data-event].is-failed text { fill: var(--danger-contrast, #fff); font-weight: 600; }
+    .rkd-net.is-failed, .rkd-power.is-failed { stroke: var(--danger, #c62828); stroke-width: 1.75; opacity: 1; }
+    .rkd-air.is-failed { fill: color-mix(in srgb, var(--danger, #c62828) 14%, var(--theme, #fff)); }
+    .rkd-air-arrow.is-failed { stroke: var(--danger, #c62828); }
+    .rkd-server.is-failed rect { fill: var(--danger-bg, rgba(198, 40, 40, 0.1)); stroke: var(--danger, #c62828); stroke-width: 2; }
+    .rkd-server.is-failed text { fill: var(--danger, #c62828); font-weight: 600; }
+    .rkd-mark.is-failed circle { fill: var(--danger, #c62828); }
+  </style>
+
+  <!-- the rack-level tree, as in rack-fta.svg -->
+  <g data-gate="or" data-node="top" data-children="inlet power net" data-label="랙 전체가 내려감" />
+  <g data-gate="and" data-node="net" data-children="torA torB" data-label="ToR 둘 다 장애" />
+  <g data-gate="and" data-node="power" data-children="pduA pduB" data-label="PDU 둘 다 상실" />
+
+  <!-- the rack, and the room's intake air reaching every server in it -->
+  <rect class="rkd-rack" x="70" y="18" width="282" height="236" rx="10" />
+  <text class="rkd-label" x="80" y="34">랙</text>
+  <rect class="rkd-air" data-node="inlet" x="76" y="108" width="270" height="54" rx="8" />
+  <g class="rkd-inlet" data-event="inlet" data-node="inlet" data-label="흡기 온도 상승">
+    <rect x="6" y="116" width="50" height="38" rx="6" />
+    <text x="31" y="135">흡기</text>
+  </g>
+  <path class="rkd-air-arrow" data-node="inlet" d="M58 135 H72 M66 130 L72 135 L66 140" />
+
+  <!-- every server has one link to each ToR and one feed from each PDU -->
+  <g class="ft-edges">
+    <path class="rkd-net" data-node="torA" d="M101 116 L154 60" />
+    <path class="rkd-net" data-node="torA" d="M167 116 L154 60" />
+    <path class="rkd-net" data-node="torA" d="M233 116 L154 60" />
+    <path class="rkd-net" data-node="torA" d="M299 116 L154 60" />
+    <path class="rkd-net" data-node="torB" d="M119 116 L264 60" />
+    <path class="rkd-net" data-node="torB" d="M185 116 L264 60" />
+    <path class="rkd-net" data-node="torB" d="M251 116 L264 60" />
+    <path class="rkd-net" data-node="torB" d="M317 116 L264 60" />
+    <path class="rkd-power" data-node="pduA" d="M101 154 L154 212" />
+    <path class="rkd-power" data-node="pduA" d="M167 154 L154 212" />
+    <path class="rkd-power" data-node="pduA" d="M233 154 L154 212" />
+    <path class="rkd-power" data-node="pduA" d="M299 154 L154 212" />
+    <path class="rkd-power" data-node="pduB" d="M119 154 L264 212" />
+    <path class="rkd-power" data-node="pduB" d="M185 154 L264 212" />
+    <path class="rkd-power" data-node="pduB" d="M251 154 L264 212" />
+    <path class="rkd-power" data-node="pduB" d="M317 154 L264 212" />
+  </g>
+
+  <g class="rkd-server" data-node="top">
+    <rect x="82" y="116" width="56" height="38" rx="5" />
+    <text x="110" y="135">서버 1</text>
+  </g>
+  <g class="rkd-server" data-node="top">
+    <rect x="148" y="116" width="56" height="38" rx="5" />
+    <text x="176" y="135">서버 2</text>
+  </g>
+  <g class="rkd-server" data-node="top">
+    <rect x="214" y="116" width="56" height="38" rx="5" />
+    <text x="242" y="135">서버 3</text>
+  </g>
+  <g class="rkd-server" data-node="top">
+    <rect x="280" y="116" width="56" height="38" rx="5" />
+    <text x="308" y="135">서버 4</text>
+  </g>
+
+  <g class="rkd-pdu" data-event="pduA" data-node="pduA" data-label="PDU-A 상실">
+    <rect x="104" y="212" width="100" height="30" rx="6" />
+    <text x="154" y="227">랙 PDU-A</text>
+  </g>
+  <g class="rkd-pdu" data-event="pduB" data-node="pduB" data-label="PDU-B 상실">
+    <rect x="214" y="212" width="100" height="30" rx="6" />
+    <text x="264" y="227">랙 PDU-B</text>
+  </g>
+
+  <!-- after the PDUs, so the buttons follow the cut set numbers 1, 2, 3 -->
+  <g class="rkd-tor" data-event="torA" data-node="torA" data-label="ToR A 장애">
+    <rect x="104" y="30" width="100" height="30" rx="6" />
+    <text x="154" y="45">ToR 스위치 A</text>
+  </g>
+  <g class="rkd-tor" data-event="torB" data-node="torB" data-label="ToR B 장애">
+    <rect x="214" y="30" width="100" height="30" rx="6" />
+    <text x="264" y="45">ToR 스위치 B</text>
+  </g>
+
+  <!-- a reminder that the PDUs are already a redundant pair -->
+  <path class="rkd-note-line" d="M70 227 H102" />
+  <text class="rkd-note" x="36" y="213">보통 PDU도</text>
+  <text class="rkd-note" x="36" y="227">A/B 두 계통</text>
+  <text class="rkd-note" x="36" y="241">이중화</text>
+
+  <!-- numbered like the minimal cut sets in rack-fta.svg; a pair's marker
+       sits across the gap between its two boxes and turns red only when
+       the whole cut set has failed -->
+  <g class="rkd-mark rkd-mark-inlet" data-node="inlet">
+    <circle cx="55" cy="115" r="9" />
+    <text x="55" y="115">1</text>
+  </g>
+  <g class="rkd-mark rkd-mark-pdu" data-node="power">
+    <circle cx="209" cy="227" r="9" />
+    <text x="209" y="227">2</text>
+  </g>
+  <g class="rkd-mark rkd-mark-tor" data-node="net">
+    <circle cx="209" cy="45" r="9" />
+    <text x="209" y="45">3</text>
+  </g>
+</svg>

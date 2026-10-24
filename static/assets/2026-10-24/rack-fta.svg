@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" class="rkf" role="img" aria-labelledby="rkf-title rkf-desc">
+  <title id="rkf-title">랙 수준의 Fault Tree: 랙 전체가 내려감</title>
+  <desc id="rkf-desc">랙 전체가 내려감을 top event로 두면 OR 게이트로 세 갈래가 나뉜다. 흡기 온도 상승은 바로 붙어서 크기가 1인 최소 컷셋 1이 된다. PDU 둘 다 상실은 AND 게이트로 PDU-A 피드 상실과 PDU-B 피드 상실이 모두 일어나야 해서 최소 컷셋 2가 되고, ToR 둘 다 장애는 AND 게이트로 ToR A 장애와 ToR B 장애가 모두 일어나야 해서 최소 컷셋 3이 된다. 번호는 랙 그림에서 같은 번호를 붙인 공통분모와 같다.</desc>
+  <!-- Pairs with rack-demo.svg, the same tree wired onto a picture of the
+       rack: the numbered markers (1 inlet, 2 PDUs, 3 ToR switches) and
+       the --ev-* colors are the same in both, so the reader can match each
+       shared part of the rack to its cut set here. -->
+  <style>
+    .rkf { font-family: inherit; }
+    .rkf-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .rkf-node { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .rkf-gate { fill: var(--code-bg, #f5f5f5); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .rkf-text { fill: var(--primary, #1e1e1e); font-size: 12.5px; text-anchor: middle; dominant-baseline: central; }
+    .rkf-top { font-weight: 600; }
+    .rkf-small { fill: var(--secondary, #6c6c6c); font-size: 11px; text-anchor: middle; dominant-baseline: central; }
+    .rkf-gate-label { fill: var(--secondary, #6c6c6c); font-size: 9px; font-weight: 600; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.04em; }
+    .rkf-ev-inlet { fill: color-mix(in srgb, var(--ev-inlet, #0d9488) 30%, var(--theme, #fff)); stroke: var(--ev-inlet, #0d9488); stroke-width: 2; }
+    .rkf-ev-pdu { fill: color-mix(in srgb, var(--ev-pdu, #d97706) 30%, var(--theme, #fff)); stroke: var(--ev-pdu, #d97706); stroke-width: 2; }
+    .rkf-ev-tor { fill: color-mix(in srgb, var(--ev-tor, #7c3aed) 30%, var(--theme, #fff)); stroke: var(--ev-tor, #7c3aed); stroke-width: 2; }
+    .rkf-bracket { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1; }
+    .rkf-mark-inlet { fill: var(--ev-inlet, #0d9488); }
+    .rkf-mark-pdu { fill: var(--ev-pdu, #d97706); }
+    .rkf-mark-tor { fill: var(--ev-tor, #7c3aed); }
+    .rkf-mark-num { fill: var(--theme, #fff); font-size: 11px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+    .rkf-cut { fill: var(--secondary, #6c6c6c); font-size: 11.5px; dominant-baseline: central; }
+  </style>
+
+  <!-- top event and OR gate -->
+  <rect class="rkf-node" x="100" y="10" width="160" height="32" rx="6" />
+  <text class="rkf-text rkf-top" x="180" y="26">랙 전체가 내려감</text>
+  <path class="rkf-line" d="M180 42 V52" />
+  <path class="rkf-gate" d="M162 80 Q180 70 198 80 Q196 60 180 52 Q164 60 162 80 Z" />
+  <text class="rkf-gate-label" x="180" y="69">OR</text>
+  <path class="rkf-line" d="M180 76 V90 M50 90 H290 M50 90 V178 M165 90 V100 M290 90 V100" />
+
+  <!-- 1: the shared intake air, straight under OR -->
+  <circle class="rkf-ev-inlet" cx="50" cy="196" r="17" />
+  <text class="rkf-small" x="50" y="226">흡기 온도</text>
+  <text class="rkf-small" x="50" y="240">상승</text>
+
+  <!-- 2: both rack PDU feeds -->
+  <rect class="rkf-node" x="113" y="100" width="104" height="28" rx="6" />
+  <text class="rkf-text" x="165" y="114">PDU 둘 다 상실</text>
+  <path class="rkf-line" d="M165 128 V136" />
+  <path class="rkf-gate" d="M147 164 V150 A18 14 0 0 1 183 150 V164 Z" />
+  <text class="rkf-gate-label" x="165" y="157">AND</text>
+  <path class="rkf-line" d="M165 164 V170 M135 170 H195 M135 170 V179 M195 170 V179" />
+  <circle class="rkf-ev-pdu" cx="135" cy="196" r="17" />
+  <text class="rkf-small" x="135" y="226">PDU-A</text>
+  <text class="rkf-small" x="135" y="240">피드 상실</text>
+  <circle class="rkf-ev-pdu" cx="195" cy="196" r="17" />
+  <text class="rkf-small" x="195" y="226">PDU-B</text>
+  <text class="rkf-small" x="195" y="240">피드 상실</text>
+
+  <!-- 3: both ToR switches -->
+  <rect class="rkf-node" x="238" y="100" width="104" height="28" rx="6" />
+  <text class="rkf-text" x="290" y="114">ToR 둘 다 장애</text>
+  <path class="rkf-line" d="M290 128 V136" />
+  <path class="rkf-gate" d="M272 164 V150 A18 14 0 0 1 308 150 V164 Z" />
+  <text class="rkf-gate-label" x="290" y="157">AND</text>
+  <path class="rkf-line" d="M290 164 V170 M260 170 H320 M260 170 V179 M320 170 V179" />
+  <circle class="rkf-ev-tor" cx="260" cy="196" r="17" />
+  <text class="rkf-small" x="260" y="226">ToR A</text>
+  <text class="rkf-small" x="260" y="240">장애</text>
+  <circle class="rkf-ev-tor" cx="320" cy="196" r="17" />
+  <text class="rkf-small" x="320" y="226">ToR B</text>
+  <text class="rkf-small" x="320" y="240">장애</text>
+
+  <!-- the minimal cut sets, numbered as in rack-demo.svg -->
+  <path class="rkf-bracket" d="M26 252 V258 H74 V252 M50 258 V264" />
+  <circle class="rkf-mark-inlet" cx="50" cy="275" r="9" />
+  <text class="rkf-mark-num" x="50" y="275">1</text>
+  <path class="rkf-bracket" d="M111 252 V258 H219 V252 M165 258 V264" />
+  <circle class="rkf-mark-pdu" cx="165" cy="275" r="9" />
+  <text class="rkf-mark-num" x="165" y="275">2</text>
+  <path class="rkf-bracket" d="M236 252 V258 H344 V252 M290 258 V264" />
+  <circle class="rkf-mark-tor" cx="290" cy="275" r="9" />
+  <text class="rkf-mark-num" x="290" y="275">3</text>
+  <text class="rkf-cut" x="64" y="275">최소 컷셋</text>
+  <text class="rkf-cut" x="179" y="275">최소 컷셋</text>
+  <text class="rkf-cut" x="304" y="275">최소 컷셋</text>
+</svg>

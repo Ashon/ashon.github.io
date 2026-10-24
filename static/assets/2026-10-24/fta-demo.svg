@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 0 710 335" class="ft-tree" data-viewbox-compact="0 0 440 300" role="img" aria-labelledby="ftd-title">
+  <title id="ftd-title">FTA 예시: 전원 상실(AND: PSU-A, PSU-B)과 팬 고장이 OR로 묶여 서버가 작업을 수행할 수 없게 되는 트리</title>
+  <!-- Tree for the fault-tree-demo shortcode. Gates carry data-gate,
+       data-children and data-label; events carry data-event; every
+       shape of a node shares its data-node, so the script can mark the
+       whole node failed. Shapes use the fault tree kit classes (ft-*,
+       assets/css/base/03-fault-tree.css); the rules below only stand in
+       when this file is opened on its own. The wide viewBox matches
+       fta-anatomy.svg, so both trees sit at the same size and place. -->
+  <style>
+    :where(.ft-line) { fill: none; stroke: #9a9a9a; stroke-width: 2; }
+    :where(.ft-node, .ft-event circle) { fill: #fff; stroke: #1e1e1e; stroke-width: 1.5; }
+    :where(.ft-gate) { fill: #f5f5f5; stroke: #1e1e1e; stroke-width: 1.5; }
+    :where(.ft-text, .ft-gate-label, .ft-event text) { text-anchor: middle; dominant-baseline: central; }
+    :where(.ft-text) { fill: #1e1e1e; font-size: 14px; }
+    :where(.ft-gate-label) { fill: #6c6c6c; font-size: 9px; font-weight: 600; }
+    :where(.ft-event text) { fill: #6c6c6c; font-size: 13px; }
+  </style>
+  <g class="ft-edges">
+    <path class="ft-line" data-node="top" d="M250 56 V66" />
+    <path class="ft-line" data-node="power" d="M150 128 V112 H250 V91" />
+    <path class="ft-line" data-node="fan" d="M350 232 V112 H250 V91" />
+    <path class="ft-line" data-node="power" d="M150 164 V174" />
+    <path class="ft-line" data-node="psuA" d="M90 232 V218 H150 V204" />
+    <path class="ft-line" data-node="psuB" d="M210 232 V218 H150 V204" />
+  </g>
+  <rect class="ft-node" data-node="top" x="130" y="16" width="240" height="40" rx="6" />
+  <text class="ft-text" x="250" y="36">서버가 작업을 수행할 수 없음</text>
+  <path class="ft-gate" data-node="top" data-gate="or" data-children="power fan" data-label="서버가 작업을 수행할 수 없음"
+        d="M232 96 Q250 86 268 96 Q266 74 250 66 Q234 74 232 96 Z" />
+  <text class="ft-gate-label" x="250" y="84">OR</text>
+  <rect class="ft-node" data-node="power" x="85" y="128" width="130" height="36" rx="6" />
+  <text class="ft-text" x="150" y="146">전원 상실</text>
+  <path class="ft-gate" data-node="power" data-gate="and" data-children="psuA psuB" data-label="전원 상실"
+        d="M132 204 V188 A18 14 0 0 1 168 188 V204 Z" />
+  <text class="ft-gate-label" x="150" y="196">AND</text>
+  <g class="ft-event" data-event="psuA" data-node="psuA">
+    <circle cx="90" cy="250" r="18" />
+    <text x="90" y="284">PSU-A 고장</text>
+  </g>
+  <g class="ft-event" data-event="psuB" data-node="psuB">
+    <circle cx="210" cy="250" r="18" />
+    <text x="210" y="284">PSU-B 고장</text>
+  </g>
+  <g class="ft-event" data-event="fan" data-node="fan">
+    <circle cx="350" cy="250" r="18" />
+    <text x="350" y="284">팬 고장</text>
+  </g>
+</svg>

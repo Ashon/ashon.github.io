@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 550" class="sl2n" role="img" aria-labelledby="sl2n-title sl2n-desc">
+  <title id="sl2n-title">서버 고장 트리의 leaf SLI를 계층 축과 유형 축으로 다시 묶는 구조</title>
+  <desc id="sl2n-desc">앞의 서버 고장 트리를 그대로 쓴다. 최상위 사건은 워크로드가 할당된 서버에서 작업을 수행할 수 없다이고, OR 게이트 아래에 전원, 네트워크, 냉각 계층이 있다. 같은 계층의 leaf는 계층 묶음으로 모인다(계층 축). 전원 상실, 네트워크 단절, 과열 보호 동작처럼 지금 쓸 수 없게 된 것은 장애 유형으로 서비스 가용성에, PSU 하나 고장, 업링크 하나 단절, 보호 동작 전에 경고 수준까지 오른 흡기 온도처럼 여유가 줄어든 것은 헤드룸 유형으로 서비스 헤드룸에 모인다(유형 축). 유형은 이 둘 말고도 몇 가지 더 있다. 관리망과 메타는 서비스 top event 밖에 두고, 각자 묶음만 둔다.</desc>
+  <style>
+    .sl2n { font-family: inherit; }
+    .sl2n-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .sl2n-dash { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; stroke-dasharray: 4 3; }
+    .sl2n-event { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 2; }
+    .sl2n-gate { fill: var(--code-bg, #f5f5f5); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .sl2n-col { fill: var(--code-bg, #f5f5f5); stroke: var(--border, #e8e8e8); stroke-width: 1; }
+    .sl2n-band { fill: none; stroke: var(--accent, #1f6fd1); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .sl2n-leaf { fill: var(--theme, #fff); stroke: var(--border, #e8e8e8); stroke-width: 1; }
+    .sl2n-roll { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.25; }
+    .sl2n-out { fill: var(--link-hover-bg, rgba(31, 111, 209, 0.06)); stroke: var(--accent, #1f6fd1); stroke-width: 1.25; }
+    .sl2n-title { fill: var(--primary, #1e1e1e); font-size: 13px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .sl2n-head { fill: var(--primary, #1e1e1e); font-size: 13px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .sl2n-text { fill: var(--primary, #1e1e1e); font-size: 11.5px; text-anchor: middle; dominant-baseline: central; }
+    .sl2n-strong { font-weight: 600; }
+    .sl2n-small { fill: var(--secondary, #6c6c6c); font-size: 11px; text-anchor: middle; dominant-baseline: central; }
+    .sl2n-label { fill: var(--primary, #1e1e1e); font-size: 12.5px; font-weight: 600; dominant-baseline: central; }
+    .sl2n-band-more { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; stroke-dasharray: 3 4; }
+    .sl2n-label-small { fill: var(--secondary, #6c6c6c); font-size: 11px; dominant-baseline: central; }
+    .sl2n-accent { fill: var(--accent, #1f6fd1); font-size: 11px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .sl2n-gate-label { fill: var(--secondary, #6c6c6c); font-size: 9px; font-weight: 600; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.04em; }
+  </style>
+
+  <!-- top event and OR gate (the example tree's) -->
+  <rect class="sl2n-event" x="20" y="12" width="320" height="40" rx="6" />
+  <text class="sl2n-title" x="180" y="32">워크로드가 할당된 서버에서 작업을 수행할 수 없음</text>
+  <path class="sl2n-line" d="M180 52 V62" />
+  <path class="sl2n-gate" d="M162 92 Q180 82 198 92 Q196 70 180 62 Q164 70 162 92 Z" />
+  <text class="sl2n-gate-label" x="180" y="80">OR</text>
+  <path class="sl2n-line" d="M180 87 V98 M70 98 H290 M70 98 V108 M180 98 V108 M290 98 V108" />
+
+  <!-- layer axis: one column per layer -->
+  <rect class="sl2n-col" x="20" y="108" width="100" height="270" rx="10" />
+  <rect class="sl2n-col" x="130" y="108" width="100" height="270" rx="10" />
+  <rect class="sl2n-col" x="240" y="108" width="100" height="270" rx="10" />
+  <text class="sl2n-head" x="70" y="124">전원</text>
+  <text class="sl2n-small" x="70" y="139">PSU, PDU 피드</text>
+  <text class="sl2n-head" x="180" y="124">네트워크</text>
+  <text class="sl2n-small" x="180" y="139">NIC, ToR 스위치</text>
+  <text class="sl2n-head" x="290" y="124">냉각</text>
+  <text class="sl2n-small" x="290" y="139">팬, 흡기 온도</text>
+
+  <!-- type axis: outage -->
+  <rect class="sl2n-band" x="10" y="152" width="340" height="76" rx="10" />
+  <text class="sl2n-label" x="20" y="167">장애 유형</text>
+  <text class="sl2n-label-small" x="94" y="167">지금 쓸 수 없는가</text>
+  <rect class="sl2n-out" x="252" y="157" width="90" height="20" rx="10" />
+  <text class="sl2n-accent" x="297" y="167">서비스 가용성</text>
+  <rect class="sl2n-leaf" x="22" y="186" width="96" height="26" rx="5" />
+  <text class="sl2n-text" x="70" y="199">전원 상실</text>
+  <rect class="sl2n-leaf" x="132" y="186" width="96" height="26" rx="5" />
+  <text class="sl2n-text" x="180" y="199">네트워크 단절</text>
+  <rect class="sl2n-leaf" x="242" y="186" width="96" height="26" rx="5" />
+  <text class="sl2n-text" x="290" y="199">과열 보호 동작</text>
+
+  <!-- type axis: headroom -->
+  <rect class="sl2n-band" x="10" y="236" width="340" height="76" rx="10" />
+  <text class="sl2n-label" x="20" y="251">헤드룸 유형</text>
+  <text class="sl2n-label-small" x="94" y="251">버틸 여유가 남았는가</text>
+  <rect class="sl2n-out" x="252" y="241" width="90" height="20" rx="10" />
+  <text class="sl2n-accent" x="297" y="251">서비스 헤드룸</text>
+  <rect class="sl2n-leaf" x="22" y="270" width="96" height="26" rx="5" />
+  <text class="sl2n-text" x="70" y="283">PSU 하나 고장</text>
+  <rect class="sl2n-leaf" x="132" y="270" width="96" height="26" rx="5" />
+  <text class="sl2n-text" x="180" y="283">업링크 하나 단절</text>
+  <rect class="sl2n-leaf" x="242" y="270" width="96" height="26" rx="5" />
+  <text class="sl2n-text" x="290" y="283">흡기 온도 경고</text>
+
+  <!-- type axis: there are more types than these two -->
+  <rect class="sl2n-band-more" x="10" y="316" width="340" height="26" rx="8" />
+  <text class="sl2n-label-small" x="20" y="329">그 외 유형 ...</text>
+  <text class="sl2n-small" x="180" y="329">...</text>
+  <text class="sl2n-small" x="290" y="329">...</text>
+
+  <!-- layer rollups -->
+  <rect class="sl2n-roll" x="22" y="348" width="96" height="26" rx="6" />
+  <text class="sl2n-text sl2n-strong" x="70" y="361">전원 묶음</text>
+  <rect class="sl2n-roll" x="132" y="348" width="96" height="26" rx="6" />
+  <text class="sl2n-text sl2n-strong" x="180" y="361">네트워크 묶음</text>
+  <rect class="sl2n-roll" x="242" y="348" width="96" height="26" rx="6" />
+  <text class="sl2n-text sl2n-strong" x="290" y="361">냉각 묶음</text>
+  <text class="sl2n-small" x="180" y="394">세로 칸이 계층 축, 점선 띠가 유형 축</text>
+
+  <!-- outside the service top event -->
+  <path class="sl2n-dash" d="M10 410 H350" />
+  <text class="sl2n-head" x="180" y="426">서비스 top event 밖</text>
+  <text class="sl2n-small" x="180" y="442">각자 묶음만 둠</text>
+
+  <rect class="sl2n-col" x="20" y="454" width="154" height="88" rx="10" />
+  <text class="sl2n-head" x="97" y="470">관리망 (OOB)</text>
+  <text class="sl2n-text" x="97" y="488">끊겨도 워크로드는 정상</text>
+  <text class="sl2n-small" x="97" y="503">운영 능력을 잃음</text>
+  <rect class="sl2n-roll" x="44" y="513" width="106" height="22" rx="6" />
+  <text class="sl2n-text sl2n-strong" x="97" y="524">운영 능력</text>
+
+  <rect class="sl2n-col" x="186" y="454" width="154" height="88" rx="10" />
+  <text class="sl2n-head" x="263" y="470">메타</text>
+  <text class="sl2n-text" x="263" y="488">관측 체계 자체</text>
+  <text class="sl2n-small" x="263" y="503">판정을 믿을 수 있는가</text>
+  <rect class="sl2n-roll" x="210" y="513" width="106" height="22" rx="6" />
+  <text class="sl2n-text sl2n-strong" x="263" y="524">판정 신뢰</text>
+</svg>

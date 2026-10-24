@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 796" class="ftn" role="img" aria-labelledby="ftn-title ftn-desc">
+  <title id="ftn-title">서버 고장 트리: 워크로드가 할당된 서버에서 작업을 수행할 수 없다</title>
+  <desc id="ftn-desc">최상위 사건은 OR 게이트로 전원 상실, 네트워크 단절, 과열 보호 동작으로 나뉜다. 전원 상실은 AND 게이트로 전원 경로 A 상실과 B 상실이 모두 일어나야 하고, 경로 A 상실은 OR 게이트로 PSU-A 고장 또는 랙 PDU-A 피드 상실이다. 경로 B는 A와 같은 구조다. 네트워크 단절도 AND 게이트로 업링크 A 단절과 B 단절이 모두 일어나야 하고, 업링크 A 단절은 OR 게이트로 NIC 포트/케이블 A 장애 또는 ToR 스위치 A 장애다. 과열 보호 동작은 OR 게이트로 서버 팬 장애 또는 흡기 온도 상승이다. 랙 PDU 피드 상실, ToR 스위치 장애, 흡기 온도 상승은 랙 단위로 공유되는 basic event다.</desc>
+  <style>
+    .ftn { font-family: inherit; }
+    .ftn-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .ftn-event { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .ftn-top { stroke-width: 2.25; }
+    .ftn-gate, .ftn-transfer { fill: var(--code-bg, #f5f5f5); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .ftn-basic { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    /* rack-shared basic events, one color per component (tokens in 03-fault-tree.css) */
+    .ftn-ev-pdu { fill: color-mix(in srgb, var(--ev-pdu, #d97706) 30%, var(--theme, #fff)); stroke: var(--ev-pdu, #d97706); stroke-width: 2; }
+    .ftn-ev-tor { fill: color-mix(in srgb, var(--ev-tor, #7c3aed) 30%, var(--theme, #fff)); stroke: var(--ev-tor, #7c3aed); stroke-width: 2; }
+    .ftn-ev-inlet { fill: color-mix(in srgb, var(--ev-inlet, #0d9488) 30%, var(--theme, #fff)); stroke: var(--ev-inlet, #0d9488); stroke-width: 2; }
+    .ftn-text { fill: var(--primary, #1e1e1e); font-size: 13px; text-anchor: middle; dominant-baseline: central; }
+    .ftn-text2 { fill: var(--primary, #1e1e1e); font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .ftn-top-text { font-weight: 600; }
+    .ftn-small { fill: var(--secondary, #6c6c6c); font-size: 11.5px; text-anchor: middle; dominant-baseline: central; }
+    .ftn-legend { fill: var(--secondary, #6c6c6c); font-size: 11px; dominant-baseline: central; }
+    .ftn-gate-label { fill: var(--secondary, #6c6c6c); font-size: 9px; font-weight: 600; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.04em; }
+  </style>
+
+  <!-- top event, OR gate and the trunk that the three branches hang off -->
+  <rect class="ftn-event ftn-top" x="20" y="12" width="320" height="42" rx="6" />
+  <text class="ftn-text ftn-top-text" x="180" y="33">워크로드가 할당된 서버에서 작업을 수행할 수 없음</text>
+  <g class="ftn-line">
+    <path d="M180 54 V64" />
+    <path d="M180 89 V104 H20 V648" />
+    <path d="M20 128 H40 M20 388 H40 M20 648 H40" />
+  </g>
+  <path class="ftn-gate" d="M162 94 Q180 84 198 94 Q196 72 180 64 Q164 72 162 94 Z" />
+  <text class="ftn-gate-label" x="180" y="82">OR</text>
+
+  <!-- branch 1: power -->
+  <g class="ftn-line">
+    <path d="M105 144 V152" />
+    <path d="M105 180 V198 M105 190 H265 V198" />
+    <path d="M105 228 V236 M265 228 V236" />
+    <path d="M105 260 V270 M65 270 H145 M65 270 V282 M145 270 V282" />
+  </g>
+  <rect class="ftn-event" x="40" y="112" width="130" height="32" rx="6" />
+  <text class="ftn-text" x="105" y="128">전원 상실</text>
+  <path class="ftn-gate" d="M87 180 V166 A18 14 0 0 1 123 166 V180 Z" />
+  <text class="ftn-gate-label" x="105" y="172">AND</text>
+  <rect class="ftn-event" x="43" y="198" width="124" height="30" rx="6" />
+  <text class="ftn-text2" x="105" y="213">전원 경로 A 상실</text>
+  <rect class="ftn-event" x="203" y="198" width="124" height="30" rx="6" />
+  <text class="ftn-text2" x="265" y="213">전원 경로 B 상실</text>
+  <path class="ftn-gate" d="M87 264 Q105 254 123 264 Q121 244 105 236 Q89 244 87 264 Z" />
+  <text class="ftn-gate-label" x="105" y="253">OR</text>
+  <path class="ftn-transfer" d="M265 236 L281 262 H249 Z" />
+  <text class="ftn-small" x="265" y="278">A와 같은 구조</text>
+  <circle class="ftn-basic" cx="65" cy="300" r="18" />
+  <text class="ftn-small" x="65" y="332">PSU-A</text>
+  <text class="ftn-small" x="65" y="346">고장</text>
+  <circle class="ftn-ev-pdu" cx="145" cy="300" r="18" />
+  <text class="ftn-small" x="145" y="332">랙 PDU-A</text>
+  <text class="ftn-small" x="145" y="346">피드 상실</text>
+
+  <!-- branch 2: network -->
+  <g class="ftn-line">
+    <path d="M105 404 V412" />
+    <path d="M105 440 V458 M105 450 H265 V458" />
+    <path d="M105 488 V496 M265 488 V496" />
+    <path d="M105 520 V530 M65 530 H145 M65 530 V542 M145 530 V542" />
+  </g>
+  <rect class="ftn-event" x="40" y="372" width="130" height="32" rx="6" />
+  <text class="ftn-text" x="105" y="388">네트워크 단절</text>
+  <path class="ftn-gate" d="M87 440 V426 A18 14 0 0 1 123 426 V440 Z" />
+  <text class="ftn-gate-label" x="105" y="432">AND</text>
+  <rect class="ftn-event" x="43" y="458" width="124" height="30" rx="6" />
+  <text class="ftn-text2" x="105" y="473">업링크 A 단절</text>
+  <rect class="ftn-event" x="203" y="458" width="124" height="30" rx="6" />
+  <text class="ftn-text2" x="265" y="473">업링크 B 단절</text>
+  <path class="ftn-gate" d="M87 524 Q105 514 123 524 Q121 504 105 496 Q89 504 87 524 Z" />
+  <text class="ftn-gate-label" x="105" y="513">OR</text>
+  <path class="ftn-transfer" d="M265 496 L281 522 H249 Z" />
+  <text class="ftn-small" x="265" y="538">A와 같은 구조</text>
+  <circle class="ftn-basic" cx="65" cy="560" r="18" />
+  <text class="ftn-small" x="65" y="592">NIC 포트/</text>
+  <text class="ftn-small" x="65" y="606">케이블 A</text>
+  <circle class="ftn-ev-tor" cx="145" cy="560" r="18" />
+  <text class="ftn-small" x="145" y="592">ToR 스위치</text>
+  <text class="ftn-small" x="145" y="606">A 장애</text>
+
+  <!-- branch 3: thermal -->
+  <g class="ftn-line">
+    <path d="M105 664 V672" />
+    <path d="M105 696 V706 M65 706 H145 M65 706 V718 M145 706 V718" />
+  </g>
+  <rect class="ftn-event" x="40" y="632" width="130" height="32" rx="6" />
+  <text class="ftn-text" x="105" y="648">과열 보호 동작</text>
+  <path class="ftn-gate" d="M87 700 Q105 690 123 700 Q121 680 105 672 Q89 680 87 700 Z" />
+  <text class="ftn-gate-label" x="105" y="689">OR</text>
+  <circle class="ftn-basic" cx="65" cy="736" r="18" />
+  <text class="ftn-small" x="65" y="768">서버 팬</text>
+  <text class="ftn-small" x="65" y="782">장애</text>
+  <circle class="ftn-ev-inlet" cx="145" cy="736" r="18" />
+  <text class="ftn-small" x="145" y="768">흡기 온도</text>
+  <text class="ftn-small" x="145" y="782">상승</text>
+
+  <!-- legend, in the space beside the last branch -->
+  <circle class="ftn-basic" cx="204" cy="660" r="7" />
+  <text class="ftn-legend" x="218" y="660">서버 하나에만 영향</text>
+  <circle class="ftn-ev-pdu" cx="201" cy="686" r="5" />
+  <circle class="ftn-ev-tor" cx="214" cy="686" r="5" />
+  <circle class="ftn-ev-inlet" cx="227" cy="686" r="5" />
+  <text class="ftn-legend" x="238" y="686">랙 단위로 공유됨</text>
+  <path class="ftn-gate" d="M196 719 V712 A8 7 0 0 1 212 712 V719 Z" />
+  <text class="ftn-legend" x="218" y="712">AND: 모두 일어나야 함</text>
+  <path class="ftn-gate" d="M196 745 Q204 740 212 745 Q211 733 204 728 Q197 733 196 745 Z" />
+  <text class="ftn-legend" x="218" y="738">OR: 하나만 일어나도 됨</text>
+  <path class="ftn-transfer" d="M204 756 L213 771 H195 Z" />
+  <text class="ftn-legend" x="218" y="764">같은 구조의 하위 트리</text>
+</svg>

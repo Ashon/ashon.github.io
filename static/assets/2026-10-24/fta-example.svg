@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 500" class="fta" role="img" aria-labelledby="fta-ex-title fta-ex-desc">
+  <title id="fta-ex-title">서버 고장 트리: 워크로드가 할당된 서버에서 작업을 수행할 수 없다</title>
+  <desc id="fta-ex-desc">최상위 사건은 OR 게이트로 전원 상실, 네트워크 단절, 과열 보호 동작으로 나뉜다. 전원 상실은 AND 게이트로 전원 경로 A 상실과 B 상실이 모두 일어나야 하고, 경로 A 상실은 OR 게이트로 PSU-A 고장 또는 랙 PDU-A 피드 상실이다. 경로 B는 A와 같은 구조다. 네트워크 단절도 AND 게이트로 업링크 A 단절과 B 단절이 모두 일어나야 하고, 업링크 A 단절은 OR 게이트로 NIC 포트/케이블 A 장애 또는 ToR 스위치 A 장애다. 과열 보호 동작은 OR 게이트로 서버 팬 장애 또는 흡기 온도 상승이다. 랙 PDU 피드 상실, ToR 스위치 장애, 흡기 온도 상승은 랙 단위로 공유되는 basic event다.</desc>
+  <style>
+    .fta { font-family: inherit; }
+    .fta-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .fta-event { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .fta-top { stroke-width: 2.25; }
+    .fta-gate, .fta-transfer { fill: var(--code-bg, #f5f5f5); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .fta-basic { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    /* rack-shared basic events, one color per component (tokens in 03-fault-tree.css) */
+    .fta-ev-pdu { fill: color-mix(in srgb, var(--ev-pdu, #d97706) 30%, var(--theme, #fff)); stroke: var(--ev-pdu, #d97706); stroke-width: 2; }
+    .fta-ev-tor { fill: color-mix(in srgb, var(--ev-tor, #7c3aed) 30%, var(--theme, #fff)); stroke: var(--ev-tor, #7c3aed); stroke-width: 2; }
+    .fta-ev-inlet { fill: color-mix(in srgb, var(--ev-inlet, #0d9488) 30%, var(--theme, #fff)); stroke: var(--ev-inlet, #0d9488); stroke-width: 2; }
+    .fta-text { fill: var(--primary, #1e1e1e); font-size: 14px; text-anchor: middle; dominant-baseline: central; }
+    .fta-top-text { font-weight: 600; }
+    .fta-small { fill: var(--secondary, #6c6c6c); font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .fta-legend { fill: var(--secondary, #6c6c6c); font-size: 12px; dominant-baseline: central; }
+    .fta-gate-label { fill: var(--secondary, #6c6c6c); font-size: 9px; font-weight: 600; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.04em; }
+  </style>
+
+  <!-- connectors -->
+  <g class="fta-line">
+    <path d="M380 56 V66" />
+    <path d="M380 91 V112 M150 112 H655 M150 112 V124 M430 112 V124 M655 112 V124" />
+    <path d="M150 160 V170 M430 160 V170 M655 160 V170" />
+    <path d="M150 200 V214 M84 214 H225 M84 214 V226 M225 214 V226" />
+    <path d="M430 200 V214 M364 214 H505 M364 214 V226 M505 214 V226" />
+    <path d="M655 195 V214 M615 214 H695 M615 214 V336 M695 214 V336" />
+    <path d="M84 262 V272 M225 262 V272 M364 262 V272 M505 262 V272" />
+    <path d="M84 297 V318 M46 318 H122 M46 318 V336 M122 318 V336" />
+    <path d="M364 297 V318 M326 318 H402 M326 318 V336 M402 318 V336" />
+  </g>
+
+  <!-- top event -->
+  <rect class="fta-event fta-top" x="200" y="12" width="360" height="44" rx="6" />
+  <text class="fta-text fta-top-text" x="380" y="34">워크로드가 할당된 서버에서 작업을 수행할 수 없음</text>
+  <path class="fta-gate" d="M362 96 Q380 86 398 96 Q396 74 380 66 Q364 74 362 96 Z" />
+  <text class="fta-gate-label" x="380" y="84">OR</text>
+
+  <!-- level 1 -->
+  <rect class="fta-event" x="75" y="124" width="150" height="36" rx="6" />
+  <text class="fta-text" x="150" y="142">전원 상실</text>
+  <path class="fta-gate" d="M132 200 V184 A18 14 0 0 1 168 184 V200 Z" />
+  <text class="fta-gate-label" x="150" y="192">AND</text>
+
+  <rect class="fta-event" x="355" y="124" width="150" height="36" rx="6" />
+  <text class="fta-text" x="430" y="142">네트워크 단절</text>
+  <path class="fta-gate" d="M412 200 V184 A18 14 0 0 1 448 184 V200 Z" />
+  <text class="fta-gate-label" x="430" y="192">AND</text>
+
+  <rect class="fta-event" x="580" y="124" width="150" height="36" rx="6" />
+  <text class="fta-text" x="655" y="142">과열 보호 동작</text>
+  <path class="fta-gate" d="M637 200 Q655 190 673 200 Q671 178 655 170 Q639 178 637 200 Z" />
+  <text class="fta-gate-label" x="655" y="188">OR</text>
+
+  <!-- level 2 -->
+  <rect class="fta-event" x="18" y="226" width="132" height="36" rx="6" />
+  <text class="fta-text" x="84" y="244">전원 경로 A 상실</text>
+  <path class="fta-gate" d="M66 302 Q84 292 102 302 Q100 280 84 272 Q68 280 66 302 Z" />
+  <text class="fta-gate-label" x="84" y="290">OR</text>
+
+  <rect class="fta-event" x="159" y="226" width="132" height="36" rx="6" />
+  <text class="fta-text" x="225" y="244">전원 경로 B 상실</text>
+  <path class="fta-transfer" d="M225 272 L241 298 H209 Z" />
+  <text class="fta-small" x="225" y="314">A와 같은 구조</text>
+
+  <rect class="fta-event" x="298" y="226" width="132" height="36" rx="6" />
+  <text class="fta-text" x="364" y="244">업링크 A 단절</text>
+  <path class="fta-gate" d="M346 302 Q364 292 382 302 Q380 280 364 272 Q348 280 346 302 Z" />
+  <text class="fta-gate-label" x="364" y="290">OR</text>
+
+  <rect class="fta-event" x="439" y="226" width="132" height="36" rx="6" />
+  <text class="fta-text" x="505" y="244">업링크 B 단절</text>
+  <path class="fta-transfer" d="M505 272 L521 298 H489 Z" />
+  <text class="fta-small" x="505" y="314">A와 같은 구조</text>
+
+  <!-- basic events -->
+  <circle class="fta-basic" cx="46" cy="354" r="18" />
+  <text class="fta-small" x="46" y="390">PSU-A</text>
+  <text class="fta-small" x="46" y="406">고장</text>
+
+  <circle class="fta-ev-pdu" cx="122" cy="354" r="18" />
+  <text class="fta-small" x="122" y="390">랙 PDU-A</text>
+  <text class="fta-small" x="122" y="406">피드 상실</text>
+
+  <circle class="fta-basic" cx="326" cy="354" r="18" />
+  <text class="fta-small" x="326" y="390">NIC 포트/</text>
+  <text class="fta-small" x="326" y="406">케이블 A</text>
+
+  <circle class="fta-ev-tor" cx="402" cy="354" r="18" />
+  <text class="fta-small" x="402" y="390">ToR 스위치</text>
+  <text class="fta-small" x="402" y="406">A 장애</text>
+
+  <circle class="fta-basic" cx="615" cy="354" r="18" />
+  <text class="fta-small" x="615" y="390">서버 팬</text>
+  <text class="fta-small" x="615" y="406">장애</text>
+
+  <circle class="fta-ev-inlet" cx="695" cy="354" r="18" />
+  <text class="fta-small" x="695" y="390">흡기 온도</text>
+  <text class="fta-small" x="695" y="406">상승</text>
+
+  <!-- legend -->
+  <circle class="fta-basic" cx="30" cy="446" r="8" />
+  <text class="fta-legend" x="46" y="446">서버 하나에만 영향을 주는 basic event</text>
+  <circle class="fta-ev-pdu" cx="326" cy="446" r="7" />
+  <circle class="fta-ev-tor" cx="344" cy="446" r="7" />
+  <circle class="fta-ev-inlet" cx="362" cy="446" r="7" />
+  <text class="fta-legend" x="378" y="446">랙 단위로 공유되는 basic event</text>
+
+  <path class="fta-gate" d="M22 482 V474 A8 7 0 0 1 38 474 V482 Z" />
+  <text class="fta-legend" x="46" y="476">AND: 모두 일어나야 함</text>
+  <path class="fta-gate" d="M322 484 Q330 479 338 484 Q337 472 330 467 Q323 472 322 484 Z" />
+  <text class="fta-legend" x="346" y="476">OR: 하나만 일어나도 됨</text>
+  <path class="fta-transfer" d="M560 467 L569 482 H551 Z" />
+  <text class="fta-legend" x="578" y="476">같은 구조의 하위 트리</text>
+</svg>

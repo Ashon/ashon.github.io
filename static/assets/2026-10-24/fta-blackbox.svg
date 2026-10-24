@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 282" class="fbb" role="img" aria-labelledby="fbb-title fbb-desc">
+  <title id="fbb-title">볼 수 있고 손쓸 수 있는 데까지만 트리로 그리고, 그 아래는 블랙박스로 두는 경계</title>
+  <desc id="fbb-desc">서버 고장 트리의 전원 경로 A 상실은 OR 게이트로 PSU-A 고장과 랙 PDU-A 피드 상실로 나뉜다. 두 사건은 상태 신호로 볼 수 있고 교체나 점검으로 손쓸 수 있어서 트리에 그린다. 그 아래에 볼 수 있고 손쓸 수 있는 경계가 있고, 경계 아래의 부품 안쪽은 블랙박스로 두고 들여다보지 않는다.</desc>
+  <style>
+    .fbb { font-family: inherit; }
+    .fbb-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .fbb-edge { fill: none; stroke: var(--accent, #1f6fd1); stroke-width: 1.5; stroke-dasharray: 6 4; }
+    .fbb-event { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .fbb-gate { fill: var(--code-bg, #f5f5f5); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .fbb-ev-pdu { fill: color-mix(in srgb, var(--ev-pdu, #d97706) 30%, var(--theme, #fff)); stroke: var(--ev-pdu, #d97706); stroke-width: 2; }
+    .fbb-note { fill: var(--code-bg, #f5f5f5); stroke: var(--border, #e8e8e8); stroke-width: 1; }
+    /* a black box stays black in both themes; the border keeps it visible on a dark page */
+    .fbb-box { fill: #141517; stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; }
+    .fbb-text { fill: var(--primary, #1e1e1e); font-size: 13px; text-anchor: middle; dominant-baseline: central; }
+    .fbb-small { fill: var(--secondary, #6c6c6c); font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .fbb-edge-label { fill: var(--accent, #1f6fd1); font-size: 12px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .fbb-box-title { fill: #ffffff; font-size: 13px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .fbb-box-text { fill: #d9d9da; font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .fbb-gate-label { fill: var(--secondary, #6c6c6c); font-size: 9px; font-weight: 600; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.04em; }
+  </style>
+
+  <!-- the part we draw as a tree -->
+  <rect class="fbb-event" x="95" y="12" width="170" height="32" rx="6" />
+  <text class="fbb-text" x="180" y="28">전원 경로 A 상실</text>
+  <path class="fbb-line" d="M180 44 V54" />
+  <path class="fbb-gate" d="M162 82 Q180 72 198 82 Q196 62 180 54 Q164 62 162 82 Z" />
+  <text class="fbb-gate-label" x="180" y="71">OR</text>
+  <path class="fbb-line" d="M180 78 V90 M100 90 H260 M100 90 V102 M260 90 V102" />
+  <circle class="fbb-event" cx="100" cy="120" r="18" />
+  <text class="fbb-text" x="100" y="152">PSU-A 고장</text>
+  <circle class="fbb-ev-pdu" cx="260" cy="120" r="18" />
+  <text class="fbb-text" x="260" y="152">랙 PDU-A 피드 상실</text>
+
+  <!-- why we stop here -->
+  <rect class="fbb-note" x="30" y="170" width="300" height="28" rx="6" />
+  <text class="fbb-small" x="100" y="184">보인다: 상태 신호</text>
+  <text class="fbb-small" x="250" y="184">손쓸 수 있다: 교체, 점검</text>
+
+  <!-- the boundary -->
+  <text class="fbb-edge-label" x="180" y="212">볼 수 있고 손쓸 수 있는 경계</text>
+  <path class="fbb-edge" d="M10 224 H350" />
+
+  <!-- below the boundary: a black box -->
+  <rect class="fbb-box" x="60" y="234" width="240" height="44" rx="8" />
+  <text class="fbb-box-title" x="180" y="248">블랙박스</text>
+  <text class="fbb-box-text" x="180" y="266">부품 안쪽은 들여다보지 않음</text>
+</svg>

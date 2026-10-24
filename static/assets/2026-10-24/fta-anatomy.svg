@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 0 710 335" class="ft-tree" data-viewbox-compact="0 0 440 300" role="img" aria-labelledby="fta-ana-title">
+  <title id="fta-ana-title">FTA 구성 요소 예시: top event, intermediate event, basic event와 AND, OR 게이트</title>
+  <!-- Figure for the annotated-figure shortcode: the same tree as
+       fta-demo.svg, static, with each part the term list explains
+       marked by data-part (in the list's order: top, power, basic, or,
+       and, cut-psu, cut-fan). Callouts (af-callout) label the parts on
+       wide screens; in the compact viewBox numbered markers (af-marker)
+       take their place. Shapes use the fault tree kit classes (ft-*,
+       assets/css/base/03-fault-tree.css); the rules below only stand in
+       when this file is opened on its own. -->
+  <style>
+    :where(.ft-line) { fill: none; stroke: #9a9a9a; stroke-width: 2; }
+    :where(.ft-node, .ft-event circle) { fill: #fff; stroke: #1e1e1e; stroke-width: 1.5; }
+    :where(.ft-gate) { fill: #f5f5f5; stroke: #1e1e1e; stroke-width: 1.5; }
+    :where(.ft-text, .ft-gate-label, .ft-event text) { text-anchor: middle; dominant-baseline: central; }
+    :where(.ft-text) { fill: #1e1e1e; font-size: 14px; }
+    :where(.ft-gate-label) { fill: #6c6c6c; font-size: 9px; font-weight: 600; }
+    :where(.ft-event text) { fill: #6c6c6c; font-size: 13px; }
+    :where(.af-callout-line) { fill: none; stroke: #6c6c6c; stroke-dasharray: 3 3; }
+    :where(.af-callout-text) { fill: #6c6c6c; font-size: 13px; dominant-baseline: central; }
+    :where(.af-callout-left .af-callout-text) { text-anchor: end; }
+    :where(.af-callout-bracket .af-callout-text) { text-anchor: middle; }
+    :where(.af-marker) { display: none; }
+  </style>
+  <g class="ft-edges af-context">
+    <path class="ft-line" d="M250 56 V66" />
+    <path class="ft-line" d="M150 128 V112 H250 V91" />
+    <path class="ft-line" d="M350 232 V112 H250 V91" />
+    <path class="ft-line" d="M150 164 V174" />
+    <path class="ft-line" d="M90 232 V218 H150 V204" />
+    <path class="ft-line" d="M210 232 V218 H150 V204" />
+  </g>
+  <g data-part="top">
+    <rect class="ft-node" x="130" y="16" width="240" height="40" rx="6" />
+    <text class="ft-text" x="250" y="36">서버가 작업을 수행할 수 없음</text>
+  </g>
+  <g data-part="or">
+    <path class="ft-gate" d="M232 96 Q250 86 268 96 Q266 74 250 66 Q234 74 232 96 Z" />
+    <text class="ft-gate-label" x="250" y="84">OR</text>
+  </g>
+  <g data-part="power">
+    <rect class="ft-node" x="85" y="128" width="130" height="36" rx="6" />
+    <text class="ft-text" x="150" y="146">전원 상실</text>
+  </g>
+  <g data-part="and">
+    <path class="ft-gate" d="M132 204 V188 A18 14 0 0 1 168 188 V204 Z" />
+    <text class="ft-gate-label" x="150" y="196">AND</text>
+  </g>
+  <g class="ft-event" data-part="basic cut-psu">
+    <circle cx="90" cy="250" r="18" />
+    <text x="90" y="284">PSU-A 고장</text>
+  </g>
+  <g class="ft-event" data-part="basic cut-psu">
+    <circle cx="210" cy="250" r="18" />
+    <text x="210" y="284">PSU-B 고장</text>
+  </g>
+  <g class="ft-event" data-part="basic cut-fan">
+    <circle cx="350" cy="250" r="18" />
+    <text x="350" y="284">팬 고장</text>
+  </g>
+  <g class="af-callout" data-part="top">
+    <path class="af-callout-line" d="M370 36 H440" />
+    <text class="af-callout-text" x="446" y="36">Top event</text>
+  </g>
+  <g class="af-callout" data-part="or">
+    <path class="af-callout-line" d="M267 81 H440" />
+    <text class="af-callout-text" x="446" y="81">OR 게이트</text>
+  </g>
+  <g class="af-callout" data-part="basic">
+    <path class="af-callout-line" d="M368 250 H440" />
+    <text class="af-callout-text" x="446" y="250">Basic event</text>
+  </g>
+  <g class="af-callout af-callout-left" data-part="power">
+    <path class="af-callout-line" d="M85 146 H0" />
+    <text class="af-callout-text" x="-6" y="146">Intermediate event</text>
+  </g>
+  <g class="af-callout af-callout-left" data-part="and">
+    <path class="af-callout-line" d="M132 196 H0" />
+    <text class="af-callout-text" x="-6" y="196">AND 게이트</text>
+  </g>
+  <g class="af-callout af-callout-bracket" data-part="cut-psu">
+    <path class="af-callout-line" d="M72 298 V306 H228 V298 M150 306 V312" />
+    <text class="af-callout-text" x="150" y="324">최소 컷셋</text>
+  </g>
+  <g class="af-callout af-callout-bracket" data-part="cut-fan">
+    <path class="af-callout-line" d="M332 298 V306 H368 V298 M350 306 V312" />
+    <text class="af-callout-text" x="350" y="324">단일 장애점</text>
+  </g>
+  <g class="af-marker" data-part="top">
+    <circle cx="386" cy="36" r="12" />
+    <text x="386" y="36">1</text>
+  </g>
+  <g class="af-marker" data-part="power">
+    <circle cx="68" cy="146" r="12" />
+    <text x="68" y="146">2</text>
+  </g>
+  <g class="af-marker" data-part="basic">
+    <circle cx="384" cy="250" r="12" />
+    <text x="384" y="250">3</text>
+  </g>
+  <g class="af-marker" data-part="or">
+    <circle cx="286" cy="80" r="12" />
+    <text x="286" y="80">4</text>
+  </g>
+  <g class="af-marker" data-part="and">
+    <circle cx="114" cy="190" r="12" />
+    <text x="114" y="190">5</text>
+  </g>
+  <g class="af-marker" data-part="cut-psu">
+    <circle cx="150" cy="284" r="12" />
+    <text x="150" y="284">6</text>
+  </g>
+  <g class="af-marker" data-part="cut-fan">
+    <circle cx="398" cy="284" r="12" />
+    <text x="398" y="284">7</text>
+  </g>
+</svg>

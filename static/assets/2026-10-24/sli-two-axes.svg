@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 416" class="sli2" role="img" aria-labelledby="sli2-title sli2-desc">
+  <title id="sli2-title">서버 고장 트리의 leaf SLI를 계층 축과 유형 축으로 다시 묶는 구조</title>
+  <desc id="sli2-desc">앞의 서버 고장 트리를 그대로 쓴다. 최상위 사건은 워크로드가 할당된 서버에서 작업을 수행할 수 없다이고, OR 게이트 아래에 전원, 네트워크, 냉각 계층이 있다. 같은 계층의 leaf는 계층 묶음으로 모인다(계층 축). 전원 상실, 네트워크 단절, 과열 보호 동작처럼 지금 쓸 수 없게 된 것은 장애 유형으로 서비스 가용성에, PSU 하나 고장, 업링크 하나 단절, 보호 동작 전에 경고 수준까지 오른 흡기 온도처럼 여유가 줄어든 것은 헤드룸 유형으로 서비스 헤드룸에 모인다(유형 축). 유형은 이 둘 말고도 몇 가지 더 있다. 관리망과 메타는 서비스 top event 밖에 두고, 각자 묶음만 둔다.</desc>
+  <style>
+    .sli2 { font-family: inherit; }
+    .sli2-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .sli2-dash { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; stroke-dasharray: 4 3; }
+    .sli2-event { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 2; }
+    .sli2-ghost { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; stroke-dasharray: 4 3; }
+    .sli2-gate { fill: var(--code-bg, #f5f5f5); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .sli2-col { fill: var(--code-bg, #f5f5f5); stroke: var(--border, #e8e8e8); stroke-width: 1; }
+    .sli2-band { fill: none; stroke: var(--accent, #1f6fd1); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .sli2-band-more { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; stroke-dasharray: 3 4; }
+    .sli2-leaf { fill: var(--theme, #fff); stroke: var(--border, #e8e8e8); stroke-width: 1; }
+    .sli2-roll { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.25; }
+    .sli2-out { fill: var(--link-hover-bg, rgba(31, 111, 209, 0.06)); stroke: var(--accent, #1f6fd1); stroke-width: 1.5; }
+    .sli2-text { fill: var(--primary, #1e1e1e); font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .sli2-strong { font-weight: 600; }
+    .sli2-title { fill: var(--primary, #1e1e1e); font-size: 14px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .sli2-head { fill: var(--primary, #1e1e1e); font-size: 13px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .sli2-small { fill: var(--secondary, #6c6c6c); font-size: 11px; text-anchor: middle; dominant-baseline: central; }
+    .sli2-label { fill: var(--primary, #1e1e1e); font-size: 13px; font-weight: 600; dominant-baseline: central; }
+    .sli2-label-small { fill: var(--secondary, #6c6c6c); font-size: 11px; dominant-baseline: central; }
+    .sli2-accent { fill: var(--accent, #1f6fd1); font-size: 12px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .sli2-gate-label { fill: var(--secondary, #6c6c6c); font-size: 9px; font-weight: 600; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.04em; }
+  </style>
+
+  <!-- top event and OR gate (the example tree's) -->
+  <rect class="sli2-event" x="165" y="12" width="380" height="40" rx="6" />
+  <text class="sli2-title" x="355" y="32">워크로드가 할당된 서버에서 작업을 수행할 수 없음</text>
+  <path class="sli2-line" d="M355 52 V66" />
+  <path class="sli2-gate" d="M337 96 Q355 86 373 96 Q371 74 355 66 Q339 74 337 96 Z" />
+  <text class="sli2-gate-label" x="355" y="84">OR</text>
+  <path class="sli2-line" d="M355 91 V104 M215 104 H495 M215 104 V116 M355 104 V116 M495 104 V116" />
+
+  <!-- layer axis: one column per layer of the example tree -->
+  <rect class="sli2-col" x="150" y="116" width="130" height="288" rx="10" />
+  <rect class="sli2-col" x="290" y="116" width="130" height="288" rx="10" />
+  <rect class="sli2-col" x="430" y="116" width="130" height="288" rx="10" />
+  <text class="sli2-head" x="215" y="134">전원</text>
+  <text class="sli2-small" x="215" y="150">PSU, 랙 PDU 피드</text>
+  <text class="sli2-head" x="355" y="134">네트워크</text>
+  <text class="sli2-small" x="355" y="150">NIC, ToR 스위치</text>
+  <text class="sli2-head" x="495" y="134">냉각</text>
+  <text class="sli2-small" x="495" y="150">팬, 흡기 온도</text>
+
+  <!-- type axis: outage -->
+  <rect class="sli2-band" x="8" y="164" width="560" height="76" rx="10" />
+  <text class="sli2-label" x="20" y="180">장애 유형</text>
+  <text class="sli2-label-small" x="20" y="196">지금 쓸 수 없는가</text>
+  <rect class="sli2-out" x="18" y="206" width="118" height="26" rx="6" />
+  <text class="sli2-accent" x="77" y="219">서비스 가용성</text>
+  <rect class="sli2-leaf" x="158" y="189" width="114" height="26" rx="5" />
+  <text class="sli2-text" x="215" y="202">전원 상실</text>
+  <rect class="sli2-leaf" x="298" y="189" width="114" height="26" rx="5" />
+  <text class="sli2-text" x="355" y="202">네트워크 단절</text>
+  <rect class="sli2-leaf" x="438" y="189" width="114" height="26" rx="5" />
+  <text class="sli2-text" x="495" y="202">과열 보호 동작</text>
+
+  <!-- type axis: headroom -->
+  <rect class="sli2-band" x="8" y="248" width="560" height="76" rx="10" />
+  <text class="sli2-label" x="20" y="264">헤드룸 유형</text>
+  <text class="sli2-label-small" x="20" y="280">버틸 여유가 남았는가</text>
+  <rect class="sli2-out" x="18" y="290" width="118" height="26" rx="6" />
+  <text class="sli2-accent" x="77" y="303">서비스 헤드룸</text>
+  <rect class="sli2-leaf" x="158" y="273" width="114" height="26" rx="5" />
+  <text class="sli2-text" x="215" y="286">PSU 하나 고장</text>
+  <rect class="sli2-leaf" x="298" y="273" width="114" height="26" rx="5" />
+  <text class="sli2-text" x="355" y="286">업링크 하나 단절</text>
+  <rect class="sli2-leaf" x="438" y="273" width="114" height="26" rx="5" />
+  <text class="sli2-text" x="495" y="286">흡기 온도 경고</text>
+
+  <!-- type axis: there are more types than these two -->
+  <rect class="sli2-band-more" x="8" y="332" width="560" height="26" rx="8" />
+  <text class="sli2-label-small" x="20" y="345">그 외 유형 ...</text>
+  <text class="sli2-small" x="215" y="345">...</text>
+  <text class="sli2-small" x="355" y="345">...</text>
+  <text class="sli2-small" x="495" y="345">...</text>
+
+  <!-- layer rollups -->
+  <text class="sli2-label" x="20" y="374">계층 축</text>
+  <text class="sli2-label-small" x="20" y="390">같은 계층끼리 묶기</text>
+  <rect class="sli2-roll" x="158" y="366" width="114" height="30" rx="6" />
+  <text class="sli2-text sli2-strong" x="215" y="381">전원 묶음</text>
+  <rect class="sli2-roll" x="298" y="366" width="114" height="30" rx="6" />
+  <text class="sli2-text sli2-strong" x="355" y="381">네트워크 묶음</text>
+  <rect class="sli2-roll" x="438" y="366" width="114" height="30" rx="6" />
+  <text class="sli2-text sli2-strong" x="495" y="381">냉각 묶음</text>
+
+  <!-- outside the service top event -->
+  <path class="sli2-dash" d="M580 104 V404" />
+  <rect class="sli2-ghost" x="592" y="12" width="158" height="40" rx="6" />
+  <text class="sli2-text sli2-strong" x="671" y="25">서비스 top event 밖</text>
+  <text class="sli2-small" x="671" y="41">각자 묶음만 둠</text>
+
+  <rect class="sli2-col" x="592" y="116" width="158" height="124" rx="10" />
+  <text class="sli2-head" x="671" y="134">관리망 (OOB)</text>
+  <text class="sli2-text" x="671" y="162">끊겨도 워크로드는 정상</text>
+  <text class="sli2-small" x="671" y="182">대신 원격으로 보고</text>
+  <text class="sli2-small" x="671" y="198">제어하는 능력을 잃음</text>
+  <rect class="sli2-roll" x="604" y="208" width="134" height="26" rx="6" />
+  <text class="sli2-text sli2-strong" x="671" y="221">운영 능력</text>
+
+  <rect class="sli2-col" x="592" y="248" width="158" height="156" rx="10" />
+  <text class="sli2-head" x="671" y="266">메타</text>
+  <text class="sli2-text" x="671" y="294">관측 체계 자체</text>
+  <text class="sli2-small" x="671" y="314">다른 판정을</text>
+  <text class="sli2-small" x="671" y="330">믿을 수 있는가</text>
+  <rect class="sli2-roll" x="604" y="372" width="134" height="26" rx="6" />
+  <text class="sli2-text sli2-strong" x="671" y="385">판정 신뢰</text>
+</svg>

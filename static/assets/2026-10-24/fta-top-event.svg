@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 396" class="fp1" role="img" aria-labelledby="fp1-title fp1-desc">
+  <title id="fp1-title">top event를 무엇이 고장 났나로 잡을 때와 무엇을 못 하게 됐나로 잡을 때의 차이</title>
+  <desc id="fp1-desc">위쪽은 서버가 고장났다를 top event로 잡은 경우로, 아래에 온도, 메모리 사용률, 링크, 팬 속도 같은 지표가 나열될 뿐이고 워크로드가 영향을 받았는지는 알 수 없다. 아래쪽은 서버가 접속이 안 된다를 top event로 잡은 경우로, OR 게이트 아래에 전원 상실, 네트워크 단절, OS 응답 없음 같은 원인이 내려간다.</desc>
+  <style>
+    .fp1 { font-family: inherit; }
+    .fp1-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .fp1-dash { fill: none; stroke: var(--border, #e8e8e8); stroke-width: 1.5; stroke-dasharray: 4 4; }
+    .fp1-top { fill: var(--theme, #fff); stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .fp1-top-good { fill: var(--theme, #fff); stroke: var(--accent, #1f6fd1); stroke-width: 2; }
+    .fp1-chip { fill: var(--code-bg, #f5f5f5); stroke: var(--border, #e8e8e8); stroke-width: 1; }
+    .fp1-event { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .fp1-gate { fill: var(--code-bg, #f5f5f5); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .fp1-head { fill: var(--secondary, #6c6c6c); font-size: 12px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .fp1-head-good { fill: var(--accent, #1f6fd1); font-size: 12px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .fp1-text { fill: var(--primary, #1e1e1e); font-size: 13px; text-anchor: middle; dominant-baseline: central; }
+    .fp1-strong { font-weight: 600; }
+    .fp1-chip-text { fill: var(--secondary, #6c6c6c); font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .fp1-note { fill: var(--primary, #1e1e1e); font-size: 12.5px; text-anchor: middle; dominant-baseline: central; }
+    .fp1-note-small { fill: var(--secondary, #6c6c6c); font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .fp1-gate-label { fill: var(--secondary, #6c6c6c); font-size: 9px; font-weight: 600; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.04em; }
+  </style>
+
+  <!-- top: what broke -->
+  <text class="fp1-head" x="180" y="14">무엇이 고장 났나</text>
+  <rect class="fp1-top" x="100" y="28" width="160" height="32" rx="6" />
+  <text class="fp1-text" x="180" y="44">서버가 고장남</text>
+  <path class="fp1-line" d="M180 60 V72 M100 72 H260 M100 72 V82 M260 72 V82" />
+  <rect class="fp1-chip" x="30" y="82" width="140" height="26" rx="5" />
+  <text class="fp1-chip-text" x="100" y="95">온도 xx도 이상</text>
+  <rect class="fp1-chip" x="190" y="82" width="140" height="26" rx="5" />
+  <text class="fp1-chip-text" x="260" y="95">메모리 xx% 이상</text>
+  <rect class="fp1-chip" x="30" y="114" width="140" height="26" rx="5" />
+  <text class="fp1-chip-text" x="100" y="127">링크 하나 다운</text>
+  <rect class="fp1-chip" x="190" y="114" width="140" height="26" rx="5" />
+  <text class="fp1-chip-text" x="260" y="127">팬 속도 저하</text>
+  <text class="fp1-note" x="180" y="160">지표를 늘어놓게 됨</text>
+  <text class="fp1-note-small" x="180" y="178">워크로드가 영향을 받았는지는 모름</text>
+
+  <path class="fp1-dash" d="M10 198 H350" />
+
+  <!-- bottom: what can no longer be done -->
+  <text class="fp1-head-good" x="180" y="218">무엇을 못 하게 됐나</text>
+  <rect class="fp1-top-good" x="90" y="232" width="180" height="32" rx="6" />
+  <text class="fp1-text fp1-strong" x="180" y="248">서버가 접속이 안 됨</text>
+  <path class="fp1-line" d="M180 264 V272" />
+  <path class="fp1-gate" d="M162 300 Q180 290 198 300 Q196 280 180 272 Q164 280 162 300 Z" />
+  <text class="fp1-gate-label" x="180" y="289">OR</text>
+  <path class="fp1-line" d="M180 296 V306 M70 306 H290 M70 306 V316 M180 306 V316 M290 306 V316" />
+  <rect class="fp1-event" x="20" y="316" width="100" height="30" rx="6" />
+  <text class="fp1-text" x="70" y="331">전원 상실</text>
+  <rect class="fp1-event" x="130" y="316" width="100" height="30" rx="6" />
+  <text class="fp1-text" x="180" y="331">네트워크 단절</text>
+  <rect class="fp1-event" x="240" y="316" width="100" height="30" rx="6" />
+  <text class="fp1-text" x="290" y="331">OS 응답 없음</text>
+  <text class="fp1-note" x="180" y="366">워크로드가 겪는 일에서 출발</text>
+  <text class="fp1-note-small" x="180" y="384">그 아래로 원인 드릴다운</text>
+</svg>

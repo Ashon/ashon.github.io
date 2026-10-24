@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 320" class="rdc" role="img" aria-labelledby="rdc-title rdc-desc">
+  <title id="rdc-title">같은 장애가 서버 쪽과 시설 쪽에서 동시에 잡힌다</title>
+  <desc id="rdc-desc">랙 안에 서버 네 대가 있고, 서버마다 서버 쪽 전원 leaf가 있다. 랙 PDU-A 피드가 끊기면 서버 네 대의 전원 leaf와 시설 쪽 PDU 피드 leaf가 동시에 위반된다. 같은 장애가 서버와 시설 두 군데서 동시에 잡히는 것이다. 둘을 한 묶음에 섞으면 위반이 서버 4에 시설 1을 더한 5로 세어져 시설 쪽에서 한 번 더 센다. 시설은 랙 수준 트리에서 따로 보면 서버 묶음은 4, 랙 수준 트리는 발생으로 센다.</desc>
+  <!-- Demo for the fault-tree-demo shortcode: one event (the feed),
+       and everything it touches shares its data-node: the server leaves,
+       the rack leaf, the lines between them and both tallies, which swap
+       their idle text (.rdc-off) for the failed one (.rdc-on). The single
+       gate only exists to satisfy the script; its verdict is off, and the
+       shortcode's `failed` text explains the result instead. -->
+  <style>
+    .rdc { font-family: inherit; }
+    .rdc text { font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .rdc rect, .rdc text, .rdc path { transition: fill 0.15s ease, stroke 0.15s ease; }
+    .rdc-rack { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.25; stroke-dasharray: 5 4; }
+    .rdc text.rdc-label { fill: var(--secondary, #6c6c6c); text-anchor: start; }
+    .rdc-server rect { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .rdc-server text { fill: var(--primary, #1e1e1e); }
+    .rdc-leaf rect { fill: var(--theme, #fff); stroke: var(--secondary, #6c6c6c); stroke-width: 1; }
+    .rdc-leaf text { fill: var(--secondary, #6c6c6c); font-size: 10.5px; }
+    .rdc-leaf.is-failed rect { fill: var(--danger-bg, rgba(198, 40, 40, 0.1)); stroke: var(--danger, #c62828); stroke-width: 1.5; }
+    .rdc-leaf.is-failed text { fill: var(--danger, #c62828); font-weight: 600; }
+    .rdc-wire { fill: none; stroke: var(--ev-pdu, #d97706); stroke-width: 1.25; stroke-dasharray: 3 3; }
+    .rdc-wire.is-failed { stroke: var(--danger, #c62828); stroke-dasharray: none; stroke-width: 1.5; }
+    .rdc-feed rect { fill: color-mix(in srgb, var(--ev-pdu, #d97706) 22%, var(--theme, #fff)); stroke: var(--ev-pdu, #d97706); stroke-width: 1.5; }
+    .rdc-feed text { fill: var(--primary, #1e1e1e); }
+    .rdc [data-event] { cursor: pointer; }
+    .rdc [data-event]:hover rect { stroke: var(--danger, #c62828); }
+    .rdc-feed.is-failed rect { fill: var(--danger, #c62828); stroke: var(--danger, #c62828); }
+    .rdc-feed.is-failed text { fill: var(--danger-contrast, #fff); font-weight: 600; }
+    .rdc-panel { fill: color-mix(in srgb, var(--primary, #1e1e1e) 4%, var(--theme, #fff)); stroke: var(--border, #e8e8e8); stroke-width: 1; }
+    .rdc text.rdc-title { fill: var(--primary, #1e1e1e); font-size: 12.5px; font-weight: 600; }
+    .rdc text.rdc-big { fill: var(--primary, #1e1e1e); font-size: 15px; font-weight: 700; }
+    .rdc text.rdc-sub { fill: var(--secondary, #6c6c6c); font-size: 11.5px; }
+    .rdc-callout { opacity: 0; transition: opacity 0.15s ease; }
+    .rdc-callout.is-failed { opacity: 1; }
+    .rdc-callout-line { fill: none; stroke: var(--danger, #c62828); stroke-width: 1.5; stroke-dasharray: 4 3; stroke-linejoin: round; }
+    .rdc-callout-pill { fill: var(--danger, #c62828); }
+    .rdc text.rdc-callout-text { fill: var(--danger-contrast, #fff); font-size: 11.5px; font-weight: 600; }
+    .rdc-count .rdc-on { display: none; }
+    .rdc-count.is-failed .rdc-on { display: inline; }
+    .rdc-count.is-failed .rdc-off { display: none; }
+    .rdc-count.is-failed text.rdc-bad { fill: var(--danger, #c62828); }
+    .rdc-count.is-failed text.rdc-good { fill: var(--accent, #1f6fd1); }
+  </style>
+
+  <g data-gate="or" data-node="rack" data-children="pduA" data-label="랙 PDU-A 피드 상실" data-verdict="off" />
+
+  <!-- the rack: four servers, each with its own power leaf -->
+  <rect class="rdc-rack" x="12" y="10" width="336" height="140" rx="10" />
+  <text class="rdc-label" x="22" y="24">랙</text>
+  <g class="rdc-server">
+    <rect x="40" y="30" width="64" height="30" rx="5" />
+    <text x="72" y="45">서버 1</text>
+  </g>
+  <g class="rdc-server">
+    <rect x="112" y="30" width="64" height="30" rx="5" />
+    <text x="144" y="45">서버 2</text>
+  </g>
+  <g class="rdc-server">
+    <rect x="184" y="30" width="64" height="30" rx="5" />
+    <text x="216" y="45">서버 3</text>
+  </g>
+  <g class="rdc-server">
+    <rect x="256" y="30" width="64" height="30" rx="5" />
+    <text x="288" y="45">서버 4</text>
+  </g>
+
+  <!-- the feed reaches every server's power leaf -->
+  <path class="rdc-wire" data-node="pduA" d="M100 108 L72 86" />
+  <path class="rdc-wire" data-node="pduA" d="M100 108 L144 86" />
+  <path class="rdc-wire" data-node="pduA" d="M100 108 L216 86" />
+  <path class="rdc-wire" data-node="pduA" d="M100 108 L288 86" />
+  <g class="rdc-leaf" data-node="pduA">
+    <rect x="44" y="66" width="56" height="20" rx="10" />
+    <text x="72" y="76">서버 전원</text>
+  </g>
+  <g class="rdc-leaf" data-node="pduA">
+    <rect x="116" y="66" width="56" height="20" rx="10" />
+    <text x="144" y="76">서버 전원</text>
+  </g>
+  <g class="rdc-leaf" data-node="pduA">
+    <rect x="188" y="66" width="56" height="20" rx="10" />
+    <text x="216" y="76">서버 전원</text>
+  </g>
+  <g class="rdc-leaf" data-node="pduA">
+    <rect x="260" y="66" width="56" height="20" rx="10" />
+    <text x="288" y="76">서버 전원</text>
+  </g>
+
+  <g class="rdc-feed" data-event="pduA" data-node="pduA" data-label="랙 PDU-A 피드 상실">
+    <rect x="40" y="108" width="120" height="30" rx="6" />
+    <text x="100" y="123">랙 PDU-A 피드</text>
+  </g>
+  <path class="rdc-wire" data-node="pduA" d="M160 123 H196" />
+  <g class="rdc-leaf" data-node="pduA">
+    <rect x="196" y="113" width="100" height="20" rx="10" />
+    <text x="246" y="123">시설 PDU 피드</text>
+  </g>
+
+  <!-- once the feed is cut: the same failure is caught in two places
+       at once, the servers' power leaves and the facility's feed leaf -->
+  <g class="rdc-callout" data-node="pduA">
+    <path class="rdc-callout-line" d="M38 62 H322 V138 H190 V92 H38 Z" />
+    <path class="rdc-callout-line" d="M253 138 V158" />
+    <rect class="rdc-callout-pill" x="158" y="158" width="190" height="22" rx="11" />
+    <text class="rdc-callout-text" x="253" y="169">같은 장애가 서버, 시설에서 동시에 잡힘</text>
+  </g>
+
+  <!-- the same event, counted two ways -->
+  <rect class="rdc-panel" x="12" y="188" width="162" height="122" rx="10" />
+  <rect class="rdc-panel" x="186" y="188" width="162" height="122" rx="10" />
+  <text class="rdc-title" x="93" y="206">한 묶음에 섞으면</text>
+  <text class="rdc-title" x="267" y="206">시설은 따로 보면</text>
+  <g class="rdc-count" data-node="pduA">
+    <text class="rdc-big rdc-off" x="93" y="238">위반 0</text>
+    <text class="rdc-sub rdc-off" x="93" y="264">아직 위반 없음</text>
+    <text class="rdc-big rdc-bad rdc-on" x="93" y="238">위반 5</text>
+    <text class="rdc-sub rdc-on" x="93" y="264">서버 4 + 시설 1</text>
+    <text class="rdc-sub rdc-bad rdc-on" x="93" y="288">시설 쪽에서 한 번 더 셈</text>
+  </g>
+  <g class="rdc-count" data-node="pduA">
+    <text class="rdc-big rdc-off" x="267" y="238">서버 묶음 0</text>
+    <text class="rdc-sub rdc-off" x="267" y="264">랙 수준 트리: 정상</text>
+    <text class="rdc-big rdc-on" x="267" y="238">서버 묶음 4</text>
+    <text class="rdc-sub rdc-on" x="267" y="264">랙 수준 트리: 발생</text>
+    <text class="rdc-sub rdc-good rdc-on" x="267" y="288">시설은 랙 트리에서만 셈</text>
+  </g>
+</svg>

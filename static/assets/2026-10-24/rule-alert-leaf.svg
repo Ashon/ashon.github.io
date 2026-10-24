@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 210" class="ral" role="img" aria-labelledby="ral-title ral-desc">
+  <title id="ral-title">알림은 leaf에 걸고, 묶음은 한눈에 보는 데만 쓰기</title>
+  <desc id="ral-desc">전원 묶음 아래에 PSU-A 고장, PSU-B 고장, PDU 피드 상실 leaf가 있다. leaf 하나가 위반되면 알림은 그 leaf에서 울려서 무엇을 고쳐야 할지 바로 드러나고, 전원 묶음은 위반으로 표시만 되고 알림은 울리지 않는다.</desc>
+  <!-- Demo for the fault-tree-demo shortcode: the group is an OR gate
+       over its leaves; each leaf is an event, and the alert pill under it
+       shares its data-node, so it shows when that leaf fails. -->
+  <style>
+    .ral { font-family: inherit; }
+    .ral text { font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+    .ral rect, .ral text, .ral g { transition: fill 0.15s ease, stroke 0.15s ease, opacity 0.15s ease; }
+    .ral-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .ral-group rect { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .ral-group .ral-name { fill: var(--primary, #1e1e1e); font-size: 13px; font-weight: 600; }
+    .ral-group .ral-state { fill: var(--secondary, #6c6c6c); font-size: 11px; }
+    .ral-group .ral-state-bad { display: none; }
+    .ral-group.is-failed rect { fill: color-mix(in srgb, var(--ev-pdu, #d97706) 14%, var(--theme, #fff)); stroke: var(--ev-pdu, #d97706); }
+    .ral-group.is-failed .ral-state-ok { display: none; }
+    .ral-group.is-failed .ral-state-bad { display: inline; fill: var(--ev-pdu, #d97706); font-weight: 600; }
+    .ral-leaf rect { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .ral-leaf text { fill: var(--primary, #1e1e1e); }
+    .ral [data-event] { cursor: pointer; }
+    .ral [data-event]:hover rect { stroke: var(--danger, #c62828); }
+    .ral-leaf.is-failed rect { fill: var(--danger-bg, rgba(198, 40, 40, 0.1)); stroke: var(--danger, #c62828); stroke-width: 2; }
+    .ral-leaf.is-failed text { fill: var(--danger, #c62828); font-weight: 600; }
+    .ral-alert { opacity: 0; }
+    .ral-alert rect { fill: var(--danger, #c62828); }
+    .ral-alert text { fill: var(--danger-contrast, #fff); font-size: 11.5px; font-weight: 600; }
+    .ral-alert.is-failed { opacity: 1; }
+    .ral-note { fill: var(--secondary, #6c6c6c); }
+  </style>
+
+  <!-- the group: an OR over its leaves, shown but never paging -->
+  <g data-gate="or" data-node="group" data-children="psuA psuB feed" data-label="전원 묶음" />
+  <g class="ral-group" data-node="group">
+    <rect x="100" y="12" width="160" height="42" rx="8" />
+    <text class="ral-name" x="180" y="27">전원 묶음</text>
+    <text class="ral-state ral-state-ok" x="180" y="43">정상</text>
+    <text class="ral-state ral-state-bad" x="180" y="43">위반 표시만, 알림 없음</text>
+  </g>
+  <path class="ral-line" d="M180 54 V66 M70 66 H290 M70 66 V80 M180 66 V80 M290 66 V80" />
+
+  <!-- the leaves: each one pages on its own -->
+  <g class="ral-leaf" data-event="psuA" data-node="psuA" data-label="PSU-A 고장">
+    <rect x="20" y="80" width="100" height="34" rx="6" />
+    <text x="70" y="97">PSU-A 고장</text>
+  </g>
+  <g class="ral-leaf" data-event="psuB" data-node="psuB" data-label="PSU-B 고장">
+    <rect x="130" y="80" width="100" height="34" rx="6" />
+    <text x="180" y="97">PSU-B 고장</text>
+  </g>
+  <g class="ral-leaf" data-event="feed" data-node="feed" data-label="PDU 피드 상실">
+    <rect x="240" y="80" width="100" height="34" rx="6" />
+    <text x="290" y="97">PDU 피드 상실</text>
+  </g>
+  <g class="ral-alert" data-node="psuA">
+    <rect x="26" y="124" width="88" height="24" rx="12" />
+    <text x="70" y="136">알림: PSU-A</text>
+  </g>
+  <g class="ral-alert" data-node="psuB">
+    <rect x="136" y="124" width="88" height="24" rx="12" />
+    <text x="180" y="136">알림: PSU-B</text>
+  </g>
+  <g class="ral-alert" data-node="feed">
+    <rect x="243" y="124" width="94" height="24" rx="12" />
+    <text x="290" y="136">알림: PDU 피드</text>
+  </g>
+
+  <text class="ral-note" x="180" y="174">알림은 무엇이 깨졌는지 바로 보이는 leaf에서 울리고,</text>
+  <text class="ral-note" x="180" y="194">묶음은 어디가 문제인지 한눈에 보는 데만 씀</text>
+</svg>

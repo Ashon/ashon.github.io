@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 270" class="tsl" role="img" aria-labelledby="tsl-title tsl-desc">
+  <title id="tsl-title">트리의 자리마다 붙는 SLI와, SLI가 나오는 두 방향</title>
+  <desc id="tsl-desc">top event인 서버 접속이 안 됨에는 서비스 SLI가 붙고, OR 게이트는 아래 중 하나라도 실패하면 실패로 본다. 중간 사건인 전원 상실과 네트워크 단절에는 계층 묶음이, 그 아래 basic event인 PSU, 피드, 링크 A, 링크 B에는 leaf SLI가 붙는다. SLI는 두 방향에서 나온다. 위에서 아래로는 top event에서 출발해 내려가고, 아래에서 위로는 BOM에서 발라낸 메트릭 중 PSU 상태, 입력 전원, 링크 상태, 포트 상태 같은 주요 지표만 leaf SLI로 격상한다. 온도나 메모리 같은 지표는 격상하지 않는다.</desc>
+  <style>
+    .tsl { font-family: inherit; }
+    .tsl-line { fill: none; stroke: var(--secondary, #6c6c6c); stroke-width: 1.5; }
+    .tsl-node { fill: var(--theme, #fff); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .tsl-gate { fill: var(--code-bg, #f5f5f5); stroke: var(--primary, #1e1e1e); stroke-width: 1.5; }
+    .tsl-text { fill: var(--primary, #1e1e1e); font-size: 12.5px; text-anchor: middle; dominant-baseline: central; }
+    .tsl-top { font-weight: 600; }
+    .tsl-small { fill: var(--secondary, #6c6c6c); font-size: 11px; text-anchor: middle; dominant-baseline: central; }
+    .tsl-note { fill: var(--secondary, #6c6c6c); font-size: 11px; dominant-baseline: central; }
+    .tsl-gate-label { fill: var(--secondary, #6c6c6c); font-size: 9px; font-weight: 600; text-anchor: middle; dominant-baseline: central; letter-spacing: 0.04em; }
+    .tsl-tag { fill: color-mix(in srgb, var(--accent, #1f6fd1) 16%, var(--theme, #fff)); stroke: var(--accent, #1f6fd1); stroke-width: 1.25; }
+    .tsl-tag-text { fill: var(--accent, #1f6fd1); font-size: 12px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .tsl-leader { fill: none; stroke: var(--accent, #1f6fd1); stroke-width: 1; stroke-dasharray: 2 3; }
+    .tsl-chip { fill: color-mix(in srgb, var(--accent, #1f6fd1) 10%, var(--theme, #fff)); stroke: var(--accent, #1f6fd1); stroke-width: 1; }
+    .tsl-chip-off { fill: var(--theme, #fff); stroke: var(--secondary, #6c6c6c); stroke-width: 1; stroke-dasharray: 3 2; }
+    .tsl-chip-text { fill: var(--primary, #1e1e1e); font-size: 10.5px; text-anchor: middle; dominant-baseline: central; }
+    .tsl-chip-text-off { fill: var(--secondary, #6c6c6c); font-size: 10.5px; text-anchor: middle; dominant-baseline: central; }
+    .tsl-arrow { fill: none; stroke: var(--accent, #1f6fd1); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .tsl-dir { fill: var(--accent, #1f6fd1); font-size: 11px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+  </style>
+
+  <!-- the two directions SLIs come from -->
+  <text class="tsl-dir" x="24" y="16">위에서</text>
+  <text class="tsl-dir" x="24" y="29">아래로</text>
+  <path class="tsl-arrow" d="M24 38 V66 M19 60 L24 66 L29 60" />
+  <path class="tsl-arrow" d="M24 238 V208 M19 214 L24 208 L29 214" />
+  <text class="tsl-dir" x="24" y="248">아래에서</text>
+  <text class="tsl-dir" x="24" y="261">위로</text>
+
+  <!-- top event and OR gate -->
+  <rect class="tsl-node" x="80" y="12" width="150" height="30" rx="6" />
+  <text class="tsl-text tsl-top" x="155" y="27">서버 접속이 안 됨</text>
+  <path class="tsl-line" d="M155 42 V50" />
+  <path class="tsl-gate" d="M137 78 Q155 68 173 78 Q171 58 155 50 Q139 58 137 78 Z" />
+  <text class="tsl-gate-label" x="155" y="67">OR</text>
+  <text class="tsl-note" x="182" y="66">하나라도 실패하면 실패</text>
+  <path class="tsl-line" d="M155 74 V86 M100 86 H216 M100 86 V96 M216 86 V96" />
+
+  <!-- intermediate events -->
+  <rect class="tsl-node" x="58" y="96" width="84" height="28" rx="6" />
+  <text class="tsl-text" x="100" y="110">전원 상실</text>
+  <rect class="tsl-node" x="168" y="96" width="96" height="28" rx="6" />
+  <text class="tsl-text" x="216" y="110">네트워크 단절</text>
+  <path class="tsl-line" d="M100 124 V134 M72 134 H128 M72 134 V145 M128 134 V145" />
+  <path class="tsl-line" d="M216 124 V134 M188 134 H244 M188 134 V145 M244 134 V145" />
+
+  <!-- basic events -->
+  <circle class="tsl-node" cx="72" cy="158" r="13" />
+  <text class="tsl-small" x="72" y="182">PSU</text>
+  <circle class="tsl-node" cx="128" cy="158" r="13" />
+  <text class="tsl-small" x="128" y="182">피드</text>
+  <circle class="tsl-node" cx="188" cy="158" r="13" />
+  <text class="tsl-small" x="188" y="182">링크 A</text>
+  <circle class="tsl-node" cx="244" cy="158" r="13" />
+  <text class="tsl-small" x="244" y="182">링크 B</text>
+
+  <!-- the SLI each position takes -->
+  <path class="tsl-leader" d="M232 27 H248 M266 110 H272 M259 158 H272" />
+  <rect class="tsl-tag" x="250" y="15" width="86" height="24" rx="12" />
+  <text class="tsl-tag-text" x="293" y="27">서비스 SLI</text>
+  <rect class="tsl-tag" x="274" y="98" width="76" height="24" rx="12" />
+  <text class="tsl-tag-text" x="312" y="110">계층 묶음</text>
+  <rect class="tsl-tag" x="274" y="146" width="76" height="24" rx="12" />
+  <text class="tsl-tag-text" x="312" y="158">leaf SLI</text>
+
+  <!-- metrics from the BOM: the key ones are promoted to leaf SLIs -->
+  <path class="tsl-arrow" d="M72 212 V190 M68 196 L72 190 L76 196" />
+  <path class="tsl-arrow" d="M128 212 V190 M124 196 L128 190 L132 196" />
+  <path class="tsl-arrow" d="M188 212 V190 M184 196 L188 190 L192 196" />
+  <path class="tsl-arrow" d="M244 212 V190 M240 196 L244 190 L248 196" />
+  <rect class="tsl-chip" x="47" y="214" width="50" height="22" rx="11" />
+  <text class="tsl-chip-text" x="72" y="225">PSU 상태</text>
+  <rect class="tsl-chip" x="103" y="214" width="50" height="22" rx="11" />
+  <text class="tsl-chip-text" x="128" y="225">입력 전원</text>
+  <rect class="tsl-chip" x="163" y="214" width="50" height="22" rx="11" />
+  <text class="tsl-chip-text" x="188" y="225">링크 상태</text>
+  <rect class="tsl-chip" x="219" y="214" width="50" height="22" rx="11" />
+  <text class="tsl-chip-text" x="244" y="225">포트 상태</text>
+  <rect class="tsl-chip-off" x="276" y="214" width="36" height="22" rx="11" />
+  <text class="tsl-chip-text-off" x="294" y="225">온도</text>
+  <rect class="tsl-chip-off" x="316" y="214" width="38" height="22" rx="11" />
+  <text class="tsl-chip-text-off" x="335" y="225">메모리</text>
+  <text class="tsl-small" x="200" y="256">BOM 메트릭 중 주요 지표만 leaf SLI로 격상</text>
+</svg>

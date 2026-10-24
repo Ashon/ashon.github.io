@@ -35,6 +35,17 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Subset fonts to the site's glyphs
+        # Pass 1 renders every page so the subset matches exactly what
+        # readers see; the real build below then fingerprints the fonts.
+        run: |
+          pip install -r scripts/requirements-fonts.txt
+          hugo --minify --quiet -d "${{ runner.temp }}/charscan"
+          python scripts/subset-fonts.py "${{ runner.temp }}/charscan"
       - name: Build with Hugo
         env:
           HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache

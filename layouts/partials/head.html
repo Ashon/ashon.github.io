@@ -38,11 +38,26 @@
   <link rel="stylesheet" href="{{ $stylesheet.RelPermalink }}">
 {{- end }}
 
-{{- /* Pretendard — primary UI/body typeface, served from jsDelivr.
-       Preconnect warms the TLS handshake before the CSS request. */ -}}
+{{- /* Body typeface. Published builds use a per-build glyph subset of
+       Pretendard ("Lifestack Sans", ~60 KB per weight instead of
+       ~750 KB) that scripts/subset-fonts.py writes to assets/fonts/
+       before the final Hugo pass; fingerprinting busts caches when the
+       glyph set changes. Without those files (plain `hugo server`),
+       fall back to the full Pretendard files on jsDelivr. */ -}}
+{{- with resources.Get "fonts/lifestack-sans-400.woff2" }}
+<link rel="preload" href="{{ (. | fingerprint).RelPermalink }}" as="font" type="font/woff2" crossorigin>
+<style>
+{{- range $weight := slice 400 500 600 }}
+{{- with resources.Get (printf "fonts/lifestack-sans-%d.woff2" $weight) }}
+@font-face{font-family:"Lifestack Sans";font-style:normal;font-weight:{{ $weight }};font-display:swap;src:url({{ (. | fingerprint).RelPermalink }}) format("woff2")}
+{{- end }}
+{{- end }}
+</style>
+{{- else }}
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" crossorigin
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+{{- end }}
 
 <link rel="icon" href="/favicon.ico">
 <link rel="alternate" type="application/rss+xml" href="/index.xml" title="rss">

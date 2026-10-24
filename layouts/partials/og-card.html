@@ -1,0 +1,70 @@
+{{- /* og-card.html - the 1200x630 share card for a page, returned as an
+       image resource for og:image / twitter:image (head.html). Drawn at
+       build time on assets/og/card-base.png: the wordmark sharp next to
+       the menu as skeleton pills (the compact header, mid-scroll), the
+       first category above the title, the summary under it, and the
+       domain and date under a rule. Pages that aren't posts (home,
+       lists, tags) get the site description as the title. X shows no
+       title or description under a large card, so both have to be in
+       the image itself. */ -}}
+{{- $fonts := partialCached "og-fonts.html" . "og-fonts" -}}
+{{- $ink := "#1e1e1e" -}}
+{{- $muted := "#6c6c6c" -}}
+{{- $accent := "#1f6fd1" -}}
+
+{{- $heading := site.Params.description -}}
+{{- $summary := "" -}}
+{{- $eyebrow := "" -}}
+{{- $date := "" -}}
+{{- if .IsPage -}}
+  {{- $heading = .Title -}}
+  {{- $summary = .Description | default (.Summary | plainify | htmlUnescape) -}}
+  {{- with .Params.categories }}{{ $eyebrow = index . 0 | upper }}{{ end -}}
+  {{- if not .Date.IsZero }}{{ $date = .Date.Format "Jan 02, 2006" }}{{ end -}}
+{{- end -}}
+{{- $heading = replaceRE `\s+` " " $heading | strings.TrimSpace -}}
+{{- $summary = replaceRE `\s+` " " $summary | strings.TrimSpace -}}
+
+{{- /* Text wraps at its image's width minus 20px, so both blocks are
+       drawn on a 1040px transparent canvas placed at x 80, which keeps
+       an 80px margin on the right too. images.Text can't say how tall
+       the title came out, so og-wrap.html works out its line count to
+       put the summary right under it, with as many lines as fit above
+       the rule (at most 3, cut with "..."). A line is the font's ascent
+       plus the line spacing. */ -}}
+{{- $canvas := resources.Get "og/title-canvas.png" -}}
+{{- $top := 196 -}}
+{{- $titleSize := 56 -}}
+{{- $titleGap := 14 -}}
+{{- $title := partial "og-wrap.html" (dict "text" $heading "font" "Bold" "size" $titleSize "width" 1040) -}}
+{{- $titleAscent := math.Ceil (mul hugo.Data.ogcard.Bold.ascent $titleSize) -}}
+{{- $titleBottom := add $top (mul $title.lines $titleAscent) (mul (sub $title.lines 1) $titleGap) (mul 0.25 $titleSize) -}}
+
+{{- $filters := slice
+      (images.Text site.Title (dict "font" $fonts.Bold "size" 36 "color" $ink "x" 80 "y" 52))
+      (images.Overlay ($canvas | images.Filter (images.Text $heading (dict "font" $fonts.Bold "size" $titleSize "linespacing" $titleGap "color" $ink "x" 0 "y" 0))) 80 $top)
+      (images.Text (urls.Parse site.BaseURL).Host (dict "font" $fonts.Medium "size" 26 "color" $muted "x" 80 "y" 556)) -}}
+
+{{- with $summary -}}
+  {{- $size := 26 -}}
+  {{- $gap := 12 -}}
+  {{- $y := int (add $titleBottom 18) -}}
+  {{- $step := add (math.Ceil (mul hugo.Data.ogcard.Medium.ascent $size)) $gap -}}
+  {{- /* lines that end above y 500: n * step - gap <= 500 - y */ -}}
+  {{- $room := int (math.Floor (div (add (sub 500 $y) $gap) $step)) -}}
+  {{- if gt $room 3 }}{{ $room = 3 }}{{ end -}}
+  {{- if gt $room 0 -}}
+    {{- $fit := partial "og-wrap.html" (dict "text" . "font" "Medium" "size" $size "width" 1040 "max" $room) -}}
+    {{- $layer := $canvas | images.Filter (images.Text $fit.text (dict "font" $fonts.Medium "size" $size "linespacing" $gap "color" $muted "x" 0 "y" 0)) -}}
+    {{- $filters = $filters | append (images.Overlay $layer 80 $y) -}}
+  {{- end -}}
+{{- end -}}
+{{- with $eyebrow -}}
+  {{- $filters = $filters | append (images.Text . (dict "font" $fonts.Bold "size" 22 "color" $accent "x" 80 "y" 150)) -}}
+{{- end -}}
+{{- with $date -}}
+  {{- $filters = $filters | append (images.Text . (dict "font" $fonts.Medium "size" 26 "color" $muted "x" 1120 "y" 556 "alignx" "right")) -}}
+{{- end -}}
+
+{{- $card := resources.Get "og/card-base.png" | images.Filter $filters -}}
+{{- return $card -}}

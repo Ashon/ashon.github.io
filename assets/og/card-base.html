@@ -1,0 +1,25 @@
+<!doctype html>
+<!-- Source of card-base.png, the background of the 1200x630 share card
+     (layouts/partials/og-card.html draws the text on top). Regenerate:
+       chrome --headless=new --hide-scrollbars --force-device-scale-factor=1 \
+         --window-size=1200,630 --screenshot=card-base.png card-base.html
+     title-canvas.png is a blank 1040x320 transparent PNG the title is
+     drawn on, so it wraps 80px short of the right edge. -->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #ffffff; }
+  /* The menu as the compact header draws it: skeleton pills, while the
+     wordmark (drawn by Hugo) stays sharp. */
+  .pill { position: absolute; top: 68px; height: 14px; border-radius: 7px; background: rgba(30, 30, 30, 0.12); }
+  .rule { position: absolute; left: 80px; width: 1040px; top: 528px; height: 2px; background: #e8e8e8; }
+</style>
+</head>
+<body>
+  <div class="pill" style="left: 788px; width: 86px"></div>
+  <div class="pill" style="left: 908px; width: 112px"></div>
+  <div class="pill" style="left: 1054px; width: 66px"></div>
+  <div class="rule"></div>
+</body>
+</html>

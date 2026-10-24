@@ -1,0 +1,57 @@
+{{- /* og-wrap.html - lays .text out the way images.Text does: words split
+       at spaces, a new line whenever the next word would reach the edge
+       (the image .width minus 20px). Returns how many lines it takes
+       and, when .max lines are given, the text cut to fit them with
+       "..." at the end. Glyph widths come from data/ogcard.json
+       (scripts/og-glyph-widths.py), rounded up, so the count never
+       comes out lower than what Hugo draws. Params: text, font (Bold or
+       Medium), size, width, max (optional). */ -}}
+{{- $font := index hugo.Data.ogcard .font -}}
+{{- $size := .size -}}
+{{- $edge := sub .width 20 -}}
+{{- $max := .max | default 0 -}}
+{{- $space := mul (index $font.chars " ") $size -}}
+{{- $ellipsis := mul (index $font.chars ".") 3 $size -}}
+{{- $lines := 1 -}}
+{{- $x := 0.0 -}}
+{{- $kept := slice -}}
+{{- $line := slice -}}
+{{- $cut := false -}}
+{{- range split .text " " -}}
+  {{- if and . (not $cut) -}}
+    {{- $w := 0.0 -}}
+    {{- range split . "" -}}
+      {{- $em := index $font.chars . -}}
+      {{- if not $em }}{{ $em = cond (findRE `^[가-힣]$` .) $font.hangul 1.0 }}{{ end -}}
+      {{- $w = add $w (mul $em $size) -}}
+    {{- end -}}
+    {{- if ge (add $x $w) $edge -}}
+      {{- if and $max (ge $lines $max) -}}
+        {{- $cut = true -}}
+      {{- else -}}
+        {{- $lines = add $lines 1 -}}
+        {{- $x = 0.0 -}}
+        {{- $line = slice -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if not $cut -}}
+      {{- $kept = $kept | append . -}}
+      {{- $line = $line | append (add $w $space) -}}
+      {{- $x = add $x $w $space -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if $cut -}}
+  {{- /* "..." joins the last word, so drop words off the end of the last
+         line until that word plus "..." still fits on it. */ -}}
+  {{- range seq 20 -}}
+    {{- if and (ge (add (sub $x $space) $ellipsis) $edge) (gt (len $line) 1) -}}
+      {{- $x = sub $x (index $line (sub (len $line) 1)) -}}
+      {{- $line = first (sub (len $line) 1) $line -}}
+      {{- $kept = first (sub (len $kept) 1) $kept -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $text := delimit $kept " " -}}
+{{- if $cut }}{{ $text = printf "%s..." $text }}{{ end -}}
+{{- return dict "lines" $lines "text" $text -}}

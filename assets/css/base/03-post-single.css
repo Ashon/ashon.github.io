@@ -243,10 +243,10 @@ hr.toc-divider {
         height: 2.5rem;
         padding: 0 0.95rem;
         border-radius: 999px;
-        background: color-mix(in srgb, var(--theme) 92%, transparent);
-        -webkit-backdrop-filter: saturate(180%) blur(8px);
-        backdrop-filter: saturate(180%) blur(8px);
-        box-shadow: var(--float-shadow);
+        background: var(--glass-bg);
+        -webkit-backdrop-filter: var(--glass-filter);
+        backdrop-filter: var(--glass-filter);
+        box-shadow: var(--glass-shadow);
         color: var(--primary);
         font-size: 0.85rem;
         white-space: nowrap;
@@ -288,12 +288,30 @@ hr.toc-divider {
         overscroll-behavior: contain;
         padding: 0.6rem 0.4rem;
         border-radius: 14px;
-        background: var(--theme);
-        box-shadow: var(--float-shadow);
+        background: var(--glass-bg);
+        -webkit-backdrop-filter: var(--glass-filter);
+        backdrop-filter: var(--glass-filter);
+        box-shadow: var(--glass-shadow);
     }
 
     .post-single hr.toc-divider {
         display: none;
+    }
+}
+
+/* No backdrop blur (or no color-mix): a clear veil would leave text
+   unreadable over the article, so the glass turns solid. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .toc-island,
+    .post-single nav.toc > #TableOfContents {
+        background: var(--theme);
+    }
+}
+
+@supports not (background: color-mix(in srgb, white, transparent)) {
+    .toc-island,
+    .post-single nav.toc > #TableOfContents {
+        background: var(--theme);
     }
 }
 

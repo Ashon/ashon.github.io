@@ -113,7 +113,8 @@
    max() falls back to --gap from the viewport edge on narrow screens
    where the content fills the viewport.
    Look and baseline match the TOC island (03-post-single.css): same
-   height, translucent blurred fill, --float-shadow, bottom offset. */
+   height, the same glass material (--glass-* in 02-theme-vars.css),
+   bottom offset. */
 .top-link {
     position: fixed;
     bottom: calc(1rem + env(safe-area-inset-bottom));
@@ -125,10 +126,10 @@
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--theme) 92%, transparent);
-    -webkit-backdrop-filter: saturate(180%) blur(8px);
-    backdrop-filter: saturate(180%) blur(8px);
-    box-shadow: var(--float-shadow);
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-filter);
+    backdrop-filter: var(--glass-filter);
+    box-shadow: var(--glass-shadow);
     color: var(--secondary);
     transition: visibility .3s, opacity .3s cubic-bezier(0.4, 0, 1, 1), color 0.15s ease;
 }
@@ -139,6 +140,10 @@
 }
 
 @supports not (background: color-mix(in srgb, white, transparent)) {
+    .top-link { background: var(--theme); }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .top-link { background: var(--theme); }
 }
 

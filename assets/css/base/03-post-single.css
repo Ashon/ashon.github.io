@@ -58,11 +58,9 @@
     scroll-margin-top: var(--anchor-offset);
 }
 
-/* H2 gets a thin chapter divider so long articles read as sections. */
+/* H2 marks a new section with extra space above, no divider rule. */
 .post-content h2 {
     margin-top: 2.75rem;
-    padding-bottom: 0.35rem;
-    border-bottom: 1px solid var(--border);
 }
 
 .post-content strong,

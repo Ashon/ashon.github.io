@@ -5,7 +5,6 @@
     max-width: calc(var(--main-width) + var(--gap) * 2);
     margin: 3rem auto 0 auto;
     padding: 1.75rem var(--gap) 1.25rem var(--gap);
-    border-top: 1px solid var(--border);
     font-size: 0.78rem;
     line-height: 1.55;
     color: var(--secondary);

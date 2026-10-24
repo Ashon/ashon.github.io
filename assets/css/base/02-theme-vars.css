@@ -17,6 +17,19 @@
        header + --gap also keeps anchored headings clear of the
        header's bottom fade. */
     --anchor-offset: calc(var(--header-height) + 12px + var(--gap));
+
+    /* Type rhythm for Pretendard + Hangul. Tracking tightens as size
+       grows (large Hangul looks airy at 0) and stays at 0 for small
+       text so 12–13px labels don't clot. Leading opens up because
+       Hangul glyphs fill the em box: wrapped headings at 1.2 touch. */
+    --tracking-display: -0.025em; /* >= 24px: post title, logo */
+    --tracking-heading: -0.02em;  /* 20-24px: h2, h3, list titles */
+    --tracking-body: -0.01em;     /* 14-17px: prose, h4, UI */
+    --tracking-small: 0;          /* <= 13px: meta, chips, footer */
+    --leading-display: 1.35;
+    --leading-heading: 1.4;
+    --leading-prose: 1.75;
+    --leading-ui: 1.6;
     color-scheme: light;
 }
 

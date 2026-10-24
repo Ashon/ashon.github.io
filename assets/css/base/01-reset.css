@@ -34,11 +34,11 @@ body {
         Roboto, "Helvetica Neue", "Apple SD Gothic Neo", "Noto Sans KR",
         sans-serif;
     font-size: 16px;
-    line-height: 1.65;
+    line-height: var(--leading-ui);
     font-weight: 400;
     font-feature-settings: "kern", "liga", "calt";
     font-variant-ligatures: common-ligatures contextual;
-    letter-spacing: -0.003em;
+    letter-spacing: var(--tracking-body);
     word-break: keep-all;
     overflow-wrap: break-word;
     background: var(--theme);
@@ -67,10 +67,13 @@ table {
     display: block;
 }
 
+/* 500, not 600: Pretendard SemiBold at 20px+ outshouts the 400 body.
+   Size carries the hierarchy; small headings (h4, ~body size) opt
+   back into 600 where weight is what sets them apart. */
 h1, h2, h3, h4, h5, h6 {
-    line-height: 1.2;
-    font-weight: 600;
-    letter-spacing: -0.015em;
+    line-height: var(--leading-heading);
+    font-weight: 500;
+    letter-spacing: var(--tracking-heading);
     margin: 0;
 }
 

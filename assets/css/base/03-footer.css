@@ -6,7 +6,8 @@
     margin: 3rem auto 0 auto;
     padding: 1.75rem var(--gap) 1.25rem var(--gap);
     font-size: 0.78rem;
-    line-height: 1.55;
+    line-height: var(--leading-ui);
+    letter-spacing: var(--tracking-small);
     color: var(--secondary);
     text-align: left;
 }
@@ -30,7 +31,7 @@
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--secondary);
-    letter-spacing: 0;
+    letter-spacing: var(--tracking-small);
 }
 
 .site-footer .footer-description {

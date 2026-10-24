@@ -22,6 +22,7 @@
     border-radius: 3px;
     font-size: 0.78rem;
     line-height: 1.4;
+    letter-spacing: var(--tracking-small);
     text-decoration: none;
     transition: background 0.15s ease, color 0.15s ease;
     position: relative;

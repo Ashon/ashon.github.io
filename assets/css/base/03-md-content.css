@@ -240,6 +240,7 @@
     display: grid;
     margin: auto 0;
     padding: 10px;
+    line-height: 1.6;
     color: rgb(213, 213, 214);
     background: var(--code-block-bg) !important;
     border-radius: var(--radius);
@@ -266,7 +267,7 @@
     display: block;
     margin-top: -0.4rem;
     font-size: 0.92em;
-    line-height: 1.6;
+    line-height: var(--leading-ui);
     color: var(--secondary);
     user-select: none;
 }
@@ -376,6 +377,7 @@ html[data-theme="dark"] .md-content a > img {
     text-align: center;
     margin: 0.5rem 0 0;
     line-height: 1.5;
+    letter-spacing: var(--tracking-small);
 }
 
 .md-content figure > figcaption > p {

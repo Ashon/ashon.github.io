@@ -8,10 +8,10 @@
 
 .page-header h1,
 .post-title {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 1.8rem;
-    letter-spacing: -0.02em;
-    line-height: 1.3;
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-display);
     margin: 0.4rem 0 0 0;
 }
 
@@ -30,15 +30,15 @@
     color: var(--content);
     margin: 1.25rem 0 0 0;
     font-size: 1rem;
-    line-height: 1.75;
+    line-height: var(--leading-prose);
 }
 
-/* Scale steps down ~1.2x from the 1.8rem/600 post title, and never
+/* Scale steps down ~1.2x from the 1.8rem/500 post title, and never
    outweighs it — a heavier h2 would read louder than the title. */
-.post-content h1 { font-size: 1.625rem; font-weight: 600; }
-.post-content h2 { font-size: 1.5rem;   font-weight: 600; }
-.post-content h3 { font-size: 1.25rem;  font-weight: 600; }
-.post-content h4 { font-size: 1.05rem;  font-weight: 600; color: var(--secondary); }
+.post-content h1 { font-size: 1.625rem; font-weight: 500; }
+.post-content h2 { font-size: 1.5rem;   font-weight: 500; }
+.post-content h3 { font-size: 1.25rem;  font-weight: 500; }
+.post-content h4 { font-size: 1.05rem;  font-weight: 600; color: var(--secondary); letter-spacing: var(--tracking-body); }
 
 .post-content h1,
 .post-content h2,
@@ -255,7 +255,7 @@ hr.toc-divider {
 .paginav .title {
     font-size: 0.75rem;
     color: var(--secondary);
-    letter-spacing: 0;
+    letter-spacing: var(--tracking-small);
     text-transform: none;
     font-weight: 400;
 }

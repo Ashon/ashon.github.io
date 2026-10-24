@@ -56,8 +56,8 @@
     margin: 0;
     font-size: 1.4rem;
     font-weight: 500;
-    line-height: 1.35;
-    letter-spacing: -0.015em;
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
     color: var(--accent);
 }
 
@@ -65,7 +65,7 @@
 .first-entry .entry-content {
     margin: 0.4rem 0 0 0;
     font-size: 0.95rem;
-    line-height: 1.55;
+    line-height: var(--leading-ui);
     color: var(--primary);
     opacity: 0.85;
     -webkit-line-clamp: unset;
@@ -85,6 +85,7 @@
     align-items: center;
     gap: 0.25rem 0.5rem;
     font-size: 0.8rem;
+    letter-spacing: var(--tracking-small);
     color: var(--secondary);
     margin-bottom: 0.25rem;
 }

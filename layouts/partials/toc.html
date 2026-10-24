@@ -1,10 +1,13 @@
 {{- /* TOC override — render Hugo's built-in <nav><ul> tree directly
        (no <details>/<summary> chrome, no "목차" header), with a thin
-       <hr> divider below it. Matches the original minima layout. */ -}}
+       <hr> divider below it. Matches the original minima layout.
+       Hugo wraps the tree in its own <nav id="TableOfContents">; turn
+       that into a <div> so the TOC is one labelled landmark, not two
+       nested ones. */ -}}
 {{- $headers := findRE "<h[1-6].*?>(.|\n])+?</h[1-6]>" .Content -}}
 {{- if ge (len $headers) 1 -}}
-<nav class="toc">
-  {{- .TableOfContents -}}
+<nav class="toc" aria-label="목차">
+  {{- .TableOfContents | replaceRE `^<nav id="TableOfContents">` `<div id="TableOfContents">` | replaceRE `</nav>$` `</div>` | safeHTML -}}
 </nav>
 <hr class="toc-divider" />
 {{- end -}}

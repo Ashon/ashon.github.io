@@ -50,15 +50,25 @@
 
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener("click", function (e) {
+      var hash = this.getAttribute("href");
+      var id = decodeURIComponent(hash.substr(1));
+      var target = document.getElementById(id);
+      if (!target) return;
       e.preventDefault();
-      var id = this.getAttribute("href").substr(1);
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({ behavior: "smooth" });
+        target.scrollIntoView({ behavior: "smooth" });
       } else {
-        document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+        target.scrollIntoView();
       }
-      if (id === "top") { history.replaceState(null, null, " "); }
-      else { history.pushState(null, null, `#${id}`); }
+      if (id === "top") { history.replaceState(null, null, " "); return; }
+      history.pushState(null, null, hash);
+      /* preventDefault() above also cancels the browser's own focus
+         move, which would strand skip-link and TOC users on the link
+         they pressed. Move focus to the target ourselves. */
+      if (!target.matches('a[href], button, input, select, textarea, [tabindex]')) {
+        target.setAttribute('tabindex', '-1');
+      }
+      target.focus({ preventScroll: true });
     });
   });
 </script>

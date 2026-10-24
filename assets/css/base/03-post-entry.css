@@ -102,12 +102,14 @@
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 500;
     text-decoration: none;
     border-radius: 3px;
-    padding: 2px 5px;
-    margin: -2px -5px;
+    /* 3px vertical padding brings the hit area to ~26px, above the
+       24px minimum target size (WCAG 2.5.8). */
+    padding: 3px 5px;
+    margin: -3px -5px;
     transition: background 0.15s ease;
 }
 

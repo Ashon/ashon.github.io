@@ -32,14 +32,12 @@
     font-weight: 500;
     color: var(--secondary);
     letter-spacing: 0;
-    opacity: 0.85;
 }
 
 .site-footer .footer-description {
     margin: 0 0 0.3rem 0;
     color: var(--secondary);
     font-size: 0.78rem;
-    opacity: 0.85;
 }
 
 .site-footer .footer-contact {
@@ -50,13 +48,11 @@
 .site-footer .footer-contact a {
     color: var(--secondary);
     text-decoration: none;
-    opacity: 0.85;
-    transition: color 0.15s ease, opacity 0.15s ease;
+    transition: color 0.15s ease;
 }
 
 .site-footer .footer-contact a:hover {
     color: var(--primary);
-    opacity: 1;
     text-decoration: underline;
 }
 
@@ -77,14 +73,12 @@
     display: inline-flex;
     padding: 4px;
     color: var(--secondary);
-    opacity: 0.7;
     border-radius: 4px;
-    transition: color 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+    transition: color 0.15s ease, background 0.15s ease;
 }
 
 .site-footer .social-icons a:hover {
     color: var(--primary);
-    opacity: 1;
     background: var(--border);
 }
 
@@ -97,9 +91,8 @@
     text-align: center;
     margin-top: 1.25rem;
     padding-top: 0.75rem;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--secondary);
-    opacity: 0.7;
 }
 
 @media (max-width: 600px) {

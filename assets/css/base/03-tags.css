@@ -24,6 +24,16 @@
     line-height: 1.4;
     text-decoration: none;
     transition: background 0.15s ease, color 0.15s ease;
+    position: relative;
+}
+
+/* The small chip renders ~20px tall, under the 24px minimum target
+   size (WCAG 2.5.8). Stretch the clickable box 3px above and below
+   without changing how the chip looks. */
+.entry-tag::after {
+    content: "";
+    position: absolute;
+    inset: -3px 0;
 }
 
 .entry-tag:hover {
@@ -49,10 +59,10 @@
 }
 
 .entry-tag-count {
-    font-size: 0.78em; /* relative to chip — scales with size variant */
-    opacity: 0.55;
+    font-size: 0.82em; /* relative to chip — ~12px on the large chip */
+    opacity: 0.7; /* lowest step that still clears 4.5:1 in both themes */
 }
 
 .entry-tag.selected .entry-tag-count {
-    opacity: 0.9;
+    opacity: 1;
 }

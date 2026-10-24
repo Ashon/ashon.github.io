@@ -59,9 +59,9 @@
       {{- range .Pages }}
       {{- if eq .Kind "page" }}
       <div class="archive-entry">
-        <h3 class="archive-entry-title">
+        <h4 class="archive-entry-title">
           <a class="link-accent" href="{{ .Permalink }}">{{- .Title | markdownify -}}</a>
-        </h3>
+        </h4>
         {{- partial "post_meta.html" . }}
       </div>
       {{- end }}

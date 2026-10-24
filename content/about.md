@@ -18,11 +18,11 @@ comments: false
 
 오픈스택 기반의 프라이빗 클라우드 서비스 개발 운영 경험과 AWS GCP 등 퍼블릭 클라우드 기반 플랫폼 개발 경험을 가지고, 다양한 사용 계층 기술 계층에서 플랫폼 서비스를 설계하고 개발하는 경험과 역량을 갖추고 있습니다.
 
-### Interests
+## Interests
 
 Clean Architecture, Cloud, DevOps, SRE
 
-### Careers
+## Careers
 
 - 2026.02 ~ Present - Rebellions.ai \| Cloud Platform
 - 2022.12 ~ 2026.02 - 당근마켓 \| SRE
@@ -31,7 +31,7 @@ Clean Architecture, Cloud, DevOps, SRE
 - 2014.08 ~ 2017.02 - CDNetworks \| Web Portal
 - 2012.08 ~ 2013.12 - 네오펙트 \| Planning
 
-### Presentations
+## Presentations
 
 - [당근 SRE 밋업 4회 - 멋진 운영 경험을 위하여: Prometheus 레코딩 룰로 SLI 정하기](https://youtu.be/f76i29l4aGs)
 - [NIPA 제28회 SW Quality Insight Conference - Krane의 CI/CD 파이프라인](https://youtu.be/gg9Oieuv2ow?t=4501)

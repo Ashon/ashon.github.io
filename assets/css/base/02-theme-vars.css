@@ -35,10 +35,14 @@ html[data-theme] {
     --tag-fg: rgb(34, 34, 34);
     --tag-hover-bg: rgb(228, 228, 228);
 
-    --accent: #2a7ae2;
+    /* #1f6fd1 clears WCAG AA (4.5:1) both as text on --theme (4.94)
+       and as a fill under --accent-contrast text; the previous
+       #2a7ae2 sat at 4.22. Hover tint is kept light enough (6%) that
+       accent text on it still passes. */
+    --accent: #1f6fd1;
     --accent-contrast: #ffffff;
     --hover-bg: rgb(247, 248, 250);
-    --link-hover-bg: rgba(42, 122, 226, 0.1);
+    --link-hover-bg: rgba(31, 111, 209, 0.06);
 }
 
 html[data-theme="dark"] {

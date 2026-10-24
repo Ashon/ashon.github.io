@@ -33,8 +33,10 @@
     line-height: 1.75;
 }
 
-.post-content h1 { font-size: 2rem;     font-weight: 700; }
-.post-content h2 { font-size: 1.625rem; font-weight: 700; }
+/* Scale steps down ~1.2x from the 1.8rem/600 post title, and never
+   outweighs it — a heavier h2 would read louder than the title. */
+.post-content h1 { font-size: 1.625rem; font-weight: 600; }
+.post-content h2 { font-size: 1.5rem;   font-weight: 600; }
 .post-content h3 { font-size: 1.25rem;  font-weight: 600; }
 .post-content h4 { font-size: 1.05rem;  font-weight: 600; color: var(--secondary); }
 
@@ -174,7 +176,7 @@ hr.toc-divider {
    stays exactly as toc.html renders it. We make .post-single the
    positioning context, absolutely position `nav.toc` into the gutter
    so it spans the article's full height (top:0; bottom:0), and let
-   Hugo's inner `<nav id="TableOfContents">` be the sticky element
+   the inner `#TableOfContents` (a <div> after toc.html) be the sticky element
    inside that rail. Below the breakpoint everything falls back to
    the inline rendering above — no JS gate, no DOM swap. */
 @media (min-width: 1400px) {

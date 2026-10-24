@@ -29,17 +29,24 @@
        global taxonomy data intact. */ -}}
 {{- $taxonomy := index site.Taxonomies "tags" }}
 
-<div class="tag-filter" role="toolbar" aria-label="Tag filter">
+{{- /* role="group", not "toolbar": a toolbar promises arrow-key
+       navigation between chips, which this filter doesn't implement.
+       Each chip is a toggle, so its state lives in aria-pressed. */ -}}
+<div class="tag-filter" role="group" aria-label="태그 필터">
   {{- range $taxonomy.Alphabetical }}
     {{- $name := .Name }}
     {{- $count := .Count }}
     {{- $label := index $display $name | default $name }}
   <button class="tag-chip entry-tag entry-tag--lg" type="button"
-          data-tag="{{ $name }}">
+          data-tag="{{ $name }}" aria-pressed="false">
     {{ $label }}<span class="entry-tag-count">{{ $count }}</span>
   </button>
   {{- end }}
 </div>
+{{- /* Always-rendered live region: the visible status line sits in a
+       container that toggles `hidden`, and screen readers drop updates
+       made while a region is hidden or just appearing. */ -}}
+<p class="sr-only" aria-live="polite" id="tag-filter-live"></p>
 
 <div class="tag-filtered">
   <p class="tag-filter-status"></p>
@@ -90,6 +97,7 @@
   const items = filtered.querySelectorAll(".tag-filtered-item");
   const status = filtered.querySelector(".tag-filter-status");
   const empty = filtered.querySelector(".tag-empty");
+  const live = document.getElementById("tag-filter-live");
 
   function readURL() {
     const params = new URLSearchParams(window.location.search);
@@ -107,15 +115,18 @@
     history.replaceState(null, "", url);
   }
 
-  function apply(selected) {
+  function apply(selected, announce) {
     chips.forEach(c => {
-      c.classList.toggle("selected", selected.has(c.dataset.tag.toLowerCase()));
+      const on = selected.has(c.dataset.tag.toLowerCase());
+      c.classList.toggle("selected", on);
+      c.setAttribute("aria-pressed", on ? "true" : "false");
     });
 
     if (selected.size === 0) {
       grouped.hidden = false;
       filtered.hidden = true;
       empty.hidden = true;
+      if (announce) live.textContent = "필터 해제 — 전체 태그 목록";
       return;
     }
 
@@ -131,10 +142,11 @@
     });
     status.textContent = `${[...selected].join(" + ")} — 매칭 ${matched}개`;
     empty.hidden = matched > 0;
+    if (announce) live.textContent = status.textContent;
   }
 
   const selected = readURL();
-  apply(selected);
+  apply(selected, false);
 
   filterEl.addEventListener("click", (e) => {
     const chip = e.target.closest(".tag-chip");
@@ -144,7 +156,7 @@
     if (selected.has(tag)) selected.delete(tag);
     else selected.add(tag);
     writeURL(selected);
-    apply(selected);
+    apply(selected, true);
   });
 })();
 </script>

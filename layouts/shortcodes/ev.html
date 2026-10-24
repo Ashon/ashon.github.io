@@ -1,0 +1,15 @@
+{{- /* Event badge: the event's name in a pill tinted with its color,
+       led by a small circle drawn like the event's node in the example
+       fault trees, so the text can point at a node without {braces} or
+       code spans.
+
+       Kinds (colors in 03-fault-tree.css, shared with the tree SVGs):
+         basic  white circle, hits one server only
+         pdu    rack PDU feed, shared by the rack
+         tor    ToR switch, shared by the rack
+         inlet  inlet temperature, shared by the rack (or the row)
+
+       Usage: {{< ev "pdu" >}}랙 PDU-A{{< /ev >}}
+       The glyph is decorative (aria-hidden); the name carries meaning. */ -}}
+<span class="ev ev-{{ .Get 0 }}"><span class="ev-dot" aria-hidden="true"></span>{{ .Inner | strings.TrimSpace }}</span>
+{{- /* no trailing newline: the glyph sits mid-sentence */ -}}

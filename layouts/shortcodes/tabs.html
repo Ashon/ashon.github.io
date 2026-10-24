@@ -1,0 +1,31 @@
+{{- /* Tabs container: a subsection card with a segmented control on
+       top. Wraps two or more consecutive `tab` shortcodes.
+
+       Module files:
+         layouts/shortcodes/tabs.html, tab.html   markup
+         assets/css/base/03-tabs.css              styles (main bundle)
+         assets/js/tabs.js                        behavior, loaded by
+           extend_head.html only on pages that use this shortcode
+
+       The script builds the tab list (WAI-ARIA tabs: roving tabindex,
+       Left/Right/Home/End) from each panel's label. The card is as tall
+       as the active panel, and a switch crossfades the panels in place:
+       anything at the same spot in both panels (say, a figure at the
+       top of each) holds still while the rest dissolves. Without JS
+       every panel stays visible in order, each under its own label, so
+       nothing is lost.
+
+       Knobs (CSS custom properties on .tabs, see 03-tabs.css):
+       --tabs-bg for the card surface, --tabs-fade for the crossfade.
+
+       Use the % form so the panels' markdown is rendered:
+         {{% tabs label="FTA 간단히 정리" %}}
+         {{% tab "직접 해 보기" %}} ...markdown... {{% /tab %}}
+         {{% tab "개념 정리" %}} ...markdown... {{% /tab %}}
+         {{% /tabs %}}
+       `label` names the tab list for screen readers. */ -}}
+<div class="tabs" data-tabs{{ with .Get "label" }} data-tabs-label="{{ . }}"{{ end }}>
+
+{{ .Inner }}
+
+</div>

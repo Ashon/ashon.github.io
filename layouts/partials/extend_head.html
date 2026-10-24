@@ -116,49 +116,59 @@
   })();
 </script>
 
-{{- /* Code scroll — for code blocks wider than the column, mark the
-       <pre> with `scroll-x` and `at-start` / `at-end` so CSS can fade
-       the edges that hide code, and make the scrolling <code> a
-       focusable, labelled region so it can be scrolled from the
-       keyboard (WCAG 2.1.1). Re-checked on resize: a block that fits
-       on desktop may overflow on a phone, and vice versa. */ -}}
+{{- /* Scroll cue — for code blocks and SVG figures wider than the
+       column, mark the scroller's parent (<pre> / .svg-figure-frame)
+       with `scroll-x` and `at-start` / `at-end` so CSS can fade the
+       edges that hide content, and make the scroller a focusable,
+       labelled region so it can be scrolled from the keyboard
+       (WCAG 2.1.1). Re-checked on resize: something that fits on
+       desktop may overflow on a phone, and vice versa. */ -}}
 <script>
   (function () {
-    function setupCodeScroll() {
-      var blocks = document.querySelectorAll('.post-content pre > code');
-      if (!blocks.length) return;
+    function setupScrollCue() {
+      var scrollers = document.querySelectorAll(
+        '.post-content pre > code, .post-content .svg-figure-scroll'
+      );
+      if (!scrollers.length) return;
 
-      function update(code) {
-        var pre = code.parentElement;
-        var overflow = code.scrollWidth - code.clientWidth > 1;
-        pre.classList.toggle('scroll-x', overflow);
-        if (overflow && !code.hasAttribute('tabindex')) {
-          var lang = code.dataset.lang;
-          code.setAttribute('tabindex', '0');
-          code.setAttribute('role', 'region');
-          code.setAttribute('aria-label', '코드' + (lang ? ' (' + lang + ')' : '') + ', 좌우로 스크롤');
-        } else if (!overflow && code.hasAttribute('tabindex')) {
-          code.removeAttribute('tabindex');
-          code.removeAttribute('role');
-          code.removeAttribute('aria-label');
+      function label(el) {
+        if (el.tagName === 'CODE') {
+          var lang = el.dataset.lang;
+          return '코드' + (lang ? ' (' + lang + ')' : '') + ', 좌우로 스크롤';
         }
-        pre.classList.toggle('at-start', code.scrollLeft <= 1);
-        pre.classList.toggle('at-end', code.scrollLeft + code.clientWidth >= code.scrollWidth - 1);
+        return (el.dataset.label || '그림') + ', 좌우로 스크롤';
       }
 
-      blocks.forEach(function (code) {
-        update(code);
-        code.addEventListener('scroll', function () { update(code); }, { passive: true });
+      function update(el) {
+        var frame = el.parentElement;
+        var overflow = el.scrollWidth - el.clientWidth > 1;
+        frame.classList.toggle('scroll-x', overflow);
+        if (overflow && !el.hasAttribute('tabindex')) {
+          el.setAttribute('tabindex', '0');
+          el.setAttribute('role', 'region');
+          el.setAttribute('aria-label', label(el));
+        } else if (!overflow && el.hasAttribute('tabindex')) {
+          el.removeAttribute('tabindex');
+          el.removeAttribute('role');
+          el.removeAttribute('aria-label');
+        }
+        frame.classList.toggle('at-start', el.scrollLeft <= 1);
+        frame.classList.toggle('at-end', el.scrollLeft + el.clientWidth >= el.scrollWidth - 1);
+      }
+
+      scrollers.forEach(function (el) {
+        update(el);
+        el.addEventListener('scroll', function () { update(el); }, { passive: true });
       });
       if ('ResizeObserver' in window) {
         var ro = new ResizeObserver(function (entries) {
           entries.forEach(function (e) { update(e.target); });
         });
-        blocks.forEach(function (code) { ro.observe(code); });
+        scrollers.forEach(function (el) { ro.observe(el); });
       }
     }
-    if (document.readyState !== 'loading') setupCodeScroll();
-    else document.addEventListener('DOMContentLoaded', setupCodeScroll);
+    if (document.readyState !== 'loading') setupScrollCue();
+    else document.addEventListener('DOMContentLoaded', setupScrollCue);
   })();
 </script>
 
@@ -231,6 +241,23 @@
     else document.addEventListener('DOMContentLoaded', setupTocSpy);
   })();
 </script>
+
+{{- /* Component scripts: each shortcode that needs behavior keeps it in
+       its own file under assets/js/, loaded (deferred) only on pages
+       that use the shortcode. To add one, map the shortcode name to its
+       files here; a file listed twice loads once. */ -}}
+{{- $components := dict
+      "annotated-figure" (slice "js/svg-viewbox.js" "js/annotated-figure.js")
+      "fault-tree-demo"  (slice "js/svg-viewbox.js" "js/fault-tree-demo.js")
+      "tabs"             (slice "js/tabs.js")
+      "term"             (slice "js/term-popover.js") -}}
+{{- $scripts := slice -}}
+{{- range $shortcode, $files := $components -}}
+  {{- if $.HasShortcode $shortcode }}{{ $scripts = $scripts | append $files }}{{ end -}}
+{{- end -}}
+{{- range uniq $scripts }}
+{{- partial "deferred-script.html" . }}
+{{- end }}
 
 {{- /* TOC island — open/close the floating TOC panel shown below the
        wide-screen breakpoint (the button is hidden on wide screens,

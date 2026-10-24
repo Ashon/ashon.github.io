@@ -1,0 +1,45 @@
+{{- /* Interactive fault tree: readers fail basic events (click a circle
+       or a toggle button) and watch AND / OR gates carry the failure
+       upward, with each gate's verdict spelled out below the tree. It
+       shows only what happens; terms like cut sets are left to the text
+       around it. Without JS the tree stays a static figure.
+
+       Module files:
+         layouts/shortcodes/fault-tree-demo.html   markup
+         assets/css/base/03-fault-tree.css         styles, and the ft-*
+                                                   kit the SVG is drawn with
+         assets/js/fault-tree-demo.js              behavior, loaded by
+           extend_head.html only on pages that use this shortcode
+         assets/js/svg-viewbox.js                  compact viewBox swap
+
+       The tree itself lives in the SVG (a file under static/, see
+       inline-svg.html and the example in fta-demo.svg):
+         gates   data-gate="and|or", data-node (its id), data-children
+                 (child ids) and data-label (its name in the verdict);
+                 data-verdict="off" keeps a gate out of the verdict line
+         events  data-event and data-node; the toggle buttons are built
+                 from them, labelled with data-label or the event's text
+         every other shape of a node (box, edge to its parent) carries
+         the same data-node, so the whole node turns failed together;
+         edges go in a .ft-edges group.
+
+       The drawing need not look like a tree: any shapes will do as long
+       as they carry these attributes (rack-demo.svg wires a rack-level
+       tree onto a picture of the rack, with empty <g data-gate> gates).
+
+       Usage:
+         {{< fault-tree-demo src="assets/2026-10-24/fta-demo.svg" >}}
+       `hint` replaces the line shown before anything has failed; `max`
+       caps the drawing's width in px (default 640) for narrow drawings;
+       `failed` is the line shown once something has failed, for drawings
+       whose gates all have data-verdict="off"; pin="false" leaves the
+       demo in the flow instead of pinning it on phones (for a demo with
+       no text after it to scroll under it).
+
+       Keep the output free of blank lines: inside a tab it is run
+       through markdown, and a blank line would end the HTML block. */ -}}
+<figure class="fault-tree-demo{{ if ne (.Get "pin") "false" }} figure-pin{{ end }}" data-fault-tree-demo data-hint="{{ .Get "hint" | default "원이나 위 버튼을 눌러서 고장 내 보세요." }}"{{ with .Get "failed" }} data-failed="{{ . }}"{{ end }}{{ with .Get "max" }} style="--figure-max: {{ . }}px"{{ end }}>
+{{ partial "inline-svg.html" (.Get "src") }}
+<div class="fault-tree-demo-controls" role="group" aria-label="basic event 고장 내기" hidden></div>
+<p class="fault-tree-demo-status" aria-live="polite" hidden></p>
+</figure>

@@ -1,0 +1,24 @@
+{{- /* Term popover - an inline term the reader can tap, click, or (on
+       desktop) hover to see a short definition, without leaving the
+       sentence. Built on the native Popover API: light dismiss (click
+       outside / Esc), keyboard focus, and top-layer stacking come from
+       the browser. assets/js/term-popover.js (loaded by
+       extend_head.html on pages that use this shortcode) places it next
+       to the term and adds the hover preview; browsers without the API
+       show the definition inline in parentheses instead
+       (assets/css/base/03-term-popover.css).
+
+       Usage (inner text is markdown):
+         {{< term "FTA(Fault Tree Analysis)" >}}짧은 설명{{< /term >}}
+
+       Write the definition as a humble aside to the reader, in the same
+       합니다체 as the posts' reader notes (e.g. "~입니다", "~라고 알고
+       있습니다"), not as an encyclopedia entry.
+
+       The id comes from the shortcode's line and column in the source,
+       not .Ordinal: .Ordinal counts within the parent shortcode, so a
+       term nested in another shortcode (say, inside a tab) would reuse
+       the id of the post's first term and open the wrong popover. */ -}}
+{{- $id := printf "term-%d-%d" .Position.LineNumber .Position.ColumnNumber -}}
+<span class="term"><button type="button" class="term-trigger" popovertarget="{{ $id }}">{{ .Get 0 }}</button><span id="{{ $id }}" class="term-popover" popover>{{ .Inner | strings.TrimSpace | .Page.RenderString }}</span></span>
+{{- /* no trailing newline: the term sits mid-sentence */ -}}

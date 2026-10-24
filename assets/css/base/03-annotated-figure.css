@@ -1,0 +1,175 @@
+/* Annotated figure (layouts/shortcodes/annotated-figure.html): a
+   drawing (pinned on phones, .figure-pin in 03-svg-figure.css) over a
+   term list.
+   An active item highlights its part of the drawing in --accent and
+   dims everything else. These rules cover any drawing; a drawing kit
+   can add its own highlight touches (see 03-fault-tree.css). */
+
+.md-content .annotated-figure svg [data-part],
+.md-content .annotated-figure svg .af-context {
+    transition: opacity 0.15s ease;
+}
+
+.md-content .annotated-figure.has-active svg [data-part]:not(.is-hl),
+.md-content .annotated-figure.has-active svg .af-context {
+    opacity: 0.3;
+}
+
+.md-content .annotated-figure svg .is-hl :is(rect, path, circle) {
+    stroke: var(--accent);
+    stroke-width: 2.5;
+}
+
+.md-content .annotated-figure svg .is-hl :is(rect, circle) {
+    fill: color-mix(in srgb, var(--accent) 14%, var(--theme));
+}
+
+/* Callouts: muted labels with dashed leaders, or solid brackets. They
+   carry data-part, so they light up with their item. */
+.md-content .af-callout-line {
+    fill: none;
+    stroke: var(--secondary);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+}
+
+.md-content .af-callout-text {
+    fill: var(--secondary);
+    font-size: 13px;
+    dominant-baseline: central;
+}
+
+.md-content .af-callout-left .af-callout-text {
+    text-anchor: end;
+}
+
+.md-content .af-callout-bracket .af-callout-line {
+    stroke-dasharray: none;
+}
+
+.md-content .af-callout-bracket .af-callout-text {
+    text-anchor: middle;
+}
+
+.md-content .annotated-figure svg .is-hl .af-callout-line {
+    stroke-width: 1.5;
+}
+
+.md-content .annotated-figure svg .is-hl .af-callout-text {
+    fill: var(--accent);
+    font-weight: 600;
+}
+
+/* Narrow screens (the compact viewBox, assets/js/svg-viewbox.js):
+   numbered markers stand in for the text callouts, which would render
+   around 6px, matched by numbers on the list items below. */
+.md-content svg.is-compact .af-callout,
+.md-content svg:not(.is-compact) .af-marker {
+    display: none;
+}
+
+.md-content svg.is-compact .af-marker {
+    display: inline;
+}
+
+.md-content .af-marker circle {
+    fill: var(--primary);
+    stroke: none;
+}
+
+.md-content .af-marker text {
+    fill: var(--theme);
+    font-size: 13px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: central;
+}
+
+.md-content .annotated-figure svg .is-hl.af-marker circle {
+    fill: var(--accent);
+    stroke: none;
+}
+
+.md-content .annotated-figure svg .is-hl.af-marker text {
+    fill: var(--accent-contrast);
+}
+
+/* The term list: each top-level item is a pressable row. */
+.md-content .annotated-figure-hint {
+    margin: 0 0 0.5rem;
+    color: var(--secondary);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.md-content .annotated-figure-text > :is(ul, ol) {
+    margin: 0 0 var(--content-gap);
+    padding: 0;
+    list-style: none;
+}
+
+.md-content .annotated-figure-text > :is(ul, ol) > li {
+    margin: 0;
+    padding: 0.45rem 0.7rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: var(--leading-ui);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.md-content .annotated-figure-text > :is(ul, ol) > li:hover,
+.md-content .annotated-figure-text > :is(ul, ol) > li.is-active {
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.md-content .annotated-figure-text > :is(ul, ol) > li:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+@media (min-width: 641px) {
+    .md-content .annotated-figure-text > :is(ul, ol) {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.25rem 0.75rem;
+    }
+}
+
+/* Same breakpoint as the compact viewBox: number the items to match the
+   markers on the drawing. Overrides the generic list marker rules in
+   03-md-content.css (absolute, oversized). */
+@media (max-width: 640px) {
+    .md-content .annotated-figure-text > :is(ul, ol) {
+        counter-reset: af-part;
+    }
+
+    .md-content .annotated-figure-text > :is(ul, ol) > li {
+        position: relative;
+        padding-left: 2.6rem;
+    }
+
+    .md-content .annotated-figure-text > :is(ul, ol) > li::before {
+        counter-increment: af-part;
+        content: counter(af-part);
+        position: absolute;
+        left: 0.7rem;
+        top: 0.65rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.35rem;
+        height: 1.35rem;
+        border-radius: 999px;
+        background: var(--primary);
+        color: var(--theme);
+        font-size: 0.75rem;
+        font-weight: 600;
+        line-height: 1;
+    }
+
+    .md-content .annotated-figure-text > :is(ul, ol) > li.is-active::before {
+        background: var(--accent);
+        color: var(--accent-contrast);
+    }
+}

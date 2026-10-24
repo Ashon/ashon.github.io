@@ -1,0 +1,130 @@
+/* SVG figures. Diagrams are drawn as .svg files under
+   static/assets/<post date>/ and inlined at build time
+   (layouts/partials/inline-svg.html), so they follow the theme and use
+   the body font. Three shortcodes place them:
+     svg-figure        a static figure (this file)
+     annotated-figure  a figure with a linked term list (03-annotated-figure.css)
+     fault-tree-demo   an interactive fault tree (03-fault-tree.css) */
+
+/* svg-figure: diagrams keep a legible minimum width and scroll sideways
+   below it, with the same scroll-x / at-start / at-end cue as code
+   blocks, faded to the page background instead of the code background. */
+.md-content .svg-figure-frame {
+    position: relative;
+}
+
+.md-content .svg-figure-scroll {
+    overflow-x: auto;
+    border-radius: var(--radius);
+}
+
+.md-content .svg-figure-scroll > svg {
+    display: block;
+    width: 100%;
+    min-width: 640px;
+    height: auto;
+}
+
+/* Narrow figures (svg-figure max="..."): fit the column instead of
+   scrolling, capped at --svg-max on wide screens. */
+.md-content .svg-figure-fit .svg-figure-scroll > svg {
+    min-width: 0;
+    max-width: var(--svg-max);
+    margin: 0 auto;
+}
+
+/* Figures with a phone layout (svg-figure narrow="..."): the narrow
+   drawing takes over once the figure is narrower than the wide one's
+   640px minimum, so neither version scrolls. Browsers without
+   container queries keep the wide one and its sideways scroll. */
+.md-content .svg-figure-dual {
+    container-type: inline-size;
+}
+
+.md-content .svg-figure-narrow {
+    display: none;
+}
+
+.md-content .svg-figure-narrow > svg {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    margin: 0 auto;
+}
+
+@container (max-width: 639px) {
+    .md-content .svg-figure-dual .svg-figure-frame {
+        display: none;
+    }
+
+    .md-content .svg-figure-dual .svg-figure-narrow {
+        display: block;
+    }
+}
+
+.md-content .svg-figure-frame.scroll-x::before,
+.md-content .svg-figure-frame.scroll-x::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 2rem;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.md-content .svg-figure-frame.scroll-x::before {
+    left: 0;
+    background: linear-gradient(to right, var(--theme), transparent);
+}
+
+.md-content .svg-figure-frame.scroll-x::after {
+    right: 0;
+    background: linear-gradient(to left, var(--theme), transparent);
+}
+
+.md-content .svg-figure-frame.scroll-x.at-start::before,
+.md-content .svg-figure-frame.scroll-x.at-end::after {
+    opacity: 0;
+}
+
+.md-content .svg-figure-scroll:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Pinned figures (annotated-figure, fault-tree-demo): on phones the
+   drawing stays pinned (sticky) while the text that goes with it
+   scrolls under it, so whatever the text points at stays in view.
+   Inside a tab card it pins just below the tab bar, else just below
+   the header's fade, and takes the card's background so text never
+   shows through. Wider screens leave it in place: the drawing and its
+   text fit on screen together there. Both share one width, so two
+   figures in neighboring tabs hold the same size and place. */
+.md-content .figure-pin {
+    position: relative;
+    z-index: 1;
+    margin-top: 0;
+    padding: 0.25rem 0 0.5rem;
+    background: var(--tabs-bg, var(--hover-bg));
+}
+
+@media (max-width: 640px) {
+    .md-content .figure-pin {
+        position: sticky;
+        top: var(--tabs-sticky-top, var(--anchor-offset));
+    }
+}
+
+/* Same sizing for a fault-tree-demo left unpinned (pin="false"). */
+.md-content .figure-pin > svg,
+.md-content .fault-tree-demo > svg {
+    display: block;
+    width: 100%;
+    max-width: var(--figure-max, 640px);
+    height: auto;
+    margin: 0 auto;
+    font-family: inherit;
+}

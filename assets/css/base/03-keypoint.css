@@ -1,0 +1,44 @@
+/* Key point box (layouts/shortcodes/keypoint.html): the sentence a
+   section hinges on. Stronger than a blockquote, which holds quiet
+   reader notes in muted text: an accent bar, a faint accent fill and
+   slightly larger, heavier text, so the takeaway stands out at a
+   glance. Bold text stays in the body color; accent-colored text
+   would read as a link here. */
+.md-content .keypoint {
+    margin: 1.5rem 0;
+    padding: 0.9rem 1.15rem;
+    border-inline-start: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+    color: var(--primary);
+    font-size: 1.05em;
+    font-weight: 500;
+    line-height: var(--leading-ui);
+}
+
+@supports not (background: color-mix(in srgb, white, transparent)) {
+    .md-content .keypoint {
+        background: var(--hover-bg);
+    }
+}
+
+.md-content .keypoint p {
+    margin: 0;
+}
+
+.md-content .keypoint p + p {
+    margin-top: 0.5rem;
+}
+
+.md-content .keypoint strong {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.md-content .keypoint .keypoint-label {
+    margin-bottom: 0.35rem;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-small);
+}

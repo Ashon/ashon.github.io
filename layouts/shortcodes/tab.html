@@ -1,0 +1,9 @@
+{{- /* One tab panel inside `tabs` (see tabs.html). The visible label
+       paragraph is only for the no-JS fallback; the script hides it
+       once the tab list exists. */ -}}
+<div class="tab-panel" data-tab-label="{{ .Get 0 }}">
+<p class="tab-panel-label">{{ .Get 0 }}</p>
+
+{{ .Inner }}
+
+</div>

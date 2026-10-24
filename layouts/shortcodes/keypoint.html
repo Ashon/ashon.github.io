@@ -1,0 +1,24 @@
+{{- /* Key point box: the one or two sentences a section hinges on,
+       set apart from the body with an accent bar, a faint accent fill
+       and slightly larger text. Use it for a section's takeaway, not
+       for side notes: reader notes go in a blockquote, author asides
+       in `aside`. Styles: assets/css/base/03-keypoint.css.
+
+       Use the % form so the inner markdown (bold, links, code) renders:
+         {{% keypoint %}}
+         ... **가장 중요한 부분** ...
+         {{% /keypoint %}}
+       Optional small label above the text:
+         {{% keypoint label="핵심" %}} ... {{% /keypoint %}}
+
+       The HTML before the text slot must not contain blank lines: this
+       output is run through markdown, and a blank line ends the HTML
+       block. */ -}}
+<div class="keypoint">
+{{- with .Get "label" }}
+<p class="keypoint-label">{{ . }}</p>
+{{- end }}
+
+{{ .Inner }}
+
+</div>

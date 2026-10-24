@@ -1,0 +1,228 @@
+/* Fault tree kit: classes to draw fault trees in SVG files that are
+   inlined into posts (fta-demo.svg, fta-anatomy.svg), plus the
+   interactive fault-tree-demo shortcode and the ev glyphs that point
+   at events from the text.
+
+     ft-tree        the <svg>
+     ft-edges       group of ft-line edges (failed ones paint last)
+     ft-line        an edge between a node and its gate
+     ft-node        an event box (top or intermediate event)
+     ft-text        the label inside an event box
+     ft-gate        an AND / OR gate shape
+     ft-gate-label  the "AND" / "OR" inside a gate
+     ft-event       a basic event: <g> with a <circle> and a <text>
+
+   Colors come from the theme, so trees follow light and dark mode. */
+
+.md-content .ft-line {
+    fill: none;
+    stroke: var(--tertiary);
+    stroke-width: 2;
+    transition: stroke 0.15s ease;
+}
+
+.md-content .ft-node {
+    fill: var(--theme);
+    stroke: var(--primary);
+    stroke-width: 1.5;
+    transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
+.md-content .ft-gate {
+    fill: var(--code-bg);
+    stroke: var(--primary);
+    stroke-width: 1.5;
+    transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
+.md-content .ft-text,
+.md-content .ft-gate-label,
+.md-content .ft-event text {
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+}
+
+.md-content .ft-text {
+    fill: var(--primary);
+    font-size: 14px;
+}
+
+.md-content .ft-gate-label {
+    fill: var(--secondary);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.md-content .ft-event circle {
+    fill: var(--theme);
+    stroke: var(--primary);
+    stroke-width: 1.5;
+    transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
+.md-content .ft-event text {
+    fill: var(--secondary);
+    font-size: 13px;
+}
+
+/* In an annotated figure (03-annotated-figure.css), a lit gate fills
+   with the accent like a pressed chip. */
+.md-content .annotated-figure svg .is-hl .ft-gate {
+    fill: var(--accent);
+}
+
+.md-content .annotated-figure svg .is-hl .ft-gate-label {
+    fill: var(--accent-contrast);
+}
+
+/* fault-tree-demo (layouts/shortcodes/fault-tree-demo.html), pinned on
+   phones like other interactive figures (.figure-pin, 03-svg-figure.css).
+   Failed nodes, gates and edges switch to --danger; the toggle buttons
+   follow the tag-chip look and fill with --danger when pressed. */
+.md-content .fault-tree-demo .ft-event {
+    cursor: pointer;
+}
+
+.md-content .fault-tree-demo .ft-event:hover circle {
+    stroke: var(--danger);
+}
+
+.md-content .ft-line.is-failed {
+    stroke: var(--danger);
+}
+
+.md-content .ft-node.is-failed {
+    fill: var(--danger-bg);
+    stroke: var(--danger);
+    stroke-width: 2;
+}
+
+.md-content .ft-gate.is-failed,
+.md-content .ft-event.is-failed circle {
+    fill: var(--danger);
+    stroke: var(--danger);
+}
+
+.md-content .ft-gate.is-failed + .ft-gate-label {
+    fill: var(--danger-contrast);
+}
+
+.md-content .ft-event.is-failed text {
+    fill: var(--danger);
+    font-weight: 600;
+}
+
+.md-content .fault-tree-demo-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.md-content .fault-tree-demo-toggle,
+.md-content .fault-tree-demo-reset {
+    min-height: 2rem;
+    padding: 0 0.9rem;
+    border-radius: 999px;
+    /* Tinted from the text color so the chip stays visible on the page
+       and on the tinted tab card alike. */
+    background: color-mix(in srgb, var(--primary) 7%, transparent);
+    color: var(--tag-fg);
+    font-size: 0.9rem;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.md-content .fault-tree-demo-toggle:hover {
+    background: color-mix(in srgb, var(--primary) 13%, transparent);
+}
+
+.md-content .fault-tree-demo-toggle[aria-pressed="true"] {
+    background: var(--danger);
+    color: var(--danger-contrast);
+}
+
+.md-content .fault-tree-demo-reset {
+    background: transparent;
+    color: var(--secondary);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+}
+
+.md-content .fault-tree-demo-toggle:focus-visible,
+.md-content .fault-tree-demo-reset:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.md-content .fault-tree-demo-status {
+    margin: 0.75rem 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--secondary);
+    line-height: var(--leading-ui);
+    white-space: pre-line;
+}
+
+/* Event badges (layouts/shortcodes/ev.html): the event's name in a
+   pill tinted with its color, led by a small circle drawn like the
+   event's node, so the text can point at one. Kinds that are shared
+   by many servers get one color each; the fault tree SVGs read the
+   same --ev-* colors. Tints sit on the theme color, so they stay
+   opaque in both themes. */
+.md-content {
+    --ev-pdu: #d97706;
+    --ev-tor: #7c3aed;
+    --ev-inlet: #0d9488;
+}
+
+html[data-theme="dark"] .md-content {
+    --ev-pdu: #fbbf24;
+    --ev-tor: #a78bfa;
+    --ev-inlet: #2dd4bf;
+}
+
+/* inline-block rather than inline-flex, so the badge keeps the text's
+   baseline; nowrap keeps the circle and the name on one line. */
+.md-content .ev {
+    display: inline-block;
+    padding: 0 0.55em 0 0.45em;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ev-color, var(--primary)) 12%, var(--theme));
+    font-size: 0.94em;
+    line-height: 1.7;
+    white-space: nowrap;
+}
+
+.md-content .ev-basic {
+    background: color-mix(in srgb, var(--primary) 7%, var(--theme));
+}
+
+.md-content .ev-dot {
+    display: inline-block;
+    width: 0.72em;
+    height: 0.72em;
+    margin-right: 0.35em;
+    border: 1.5px solid var(--ev-color, var(--primary));
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--ev-color, var(--primary)) 30%, var(--theme));
+    vertical-align: -0.04em;
+}
+
+.md-content .ev-basic .ev-dot {
+    background: var(--theme);
+}
+
+.md-content .ev-pdu {
+    --ev-color: var(--ev-pdu);
+}
+
+.md-content .ev-tor {
+    --ev-color: var(--ev-tor);
+}
+
+.md-content .ev-inlet {
+    --ev-color: var(--ev-inlet);
+}

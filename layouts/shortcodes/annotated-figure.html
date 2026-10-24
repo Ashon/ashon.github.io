@@ -1,0 +1,46 @@
+{{- /* Annotated figure: an SVG pinned on top of a markdown list, each
+       top-level list item linked, in order, to a part of the drawing.
+       Hovering, focusing or tapping an item highlights its part and
+       dims the rest, so a list of terms can point into one diagram.
+
+       Module files:
+         layouts/shortcodes/annotated-figure.html   markup
+         assets/css/base/03-annotated-figure.css    styles
+         assets/js/annotated-figure.js              behavior, loaded by
+           extend_head.html only on pages that use this shortcode
+         assets/js/svg-viewbox.js                   compact viewBox swap
+
+       Drawing the SVG (a file under static/, see inline-svg.html):
+         data-part="a b"     the part(s) an element belongs to; the
+                             `parts` param maps list items to them
+         af-context          class for shapes that dim along with the
+                             unlit parts (say, the connecting lines)
+         af-callout          labels shown on wide screens, made of
+                             af-callout-line and af-callout-text (add
+                             af-callout-left / af-callout-bracket to
+                             anchor the text at its end / middle)
+         af-marker           numbered circles that replace the callouts
+                             in the compact viewBox; the list items get
+                             matching numbers
+         data-viewbox-compact (on <svg>) the viewBox to use below 640px
+
+       Usage (% form, so the list renders as markdown):
+         {{% annotated-figure src="assets/2026-10-24/fta-anatomy.svg"
+                              parts="top,power,basic" %}}
+         - **Top event**: ...
+         {{% /annotated-figure %}}
+       `hint` replaces the guide line above the list.
+
+       The HTML before the text slot must not contain blank lines: this
+       output is run through markdown. */ -}}
+<div class="annotated-figure" data-annotated-figure data-parts="{{ .Get "parts" }}">
+<figure class="annotated-figure-media figure-pin">
+{{ partial "inline-svg.html" (.Get "src") }}
+</figure>
+<div class="annotated-figure-text">
+<p class="annotated-figure-hint" hidden>{{ .Get "hint" | default "항목에 마우스를 올리거나 눌러 보시면 그림에서 해당 부분이 강조됩니다." }}</p>
+
+{{ .Inner }}
+
+</div>
+</div>

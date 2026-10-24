@@ -1,0 +1,24 @@
+{{- /* Inline an SVG file from static/ into the page, for the figure
+       shortcodes (svg-figure, annotated-figure, fault-tree-demo).
+
+       Inline rather than <img>: an inline SVG sees the page's CSS, so a
+       diagram follows the theme variables (--primary, --accent, ...)
+       in light and dark mode, uses the body font, and can be made
+       interactive. The file under static/ is still published as is,
+       so it can be opened on its own (with its fallback colors).
+
+       Comments and blank lines are stripped: comments are notes for the
+       file's author, and a shortcode used inside markdown (a % shortcode,
+       or one placed in a tab) has its output run through markdown, where
+       a blank line would end the HTML block mid-SVG.
+
+       Usage: {{ partial "inline-svg.html" "assets/2026-10-24/x.svg" }} */ -}}
+{{- $path := printf "static/%s" (strings.TrimPrefix "/" .) -}}
+{{- if not (fileExists $path) -}}
+  {{- errorf "inline-svg: %s not found" $path -}}
+{{- end -}}
+{{- readFile $path
+    | replaceRE `(?s)<!--.*?-->` ""
+    | replaceRE `\n\s*\n` "\n"
+    | strings.TrimSpace
+    | safeHTML -}}

@@ -1,0 +1,176 @@
+/* Tabs component: layouts/shortcodes/tabs.html + tab.html, script in
+   assets/js/tabs.js. Reads as a subsection: a soft, borderless card
+   with a segmented control on top. The card is as tall as the active
+   panel, with no inner scroll area to trap the wheel; the tab list sits
+   on top, so a switch never moves what the reader just clicked. Before
+   the script runs (or without JS) panels simply stack, each under a
+   small label.
+
+   Knobs, set on .tabs (or any ancestor):
+     --tabs-bg    card surface; panels paint it too (see the crossfade)
+     --tabs-fade  crossfade length, read by the script; 0ms turns it off
+   Content inside can use var(--tabs-bg) to match the card, and
+   var(--tabs-sticky-top) to pin itself just below the pinned tab bar.
+
+   On phones, while the card scrolls past, the tab bar stays pinned
+   under the header (it follows the header as it shrinks), on the card
+   surface and as wide as the card, so nothing shows around the
+   control. Wider screens leave it in place: there the card usually
+   fits on screen, and pinning would only add motion. */
+.md-content .tabs {
+    --tabs-bg: var(--hover-bg);
+    --tabs-fade: 180ms;
+    --tabs-bar-h: calc(2.75rem + 1.5rem); /* control + padding */
+    margin: 1.5rem 0 var(--content-gap);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .md-content .tabs {
+        --tabs-fade: 0ms;
+    }
+}
+
+.md-content .tabs.is-ready {
+    --tabs-sticky-top: calc(var(--header-height) + 12px + var(--tabs-bar-h));
+    position: relative; /* containing block for inactive panels */
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0.25rem 1.25rem 1.25rem;
+    border-radius: 12px;
+    background: var(--tabs-bg);
+}
+
+.md-content .tabs.is-ready > .tab-bar {
+    grid-row: 1;
+    position: relative;
+    z-index: 2; /* above the active panel, and anything pinned in it */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--tabs-bar-h);
+    margin: 0 -1.25rem; /* reach the card's edges over its padding */
+    padding: 0 1.25rem;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    background: var(--tabs-bg);
+}
+
+.md-content .tabs.is-ready > .tab-panel {
+    /* Both lines explicit: an absolutely positioned child with an auto
+       end line would take the card's padding edge there instead and
+       come out wider than the active panel. */
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+    background: var(--tabs-bg);
+}
+
+.md-content .tabs.is-ready > .tab-panel.is-active {
+    position: relative;
+    z-index: 1;
+}
+
+/* Inactive panels leave the flow but keep the active panel's grid
+   cell (an absolutely positioned grid child uses its grid area as the
+   containing block), so they sit exactly where the active one does and
+   are cut to its height. */
+.md-content .tabs.is-ready > .tab-panel:not(.is-active) {
+    position: absolute;
+    inset: 0;
+    overflow: clip;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Crossfade, only during a switch (.is-switching, set by the script).
+   Fading one panel out while the other fades in would dim whatever
+   both share (a figure at the same spot drops to ~75% halfway). So the
+   outgoing panel stays fully visible underneath, and the incoming one,
+   on top and painted with the card surface, fades in over it: shared
+   content holds still, everything else dissolves. The outgoing panel
+   hides once the fade is over. */
+.md-content .tabs.is-switching > .tab-panel.is-active {
+    transition: opacity var(--tabs-fade) ease;
+}
+
+.md-content .tabs.is-switching > .tab-panel:not(.is-active) {
+    transition: opacity 0s var(--tabs-fade), visibility 0s var(--tabs-fade);
+}
+
+.md-content .tab-list {
+    display: flex;
+    gap: 0.25rem;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.25rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--primary) 7%, transparent);
+    overflow-x: auto;
+}
+
+.md-content .tab {
+    flex: none;
+    min-height: 2.25rem;
+    padding: 0 1.1rem;
+    border-radius: 999px;
+    color: var(--secondary);
+    font-size: 0.92rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.md-content .tab:hover {
+    color: var(--primary);
+}
+
+.md-content .tab[aria-selected="true"] {
+    background: var(--theme);
+    color: var(--primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.md-content .tab:focus-visible,
+.md-content .tab-panel:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.md-content .tab-panel {
+    border-radius: var(--radius);
+}
+
+.md-content .tab-panel-label {
+    margin-bottom: 0.5rem;
+    color: var(--secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-small);
+}
+
+.md-content .tabs.is-ready .tab-panel-label {
+    display: none;
+}
+
+.md-content .tabs:not(.is-ready) .tab-panel + .tab-panel {
+    margin-top: var(--content-gap);
+}
+
+/* Phones: the card runs edge to edge, same bleed as the post list's
+   hover rows, so it reads as a band of the page instead of a box, and
+   the tab bar pins under the header (same breakpoint as .figure-pin in
+   03-svg-figure.css). */
+@media (max-width: 640px) {
+    .md-content .tabs.is-ready {
+        margin-left: -1.25rem;
+        margin-right: -1.25rem;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        border-radius: 0;
+    }
+
+    .md-content .tabs.is-ready > .tab-bar {
+        position: sticky;
+        top: calc(var(--header-height) + 12px); /* the header's bottom edge */
+    }
+}

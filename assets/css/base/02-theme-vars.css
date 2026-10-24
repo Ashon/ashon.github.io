@@ -76,6 +76,12 @@ html[data-theme] {
     --glass-filter: saturate(180%) blur(20px);
     --glass-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.7), 0 0 0 0.5px rgba(0, 0, 0, 0.08),
         0 8px 28px rgba(0, 0, 0, 0.12);
+
+    /* Failure state (interactive diagrams). 5.62:1 as text on --theme
+       and under --danger-contrast text. */
+    --danger: #c62828;
+    --danger-bg: rgba(198, 40, 40, 0.10);
+    --danger-contrast: #ffffff;
 }
 
 html[data-theme="dark"] {
@@ -105,5 +111,8 @@ html[data-theme="dark"] {
     --glass-bg: color-mix(in srgb, var(--theme) 62%, transparent);
     --glass-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.12), 0 0 0 0.5px rgba(255, 255, 255, 0.08),
         0 8px 28px rgba(0, 0, 0, 0.5);
+    --danger: #f28b82; /* 6.98:1 on --theme */
+    --danger-bg: rgba(242, 139, 130, 0.16);
+    --danger-contrast: rgb(20, 22, 26);
     color-scheme: dark;
 }

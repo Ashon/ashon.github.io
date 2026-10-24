@@ -1,0 +1,14 @@
+{{- /* One deferred <script> for a file under assets/: minified,
+       fingerprinted and integrity-checked in production, as is in dev.
+
+       Usage: {{ partial "deferred-script.html" "js/tabs.js" }} */ -}}
+{{- $js := resources.Get . -}}
+{{- if not $js -}}
+  {{- errorf "deferred-script: assets/%s not found" . -}}
+{{- end -}}
+{{- if hugo.IsProduction | or (eq site.Params.env "production") }}
+  {{- $js = $js | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" defer></script>
+{{- else }}
+<script src="{{ $js.RelPermalink }}" defer></script>
+{{- end }}

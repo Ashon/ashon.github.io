@@ -476,3 +476,26 @@ video {
     border-radius: var(--radius);
     max-width: 100%;
 }
+
+/* Small, muted supporting text (layouts/shortcodes/small.html). */
+.md-content .small-text {
+    margin-top: 1rem;
+    color: var(--secondary);
+    font-size: 0.88rem;
+    line-height: var(--leading-ui);
+    letter-spacing: var(--tracking-small);
+}
+
+.md-content .small-text :is(p, ol, ul):not(:last-child) {
+    margin-bottom: 0.5rem;
+}
+
+.md-content .small-text li {
+    margin-top: 0.15rem;
+}
+
+/* Outside a tab card the guide is followed by more text: keep the
+   usual gap below it. */
+.md-content .small-text:not(:last-child) {
+    margin-bottom: var(--content-gap);
+}

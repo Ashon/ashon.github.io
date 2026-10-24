@@ -1,0 +1,46 @@
+{{- /* SVG figure: a static diagram from an .svg file under static/,
+       inlined rather than linked as <img> (see inline-svg.html for
+       why). Styles: assets/css/base/03-svg-figure.css. For a diagram
+       with a linked term list use annotated-figure; for an interactive
+       fault tree, fault-tree-demo.
+
+       Usage:
+         {{< svg-figure src="assets/2026-10-24/fta-example.svg"
+                        label="예시 Fault Tree"
+                        caption="그림 설명 (markdown)" >}}
+
+       The file lives under static/, so it is also published as a
+       standalone SVG (with fallback colors). Wide figures scroll
+       sideways on narrow screens instead of shrinking past legibility;
+       the scroll cue script in extend_head.html handles focus/fades.
+
+       Figures drawn narrow enough for a phone (a viewBox around 360
+       wide) can pass max="420": they then shrink to fit instead of
+       scrolling, and stop growing at that many pixels on wide screens
+       so their text stays close to the body size.
+
+       Wide figures can also pass narrow="assets/.../x-narrow.svg": a
+       second drawing laid out for a phone. It replaces the wide one
+       whenever the figure is narrower than the wide one's 640px minimum
+       (a container query in 03-svg-figure.css), so nothing scrolls,
+       while wide screens keep the wide layout. The two files are
+       inlined into the same page, so give the narrow one its own class
+       prefix and ids: their <style> blocks are global. */ -}}
+{{- $src := strings.TrimPrefix "/" (.Get "src") -}}
+{{- $max := .Get "max" -}}
+{{- $narrow := strings.TrimPrefix "/" (.Get "narrow") -}}
+<figure class="svg-figure{{ with $max }} svg-figure-fit{{ end }}{{ with $narrow }} svg-figure-dual{{ end }}"{{ with $max }} style="--svg-max: {{ . }}px"{{ end }}>
+  <div class="svg-figure-frame">
+    <div class="svg-figure-scroll" data-label="{{ .Get "label" | default "그림" }}">
+      {{- partial "inline-svg.html" $src -}}
+    </div>
+  </div>
+  {{- with $narrow }}
+  <div class="svg-figure-narrow">
+    {{- partial "inline-svg.html" . -}}
+  </div>
+  {{- end }}
+  {{- with .Get "caption" }}
+  <figcaption>{{ . | markdownify }}</figcaption>
+  {{- end }}
+</figure>

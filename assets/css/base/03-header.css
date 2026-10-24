@@ -5,11 +5,27 @@
     background: color-mix(in srgb, var(--theme) 92%, transparent);
     -webkit-backdrop-filter: saturate(180%) blur(8px);
     backdrop-filter: saturate(180%) blur(8px);
-    border-bottom: 1px solid var(--border);
+}
+
+/* Soft fade below the header instead of a hard border — content
+   scrolling up dissolves into the header rather than being cut by a
+   line. Height is --gap, same as .main's top padding, so at scroll 0
+   the fade only covers empty space. */
+.header::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: var(--gap);
+    background: linear-gradient(to bottom,
+        color-mix(in srgb, var(--theme) 92%, transparent), transparent);
+    pointer-events: none;
 }
 
 @supports not (background: color-mix(in srgb, white, transparent)) {
     .header { background: var(--theme); }
+    .header::after { background: linear-gradient(to bottom, var(--theme), transparent); }
 }
 
 .header-nav {

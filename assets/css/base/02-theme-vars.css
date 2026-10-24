@@ -11,10 +11,12 @@
        top and headings' scroll-margin-top so clicked links and the
        active TOC row share the same baseline. Matches the post
        header's natural y, so the TOC aligns with the meta line at
-       its left. The `+ 1px` compensates for the header's
-       border-bottom (the rendered header is 1px taller than
-       --header-height, which models the content/line-height only). */
-    --anchor-offset: calc(var(--header-height) + 1px + var(--gap));
+       its left. The `+ 12px` is the menu links' vertical padding
+       (6px top + bottom), which makes the rendered header taller
+       than --header-height (the line-height only). Landing at
+       header + --gap also keeps anchored headings clear of the
+       header's bottom fade. */
+    --anchor-offset: calc(var(--header-height) + 12px + var(--gap));
     color-scheme: light;
 }
 

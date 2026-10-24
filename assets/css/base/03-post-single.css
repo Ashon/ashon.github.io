@@ -53,7 +53,9 @@
    the heading lands behind the blurred header bar. Same token as the
    sticky TOC top offset below, so a clicked heading lands on the
    same baseline as the pinned TOC. Applies to both hash navigation
-   and scrollIntoView() calls. */
+   and scrollIntoView() calls. The body itself is the target of the
+   TOC's "들어가며" entry (#intro), so it gets the same offset. */
+.post-content,
 .post-content :is(h1, h2, h3, h4, h5, h6) {
     scroll-margin-top: var(--anchor-offset);
 }

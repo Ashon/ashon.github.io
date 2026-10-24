@@ -162,9 +162,13 @@
   })();
 </script>
 
-{{- /* TOC scrollspy — highlight the table-of-contents link matching
-       the heading currently in view, so long posts have a "you are
-       here" indicator. Single rAF debounce keeps it cheap. */ -}}
+{{- /* TOC scrollspy — highlight the table-of-contents link of the
+       section being read, so long posts have a "you are here"
+       indicator: the last heading above a line at 35% of the viewport,
+       or, above the first heading, the "들어가며" entry (#intro,
+       toc.html). Worked out from positions on each scroll frame rather
+       than from intersection changes, so a jump (a TOC click, Home/End)
+       lands on the right entry too. Single rAF debounce keeps it cheap. */ -}}
 <script>
   (function () {
     function setupTocSpy() {
@@ -175,21 +179,27 @@
         var id = decodeURIComponent(a.getAttribute('href').slice(1));
         if (id) linkById[id] = a;
       });
-      var headings = document.querySelectorAll(
-        '.post-content h2[id], .post-content h3[id], .post-content h4[id]'
+      var headings = Array.prototype.filter.call(
+        document.querySelectorAll('.post-content h2[id], .post-content h3[id], .post-content h4[id]'),
+        function (h) { return linkById[h.id]; }
       );
       if (!headings.length) return;
       var islandLabel = document.querySelector('.toc-island-current');
-      var visible = new Set();
+      var intro = document.querySelector('.post-content[id]');
+      var introId = intro && linkById[intro.id] ? intro.id : null;
+      var current;
       function refresh() {
-        if (!visible.size) return;
-        var first = null;
-        headings.forEach(function (h) {
-          if (visible.has(h.id) && !first) first = h.id;
-        });
+        var line = window.innerHeight * 0.35;
+        var id = introId;
+        for (var i = 0; i < headings.length; i++) {
+          if (headings[i].getBoundingClientRect().top > line) break;
+          id = headings[i].id;
+        }
+        if (id === current) return;
+        current = id;
         links.forEach(function (a) { a.classList.remove('active'); });
-        if (!first || !linkById[first]) return;
-        var active = linkById[first];
+        if (!id) return;
+        var active = linkById[id];
         active.classList.add('active');
         /* The collapsed TOC island names the current section. */
         if (islandLabel) islandLabel.textContent = active.textContent;
@@ -207,14 +217,15 @@
           scroller.scrollTop += ar.bottom - sr.bottom + 8;
         }
       }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) visible.add(e.target.id);
-          else visible.delete(e.target.id);
-        });
-        refresh();
-      }, { rootMargin: '0px 0px -65% 0px' });
-      headings.forEach(function (h) { io.observe(h); });
+      var queued = false;
+      function schedule() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(function () { queued = false; refresh(); });
+      }
+      window.addEventListener('scroll', schedule, { passive: true });
+      window.addEventListener('resize', schedule);
+      refresh();
     }
     if (document.readyState !== 'loading') setupTocSpy();
     else document.addEventListener('DOMContentLoaded', setupTocSpy);

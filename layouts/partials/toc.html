@@ -5,6 +5,11 @@
        that into a <div> so the TOC is one labelled landmark, not two
        nested ones.
 
+       The list always opens with "들어가며", a link to the start of the
+       post body (#intro on .post-content in single.html), so the text
+       before the first heading has an entry too; the scrollspy lights it
+       up while the reader is above the first heading.
+
        Below the wide-screen breakpoint the TOC collapses into a
        floating "island" button (bottom center) that names the current
        section and expands the tree as a panel — see 03-post-single.css
@@ -25,7 +30,10 @@
       <path d="M6 15l6-6 6 6" />
     </svg>
   </button>
-  {{- .TableOfContents | replaceRE `^<nav id="TableOfContents">` `<div id="TableOfContents">` | replaceRE `</nav>$` `</div>` | safeHTML -}}
+  {{- .TableOfContents
+      | replaceRE `^<nav id="TableOfContents">(\s*)<ul>` `<div id="TableOfContents">${1}<ul>${1}  <li><a href="#intro">들어가며</a></li>`
+      | replaceRE `</nav>$` `</div>`
+      | safeHTML -}}
 </nav>
 <hr class="toc-divider" />
 {{- end -}}

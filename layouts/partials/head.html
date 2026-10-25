@@ -93,7 +93,10 @@
 {{- else with .Params.cover }}{{ with .image }}{{ $ogImage = absURL . }}{{ end }}
 {{- end -}}
 {{- if not $ogImage -}}
-  {{- $ogCard = cond .IsPage (partial "og-card.html" .) (partialCached "og-card.html" . "site") -}}
+  {{- /* if/else, not cond: cond evaluates both branches, which would
+         cache whichever page renders first as the shared card. */ -}}
+  {{- if .IsPage }}{{ $ogCard = partial "og-card.html" . }}
+  {{- else }}{{ $ogCard = partialCached "og-card.html" . "site" }}{{ end -}}
   {{- $ogImage = $ogCard.Permalink -}}
 {{- end -}}
 {{- $ogAlt := cond .IsPage .Title site.Params.description }}

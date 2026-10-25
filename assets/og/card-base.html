@@ -3,8 +3,10 @@
      (layouts/partials/og-card.html draws the text on top). Regenerate:
        chrome --headless=new --hide-scrollbars --force-device-scale-factor=1 \
          --window-size=1200,630 --screenshot=card-base.png card-base.html
-     title-canvas.png is a blank 1040x320 transparent PNG the title is
-     drawn on, so it wraps 80px short of the right edge. -->
+     Everything sits in the middle 560px column, so the card still reads
+     when a feed crops it to the center square (Facebook on phones shows
+     630x630 of it). The pills follow the wordmark og-card.html draws at
+     x 413: "Lifestack" in Pretendard Bold 32px is 139px wide. -->
 <html>
 <head>
 <meta charset="utf-8">
@@ -12,14 +14,14 @@
   html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #ffffff; }
   /* The menu as the compact header draws it: skeleton pills, while the
      wordmark (drawn by Hugo) stays sharp. */
-  .pill { position: absolute; top: 68px; height: 14px; border-radius: 7px; background: rgba(30, 30, 30, 0.12); }
-  .rule { position: absolute; left: 80px; width: 1040px; top: 528px; height: 2px; background: #e8e8e8; }
+  .pill { position: absolute; top: 60px; height: 12px; border-radius: 6px; background: rgba(30, 30, 30, 0.12); }
+  .rule { position: absolute; left: 320px; width: 560px; top: 526px; height: 2px; background: #e8e8e8; }
 </style>
 </head>
 <body>
-  <div class="pill" style="left: 788px; width: 86px"></div>
-  <div class="pill" style="left: 908px; width: 112px"></div>
-  <div class="pill" style="left: 1054px; width: 66px"></div>
+  <div class="pill" style="left: 583px; width: 54px"></div>
+  <div class="pill" style="left: 655px; width: 72px"></div>
+  <div class="pill" style="left: 745px; width: 42px"></div>
   <div class="rule"></div>
 </body>
 </html>

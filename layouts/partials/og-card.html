@@ -1,12 +1,14 @@
 {{- /* og-card.html - the 1200x630 share card for a page, returned as an
        image resource for og:image / twitter:image (head.html). Drawn at
-       build time on assets/og/card-base.png: the wordmark sharp next to
-       the menu as skeleton pills (the compact header, mid-scroll), the
-       first category above the title, the summary under it, and the
-       domain and date under a rule. Pages that aren't posts (home,
-       lists, tags) get the site description as the title. X shows no
-       title or description under a large card, so both have to be in
-       the image itself. */ -}}
+       build time on assets/og/card-base.png, all of it centered in the
+       middle 560px: the wordmark next to the menu as skeleton pills
+       (the compact header, mid-scroll), then the first category, the
+       title and the summary, then the domain and date under a rule.
+       Feeds that crop link images to the center square (Facebook on
+       phones) still show every part of it, and X, which shows no title
+       or description under a large card, gets both in the image. Pages
+       that aren't posts (home, lists, tags) get the site description as
+       the title. */ -}}
 {{- $fonts := partialCached "og-fonts.html" . "og-fonts" -}}
 {{- $ink := "#1e1e1e" -}}
 {{- $muted := "#6c6c6c" -}}
@@ -24,46 +26,50 @@
 {{- end -}}
 {{- $heading = replaceRE `\s+` " " $heading | strings.TrimSpace -}}
 {{- $summary = replaceRE `\s+` " " $summary | strings.TrimSpace -}}
+{{- $footer := (urls.Parse site.BaseURL).Host -}}
+{{- with $date }}{{ $footer = printf "%s  /  %s" $footer . }}{{ end -}}
 
-{{- /* Text wraps at its image's width minus 20px, so both blocks are
-       drawn on a 1040px transparent canvas placed at x 80, which keeps
-       an 80px margin on the right too. images.Text can't say how tall
-       the title came out, so og-wrap.html works out its line count to
-       put the summary right under it, with as many lines as fit above
-       the rule (at most 3, cut with "..."). A line is the font's ascent
-       plus the line spacing. */ -}}
-{{- $canvas := resources.Get "og/title-canvas.png" -}}
-{{- $top := 196 -}}
-{{- $titleSize := 56 -}}
-{{- $titleGap := 14 -}}
-{{- $title := partial "og-wrap.html" (dict "text" $heading "font" "Bold" "size" $titleSize "width" 1040) -}}
-{{- $titleAscent := math.Ceil (mul hugo.Data.ogcard.Bold.ascent $titleSize) -}}
-{{- $titleBottom := add $top (mul $title.lines $titleAscent) (mul (sub $title.lines 1) $titleGap) (mul 0.25 $titleSize) -}}
-
-{{- $filters := slice
-      (images.Text site.Title (dict "font" $fonts.Bold "size" 36 "color" $ink "x" 80 "y" 52))
-      (images.Overlay ($canvas | images.Filter (images.Text $heading (dict "font" $fonts.Bold "size" $titleSize "linespacing" $titleGap "color" $ink "x" 0 "y" 0))) 80 $top)
-      (images.Text (urls.Parse site.BaseURL).Host (dict "font" $fonts.Medium "size" 26 "color" $muted "x" 80 "y" 556)) -}}
-
+{{- /* The middle block (category, title, summary) is centered in the
+       band between the header and the rule, y 120 to 500. og-wrap.html
+       breaks the text into lines that fit the column, which gives the
+       block's height: a line is the font's ascent plus the line gap.
+       The title takes up to 5 lines; the summary gets what is left, at
+       most 3, cut with "...". */ -}}
+{{- $column := 560 -}}
+{{- $band := 380 -}}
+{{- $ascent := hugo.Data.ogcard.Bold.ascent -}}
+{{- $eyebrowStep := cond (ne $eyebrow "") (add (math.Ceil (mul $ascent 22)) 16) 0 -}}
+{{- $titleStep := add (math.Ceil (mul $ascent 50)) 12 -}}
+{{- $summaryStep := add (math.Ceil (mul hugo.Data.ogcard.Medium.ascent 24)) 10 -}}
+{{- $title := partial "og-wrap.html" (dict "text" $heading "font" "Bold" "size" 50 "width" $column "max" 5) -}}
+{{- $used := add $eyebrowStep (sub (mul (len $title) $titleStep) 12) -}}
+{{- $lines := slice -}}
 {{- with $summary -}}
-  {{- $size := 26 -}}
-  {{- $gap := 12 -}}
-  {{- $y := int (add $titleBottom 18) -}}
-  {{- $step := add (math.Ceil (mul hugo.Data.ogcard.Medium.ascent $size)) $gap -}}
-  {{- /* lines that end above y 500: n * step - gap <= 500 - y */ -}}
-  {{- $room := int (math.Floor (div (add (sub 500 $y) $gap) $step)) -}}
+  {{- $room := int (math.Floor (div (sub $band $used 22 8 -10) $summaryStep)) -}}
   {{- if gt $room 3 }}{{ $room = 3 }}{{ end -}}
   {{- if gt $room 0 -}}
-    {{- $fit := partial "og-wrap.html" (dict "text" . "font" "Medium" "size" $size "width" 1040 "max" $room) -}}
-    {{- $layer := $canvas | images.Filter (images.Text $fit.text (dict "font" $fonts.Medium "size" $size "linespacing" $gap "color" $muted "x" 0 "y" 0)) -}}
-    {{- $filters = $filters | append (images.Overlay $layer 80 $y) -}}
+    {{- $lines = partial "og-wrap.html" (dict "text" . "font" "Medium" "size" 24 "width" $column "max" $room) -}}
   {{- end -}}
 {{- end -}}
+{{- $total := add $used 8 -}}
+{{- with $lines }}{{ $total = add $total 22 (sub (mul (len .) $summaryStep) 10) }}{{ end -}}
+{{- $y := int (add 120 (div (sub $band $total) 2)) -}}
+
+{{- $filters := slice
+      (images.Text site.Title (dict "font" $fonts.Bold "size" 32 "color" $ink "x" 413 "y" 44))
+      (images.Text $footer (dict "font" $fonts.Medium "size" 22 "color" $muted "x" 600 "y" 550 "alignx" "center")) -}}
 {{- with $eyebrow -}}
-  {{- $filters = $filters | append (images.Text . (dict "font" $fonts.Bold "size" 22 "color" $accent "x" 80 "y" 150)) -}}
+  {{- $filters = $filters | append (images.Text . (dict "font" $fonts.Bold "size" 22 "color" $accent "x" 600 "y" $y "alignx" "center")) -}}
+  {{- $y = add $y $eyebrowStep -}}
 {{- end -}}
-{{- with $date -}}
-  {{- $filters = $filters | append (images.Text . (dict "font" $fonts.Medium "size" 26 "color" $muted "x" 1120 "y" 556 "alignx" "right")) -}}
+{{- range $title -}}
+  {{- $filters = $filters | append (images.Text . (dict "font" $fonts.Bold "size" 50 "color" $ink "x" 600 "y" $y "alignx" "center")) -}}
+  {{- $y = add $y $titleStep -}}
+{{- end -}}
+{{- $y = add $y -12 22 -}}
+{{- range $lines -}}
+  {{- $filters = $filters | append (images.Text . (dict "font" $fonts.Medium "size" 24 "color" $muted "x" 600 "y" $y "alignx" "center")) -}}
+  {{- $y = add $y $summaryStep -}}
 {{- end -}}
 
 {{- $card := resources.Get "og/card-base.png" | images.Filter $filters -}}

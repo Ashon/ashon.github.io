@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Write data/ogcard.json: advance widths of the share card fonts.
 
-layouts/partials/og-wrap.html lays text out the way Hugo's images.Text
-does (break at spaces when the next word would cross the edge) to know
-how many lines the title takes and where the summary can start. It
-needs each glyph's width: printable ASCII one by one, and one width for
-every Hangul syllable (Pretendard draws them all at the same width).
-Anything else falls back to a full em, which errs toward an extra line.
+layouts/partials/og-wrap.html breaks the share card's title and summary
+into lines that fit its column (at spaces), so og-card.html can center
+each line and the whole block. It needs each glyph's width: printable
+ASCII one by one, and one width for every Hangul syllable (Pretendard
+draws them all at the same width). Anything else falls back to a full
+em, which errs toward a shorter line.
 
-Widths are in em, rounded up, so the estimate never comes out narrower
-than the real text. Run it again if the pinned Pretendard version in
+Widths are in em, rounded up, so a line never comes out wider than
+measured. Run it again if the pinned Pretendard version in
 layouts/partials/og-fonts.html changes:
 
     python scripts/og-glyph-widths.py Pretendard-Bold.ttf Pretendard-Medium.ttf
